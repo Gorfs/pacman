@@ -1,1 +1,8 @@
+<<<<<<< HEAD
 MA Qian En Mathieu mail: mamathieu3bg3@gmail.com discord: maqianenmathieu
+=======
+Archie Beales, email:archiebeales@gmail.com discord:gorfgorf23
+Rémi Chèze - remi.cheze@etu.u-paris.fr - mimstar_
+Christophe JIN - christophe.jin@etu.u-paris.fr - perdsonnoeud
+MA Qian En Mathieu mail: mamathieu3bg3@gmail.com discord: maqianenmathieu
+>>>>>>> a9dcd4af416cb208c59471449b0cb1c056c7a42b
