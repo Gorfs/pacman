@@ -2,6 +2,7 @@ package model;
 
 import geometry.RealCoordinates;
 
+// Critter seems to be the main class used for any object that moves around in the maze with the pac-man
 public sealed interface Critter permits Ghost, PacMan {
     RealCoordinates getPos();
 
