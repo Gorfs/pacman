@@ -60,12 +60,12 @@ public class MazeConfig {
     // TODO: mazes should be loaded from a text file
     public static MazeConfig makeExample1() {
         return new MazeConfig(new Cell[][]{
-                {nTee(DOT),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nTee(DOT)},
-                {vPipe(DOT),    seVee(NOTHING), nTee(NOTHING),  nTee(NOTHING),  swVee(NOTHING), vPipe(DOT)},
-                {vPipe(DOT),     wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
-                {vPipe(DOT),    wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
-                {vPipe(DOT),    neVee(NOTHING), sTee(NOTHING),  sTee(NOTHING),   nwVee(NOTHING), vPipe(DOT)},
-                {neVee(DOT),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nwVee(DOT)}
+                {slot("n", DOT), slot("ns", DOT), slot("ns", DOT), slot("ns", DOT), slot("ns", DOT), slot("n", DOT)},
+                {slot("we", DOT), slot("nw", NOTHING), slot("n", NOTHING), slot("n", NOTHING), slot("ne", NOTHING), slot("we", DOT)},
+                {slot("we", DOT), slot("w", NOTHING), slot("", NOTHING), slot("", NOTHING), slot("e", NOTHING), slot("we", DOT)},
+                {slot("we", DOT), slot("w", NOTHING), slot("", NOTHING), slot("", NOTHING), slot("e", NOTHING), slot("we", DOT)},
+                {slot("we", DOT), slot("ws", NOTHING), slot("s", NOTHING), slot("s", NOTHING), slot("se", NOTHING), slot("we", DOT)},
+                {slot("ws", DOT), slot("ns", DOT), slot("ns", DOT), slot("ns", DOT), slot("ns", DOT), slot("se", DOT)},
         },
                 new IntCoordinates(3, 0),
                 new IntCoordinates(0, 3),
