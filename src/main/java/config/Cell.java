@@ -1,7 +1,7 @@
 package config;
 
 public record Cell(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, Cell.Content initialContent) {
-    public enum Content {NOTHING, DOT, ENERGIZER}
+    public enum Content {NOTHING, ENERGIZER, DOT}
     // Create a cell shaped as we want
     public static Cell slot(String wall, Content c) {
         // n = north, e = east, s = south, w = west. By default, there is no wall (false).
