@@ -17,7 +17,7 @@ public final class MazeState {
     private final boolean[][] gridState;
 
     private final List<Critter> critters;
-    private int score;
+    private static int score;
 
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
@@ -144,6 +144,10 @@ public final class MazeState {
 
     public MazeConfig getConfig() {
         return config;
+    }
+
+    public static int getScore(){
+        return score;
     }
 
     public boolean getGridState(IntCoordinates pos) {
