@@ -4,9 +4,7 @@ import geometry.IntCoordinates;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Paint;
 import model.MazeState;
-import misc.Debug;
 
 public class Menu {
 
