@@ -97,7 +97,7 @@ public class MazeConfig {
             throw new RuntimeException(e);
         }
         // Init the spawn of the entities
-        IntCoordinates player = new IntCoordinates(3, 1),
+        IntCoordinates player = new IntCoordinates(3, 0),
                 blinky = new IntCoordinates(0, 3), inky = new IntCoordinates(3, 5),
                 pinky = new IntCoordinates(5, 5), clyde = new IntCoordinates(5, 1);
         // return everything
