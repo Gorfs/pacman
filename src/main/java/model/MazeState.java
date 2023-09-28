@@ -103,7 +103,7 @@ public final class MazeState {
         if (!gridState[pacPos.y()][pacPos.x()]) {
             addScore(1);
             gridState[pacPos.y()][pacPos.x()] = true;
-            music_score(); // 播放得分音效
+            music_score(); 
         }
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
@@ -112,7 +112,7 @@ public final class MazeState {
                     resetCritter(critter);
                 } else {
                     playerLost();
-                    music_death(); // 播放死亡音效
+                    music_death(); 
                     return;
                 }
             }
