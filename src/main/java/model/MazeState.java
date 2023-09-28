@@ -3,9 +3,11 @@ package model;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import gui.GameView;
 
 import java.util.List;
 import java.util.Map;
+import javafx.scene.control.Label;
 
 import static model.Ghost.*;
 
@@ -20,7 +22,8 @@ public final class MazeState {
     private int score;
 
     private final Map<Critter, RealCoordinates> initialPos;
-    private int lives = 3;
+    private static int lives = 3;
+    private static boolean gameEnded = false;
 
     public MazeState(MazeConfig config) {
         this.config = config;
@@ -48,6 +51,14 @@ public final class MazeState {
 
     public int getHeight() {
         return height;
+    }
+
+    public static int getLives(){
+        return lives;
+    }
+
+    public static boolean getGameEnded(){
+        return gameEnded;
     }
 
     public void update(long deltaTns) {
@@ -127,9 +138,8 @@ public final class MazeState {
         lives--;
         if (lives == 0) {
             System.out.println("Game over!");
-            System.exit(0);
+            gameEnded = true;
         }
-        System.out.println("Lives: " + lives);
         resetCritters();
     }
 
