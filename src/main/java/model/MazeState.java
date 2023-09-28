@@ -22,7 +22,11 @@ public final class MazeState {
     private static int score;
 
     private final Map<Critter, RealCoordinates> initialPos;
-    private int lives = 3;
+    private static int lives = 3;
+
+    public static int getLives(){
+        return lives;
+    }
 
     public MazeState(MazeConfig config) {
         this.config = config;

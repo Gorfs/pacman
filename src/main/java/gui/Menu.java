@@ -19,12 +19,19 @@ public class Menu {
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos){
         // var group = new Group();
 
+        HBox menu = new HBox();
+
         Label scoreText = new Label("Score:" + String.valueOf(score) );
+        Label livesText = new Label("Current lives: " + String.valueOf(MazeState.getLives()));
         
-        HBox hb = new HBox();
-        hb.getChildren().addAll(scoreText);
+        HBox scoreHb = new HBox();
+        HBox livesHb = new HBox();
+        scoreHb.getChildren().addAll(scoreText);
+        livesHb.getChildren().addAll(livesText);
+        menu.getChildren().addAll(scoreHb, livesHb);
         
-        // hb.setSpacing(0);
+        menu.setSpacing(30);
+        livesText.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
 
         // Failed attempt to make the score text white
         // scoreText.setTextFill(Paint.valueOf("#000"));
@@ -36,15 +43,19 @@ public class Menu {
             public void update() {
                 // Debug.out("score updated");
                 score = MazeState.getScore();
-                hb.getChildren().remove(0);
-                hb.getChildren().add(new Label("score :" + String.valueOf(score)));
-                hb.setTranslateX(pos.x());
-                hb.setTranslateY(pos.y());
+                scoreHb.getChildren().remove(0);
+                livesHb.getChildren().remove(0);
+                scoreHb.getChildren().add(new Label("score :" + String.valueOf(score)));
+                livesHb.getChildren().add(new Label("Lives :" + String.valueOf(MazeState.getLives())));
+                
+                menu.setTranslateX(pos.x()-30);
+                menu.setTranslateY(pos.y());
+
             }
 
             @Override
             public Node getNode() {
-                return hb;
+                return menu;
             }
         };
         
