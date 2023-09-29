@@ -27,22 +27,18 @@ public class Menu {
         HBox menu = new HBox();
 
         Label scoreText = new Label("Score:" + String.valueOf(score) );
-        Label livesText = new Label("Current lives: " + String.valueOf(MazeState.getLives()));
         ImageView livesImage = new ImageView( new Image("heart3.png",scale*size , scale * size, true, true));
         
         HBox scoreHb = new HBox();
         HBox livesHb = new HBox();
         scoreHb.getChildren().addAll(scoreText);
         livesHb.getChildren().addAll(livesImage);
-        menu.getChildren().addAll(scoreHb, livesHb);
+        menu.getChildren().addAll(livesHb, scoreHb);
         
         menu.setSpacing(20);
-        livesText.setTextFill(Color.rgb(154, 155, 155));
-
-        // Failed attempt to make the score text white
-        // scoreText.setTextFill(Paint.valueOf("#000"));
-        // hb.setStyle("#FFF");
-        
+        // centers the values to the top center of the screen.
+        menu.setTranslateX(pos.x()/2);
+        menu.setTranslateY(pos.y());
 
         return new GraphicsUpdater() {
             @Override
@@ -55,16 +51,17 @@ public class Menu {
                // Label livesText = new Label("Lives : " + String.valueOf(MazeState.getLives()));
                
                 Label scoreText = new Label("Score : " + String.valueOf(MazeState.getScore()));
-                ImageView livesImage = new ImageView( new Image(("heart" + String.valueOf(MazeState.getLives()) + ".png"),scale*size , scale * size, true, true));
+
+                // la division de la taille reduit la taille de l'image progressivement pour que elle prend pas tous l'ecran.
+                ImageView livesImage = new ImageView( new Image(("heart" + String.valueOf(MazeState.getLives()) + ".png"),scale*(size)/(4 - MazeState.getLives()) , scale * size/1, true, true));
                 
                 // livesText.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
-                scoreText.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+                scoreText.setStyle("-fx-text-fill: white; -fx-font-size: 12px;");
 
                 scoreHb.getChildren().add(scoreText);
                 livesHb.getChildren().add(livesImage);
                 
-                scoreHb.setAlignment(Pos.BOTTOM_RIGHT);
-                livesHb.setAlignment(Pos.BOTTOM_LEFT);
+                
 
 
             }
