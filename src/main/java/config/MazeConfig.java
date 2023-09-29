@@ -27,7 +27,10 @@ public class MazeConfig {
     }
 
     private final Cell[][] grid;
+    
+    
     private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
+
 
     public IntCoordinates getPacManPos() {
         return pacManPos;
@@ -83,9 +86,18 @@ public class MazeConfig {
                 for (int i = 0; i < data.length; i += 2) {
                     // create a cell based on if there is something(NOTHING, DOT, etc.) or not and place wall(data[i])
                     switch (data[i + 1]) {
-                        case "ENERGIZER" -> map[n][i/2] = slot(data[i], ENERGIZER);
-                        case "NOTHING" -> map[n][i/2] = slot(data[i], NOTHING);
-                        case "DOT" -> map[n][i/2] = slot(data[i], DOT);
+                        case "ENERGIZER":{ 
+                            map[n][i/2] = slot(data[i], ENERGIZER);
+                            break;
+                        }
+                        case "NOTHING":{
+                            map[n][i/2] = slot(data[i], NOTHING);
+                            break;
+                        }
+                        case "DOT" : {
+                            map[n][i/2] = slot(data[i], DOT);
+                            break;
+                        }
                     }
                 }
                 n++;
@@ -93,7 +105,7 @@ public class MazeConfig {
             // close file
             myReader.close();
         } catch (FileNotFoundException e) {
-            // If it doesn't found the file
+            // If it doesn't find the file
             throw new RuntimeException(e);
         }
         // Init the spawn of the entities
