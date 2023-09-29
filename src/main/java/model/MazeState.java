@@ -6,10 +6,14 @@ import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import misc.Debug;
 
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
 import static model.Ghost.*;
+
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public final class MazeState {
     private final MazeConfig config;
@@ -117,6 +121,7 @@ public final class MazeState {
                     resetCritter(critter);
                 } else {
                     playerLost();
+                    music_death(); 
                     return;
                 }
             }
@@ -163,4 +168,24 @@ public final class MazeState {
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
     }
+
+    // ...
+
+    MediaPlayer mediaPlayer;
+
+
+    public void music_score(){
+        String s = "src\\main\\resources\\score.mp3";
+        Media h = new Media(Paths.get(s).toUri().toString());
+        mediaPlayer = new MediaPlayer(h);
+        mediaPlayer.play();
+    }
+
+    public void music_death(){
+        String s = "src\\main\\resources\\death.mp3";
+        Media h = new Media(Paths.get(s).toUri().toString());
+        mediaPlayer = new MediaPlayer(h);
+        mediaPlayer.play();
+    }
+
 }
