@@ -2,11 +2,12 @@ package gui;
 
 import config.Cell;
 import geometry.IntCoordinates;
+import geometry.RealCoordinates;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-// import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Rectangle;
 import model.MazeState;
 
 
@@ -32,8 +33,32 @@ public class CellGraphicsFactory {
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
+
         if (cell.initialContent() == Cell.Content.WALL) {
             dot.setFill(Color.BLUEVIOLET);
+            if (pos.x() < state.getWidth() - 1) {
+                IntCoordinates right = pos.toRealCoordinates(1.0).plus(RealCoordinates.EAST_UNIT).round();
+                if (state.getConfig().getCell(right).initialContent() == Cell.Content.WALL) {
+                    var wall = new Rectangle();
+                    wall.setHeight(scale/2);
+                    wall.setWidth(scale);
+                    wall.setY(scale/4);
+                    wall.setX(scale/2);
+                    wall.setFill(Color.BLUEVIOLET);
+                    group.getChildren().add(wall);
+                }
+            } if (pos.y() < state.getHeight() - 1) {
+                IntCoordinates bottom = pos.toRealCoordinates(1.0).plus(RealCoordinates.SOUTH_UNIT).round();
+                if (state.getConfig().getCell(bottom).initialContent() == Cell.Content.WALL) {
+                    var wall = new Rectangle();
+                    wall.setHeight(scale);
+                    wall.setWidth(scale/2);
+                    wall.setY(scale/2);
+                    wall.setX(scale/4);
+                    wall.setFill(Color.BLUEVIOLET);
+                    group.getChildren().add(wall);
+                }
+            }
         } else {
             dot.setFill(Color.YELLOW);
         }
@@ -74,6 +99,8 @@ public class CellGraphicsFactory {
             nWall.setFill(Color.BLUEVIOLET);
             group.getChildren().add(nWall);
         }*/
+
+
         return new GraphicsUpdater() {
             @Override
             public void update() {
