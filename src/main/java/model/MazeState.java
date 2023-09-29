@@ -1,9 +1,10 @@
 package model;
 
-
+import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import misc.Debug;
 
 import java.nio.file.Paths;
 import java.util.List;
@@ -25,7 +26,11 @@ public final class MazeState {
     private static int score;
 
     private final Map<Critter, RealCoordinates> initialPos;
-    private int lives = 3;
+    private static int lives = 3;
+
+    public static int getLives(){
+        return lives;
+    }
 
     public MazeState(MazeConfig config) {
         this.config = config;
@@ -100,10 +105,14 @@ public final class MazeState {
         }
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
-        if (!gridState[pacPos.y()][pacPos.x()]) {
+        // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
+        if (!gridState[pacPos.y()][pacPos.x()] && config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
             addScore(1);
             gridState[pacPos.y()][pacPos.x()] = true;
-            music_score(); 
+        }else if (!gridState[pacPos.y()][pacPos.x()] && config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER){
+            // make the pacman energized -->
+            addScore(15);
+            gridState[pacPos.y()][pacPos.x()] = true;
         }
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
@@ -125,7 +134,6 @@ public final class MazeState {
     }
 
     private void displayScore() {
-        // FIXME: this should be displayed in the JavaFX view, not in the console
         System.out.println("Score: " + score);
     }
 

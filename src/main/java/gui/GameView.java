@@ -49,6 +49,7 @@ public class GameView {
 
     public void animate() {
         new AnimationTimer() {
+            
             long last = 0;
 
             @Override
@@ -57,6 +58,7 @@ public class GameView {
                     last = now;
                     return;
                 }
+                
                 var deltaT = now - last;
                 maze.update(deltaT);
                 for (var updater : graphicsUpdaters) {
