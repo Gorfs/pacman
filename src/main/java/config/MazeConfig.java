@@ -66,7 +66,7 @@ public class MazeConfig {
         Cell[][] map = new Cell[10][10];
 
         // Open the file maze.txt
-        File maze = new File("src/main/java/config/maze.txt");
+        File maze = new File("src/main/resources/maze.txt");
         Scanner myReader;
         // Try if the file exist
         try {
