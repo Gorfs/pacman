@@ -102,14 +102,11 @@ public final class MazeState {
 
     private void addScore(int increment) {
         score += increment;
-<<<<<<< HEAD
         displayScore();
     }
 
     private void displayScore() {
         System.out.println("Score: " + score);
-=======
->>>>>>> mazeFromFile
     }
 
     private void playerLost() {

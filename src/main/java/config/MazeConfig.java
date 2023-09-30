@@ -83,23 +83,6 @@ public class MazeConfig {
                 // Split everything into a String array
                 String[] data = line.split(",");
                 // For every 2 string
-<<<<<<< HEAD
-                for (int i = 0; i < data.length; i += 2) {
-                    // create a cell based on if there is something(NOTHING, DOT, etc.) or not and place wall(data[i])
-                    switch (data[i + 1]) {
-                        case "ENERGIZER":{ 
-                            map[n][i/2] = slot(data[i], ENERGIZER);
-                            break;
-                        }
-                        case "NOTHING":{
-                            map[n][i/2] = slot(data[i], NOTHING);
-                            break;
-                        }
-                        case "DOT" : {
-                            map[n][i/2] = slot(data[i], DOT);
-                            break;
-                        }
-=======
                 for (int i = 0; i < data.length; i ++) {
                     // create a cell based on what there is inside(NOTHING, DOT, etc.)
                     switch (data[i]) {
@@ -107,7 +90,6 @@ public class MazeConfig {
                         case "WALL" -> map[n][i] = slot(WALL);
                         case "DOT" -> map[n][i] = slot(DOT);
                         default -> map[n][i] = slot(NOTHING);
->>>>>>> mazeFromFile
                     }
                 }
                 n++;
