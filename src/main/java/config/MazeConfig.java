@@ -64,12 +64,12 @@ public class MazeConfig {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
     }
 
-    public static MazeConfig mazeFromFile(){
+    public static MazeConfig originalMaze(String file) {
         // New class Cell to store the map
-        Cell[][] map = new Cell[6][6];
+        Cell[][] map = new Cell[21][21];
 
         // Open the file maze.txt
-        File maze = new File("src/main/java/config/maze.txt");
+        File maze = new File("src/main/resources/" + file + ".txt");
         Scanner myReader;
         // Try if the file exist
         try {
@@ -83,6 +83,7 @@ public class MazeConfig {
                 // Split everything into a String array
                 String[] data = line.split(",");
                 // For every 2 string
+<<<<<<< HEAD
                 for (int i = 0; i < data.length; i += 2) {
                     // create a cell based on if there is something(NOTHING, DOT, etc.) or not and place wall(data[i])
                     switch (data[i + 1]) {
@@ -98,6 +99,15 @@ public class MazeConfig {
                             map[n][i/2] = slot(data[i], DOT);
                             break;
                         }
+=======
+                for (int i = 0; i < data.length; i ++) {
+                    // create a cell based on what there is inside(NOTHING, DOT, etc.)
+                    switch (data[i]) {
+                        case "ENERGIZER" -> map[n][i] = slot(ENERGIZER);
+                        case "WALL" -> map[n][i] = slot(WALL);
+                        case "DOT" -> map[n][i] = slot(DOT);
+                        default -> map[n][i] = slot(NOTHING);
+>>>>>>> mazeFromFile
                     }
                 }
                 n++;
@@ -109,10 +119,11 @@ public class MazeConfig {
             throw new RuntimeException(e);
         }
         // Init the spawn of the entities
-        IntCoordinates player = new IntCoordinates(3, 0),
-                blinky = new IntCoordinates(0, 3), inky = new IntCoordinates(3, 5),
-                pinky = new IntCoordinates(5, 5), clyde = new IntCoordinates(5, 1);
+        IntCoordinates player = new IntCoordinates(10, 15),
+                blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
+                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
         // return everything
         return new MazeConfig(map, player, blinky, inky, pinky, clyde);
     }
+
 }
