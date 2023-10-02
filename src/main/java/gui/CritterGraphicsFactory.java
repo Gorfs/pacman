@@ -36,7 +36,8 @@ public final class CritterGraphicsFactory {
                     // Debug.out("sprite updated");
                 }
                 else{
-                    image.setVisible(false);
+                    image.setVisible(false); //Ici tous les sprites disparaissent parce que "image" contient tous les sprites (joueur + ghosts)
+                    //Si cela ne convient pas il faudra trouver un moyen de séparer les deux types d'images.
                 }
             }
 
