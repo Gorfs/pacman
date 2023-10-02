@@ -3,11 +3,9 @@ package model;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import gui.GameView;
 
 import java.util.List;
 import java.util.Map;
-import javafx.scene.control.Label;
 
 import static model.Ghost.*;
 
@@ -19,11 +17,11 @@ public final class MazeState {
     private final boolean[][] gridState;
 
     private final List<Critter> critters;
-    private int score;
+    private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
     private static int lives = 3;
-    private static boolean gameEnded = false;
+    private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
         this.config = config;
@@ -57,8 +55,14 @@ public final class MazeState {
         return lives;
     }
 
-    public static boolean getGameEnded(){
+    public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
         return gameEnded;
+    }
+
+    public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
+        gameEnded = false;
+        lives = 3;
+        score = 0;
     }
 
     public void update(long deltaTns) {
@@ -134,11 +138,9 @@ public final class MazeState {
     }
 
     private void playerLost() {
-        // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
         lives--;
         if (lives == 0) {
-            System.out.println("Game over!");
-            gameEnded = true;
+            gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
         }
         resetCritters();
     }
