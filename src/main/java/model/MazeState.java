@@ -4,7 +4,6 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import misc.Debug;
 
 import java.util.List;
 import java.util.Map;
