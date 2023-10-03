@@ -70,13 +70,13 @@ public final class MazeState {
            var nextPos = critter.nextPos(deltaTns);
 
             // basic debugging to see if the bots are going the right direction
-            Debug.out("Next pos is: " + String.valueOf(nextPos));
-            Debug.out("cur pos is: " + String.valueOf(curPos));
+            // Debug.out("Next pos is: " + String.valueOf(nextPos));
+            // Debug.out("cur pos is: " + String.valueOf(curPos));
 
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
 
-            Debug.out(critter.toString() + "  " +  critter.getDirection());
+            // Debug.out(critter.toString() + "  " +  critter.getDirection());
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: curNeighbours) if (config.getCell(n).initialContent() == Cell.Content.WALL) {
@@ -91,18 +91,22 @@ public final class MazeState {
                 }
             }
             critter.setPos(nextPos.warp(width, height));
-        }
+       }
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!gridState[pacPos.y()][pacPos.x()] && config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
-            addScore(1);
-            gridState[pacPos.y()][pacPos.x()] = true;
-        }else if (!gridState[pacPos.y()][pacPos.x()] && config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER){
+                if (!gridState[pacPos.y()][pacPos.x()] && (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER)){
             // make the pacman energized -->
             addScore(15);
+            Debug.out("picked up power pellet");
+            PacMan.setEnergized();
             gridState[pacPos.y()][pacPos.x()] = true;
-        }
+        }else if (!gridState[pacPos.y()][pacPos.x()] && (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT)) {
+            addScore(1);
+            Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT ? "DOT" : "NOT DOT");
+            Debug.out("Picked up a normal pellet");
+            gridState[pacPos.y()][pacPos.x()] = true;
+
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
@@ -116,6 +120,7 @@ public final class MazeState {
         }
     }
 
+}
     private void addScore(int increment) {
         score += increment;
         displayScore();

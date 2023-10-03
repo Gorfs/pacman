@@ -1,6 +1,7 @@
 package config;
 
 import geometry.IntCoordinates;
+import misc.Debug;
 
 import static config.Cell.*;
 import static config.Cell.Content.*;
@@ -82,6 +83,7 @@ public class MazeConfig {
                 String line = myReader.nextLine();
                 // Split everything into a String array
                 String[] data = line.split(",");
+
                 // For every 2 string
                 for (int i = 0; i < data.length; i ++) {
                     // create a cell based on what there is inside(NOTHING, DOT, etc.)

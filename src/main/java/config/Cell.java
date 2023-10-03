@@ -4,6 +4,7 @@ package config;
 public record Cell(Cell.Content initialContent) {
     public enum Content {NOTHING, ENERGIZER, WALL, DOT}
     // Create a cell shaped as we want
+    
     public static Cell slot(Content c) {
         /*
         // n = north, e = east, s = south, w = west. By default, there is no wall (false).
