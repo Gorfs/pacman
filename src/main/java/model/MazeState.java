@@ -78,7 +78,7 @@ public final class MazeState {
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!gridState[pacPos.y()][pacPos.x()]) {
+        if (!gridState[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
             if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
                 addScore(1);
             }else if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER){
@@ -87,6 +87,7 @@ public final class MazeState {
             }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
+
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
@@ -96,6 +97,30 @@ public final class MazeState {
                     playerLost();
                     return;
                 }
+            }
+        }
+        if(allPointsCollected()){
+            resetCritters();
+            resetGrid();
+            return;
+        }
+    }
+
+    public boolean allPointsCollected() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (!gridState[i][j] && config.getCell(new IntCoordinates(i, j)).initialContent() == Cell.Content.DOT) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void resetGrid() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                gridState[i][j] = false;
             }
         }
     }
