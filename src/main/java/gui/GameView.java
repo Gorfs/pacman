@@ -44,7 +44,7 @@ public class GameView {
         for (int x = 0; x < maze.getWidth(); x++)
             for (int y = 0; y < maze.getHeight(); y++)
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
-        addGraphics(menu.makeGraphics(maze, new IntCoordinates(400, 0)));
+        addGraphics(menu.makeGraphics(maze, new IntCoordinates((int) maze.getWidth(), ((int) maze.getHeight()))));
     }
 
     public void animate() {
