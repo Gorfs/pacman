@@ -43,6 +43,11 @@ public class Menu {
         return new GraphicsUpdater() {
             @Override
             public void update() {
+                if (MazeState.getGameEnded()){
+                    livesHb.setVisible(false);
+                    return;
+                }
+                livesHb.setVisible(true);
                 // Debug.out("score updated");
                 score = MazeState.getScore();
                 scoreHb.getChildren().remove(0);

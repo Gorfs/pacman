@@ -39,7 +39,6 @@ public class GameOver {
 
                 if (MazeState.getGameEnded()){
                     vb.setVisible(true);
-                    
                 }
                 else{
                     vb.setVisible(false);
