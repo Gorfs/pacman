@@ -21,6 +21,8 @@ public final class MazeState {
 
     private final Map<Critter, RealCoordinates> initialPos;
     private int lives = 3;
+    
+    public void setLive(int l){lives=l;}
 
     public MazeState(MazeConfig config) {
         this.config = config;
