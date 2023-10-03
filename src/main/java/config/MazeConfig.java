@@ -2,9 +2,15 @@ package config;
 
 import geometry.IntCoordinates;
 
-import static config.Cell.Content.DOT;
 import static config.Cell.*;
-import static config.Cell.Content.NOTHING;
+import static config.Cell.Content.*;
+
+// Import the File class
+import java.io.File;
+// Import this class to handle errors
+import java.io.FileNotFoundException;
+// Import the Scanner class to read text files
+import java.util.Scanner;
 
 public class MazeConfig {
     public MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
@@ -21,7 +27,10 @@ public class MazeConfig {
     }
 
     private final Cell[][] grid;
+    
+    
     private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
+
 
     public IntCoordinates getPacManPos() {
         return pacManPos;
@@ -55,23 +64,48 @@ public class MazeConfig {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
     }
 
+    public static MazeConfig originalMaze(String file) {
+        // New class Cell to store the map
+        Cell[][] map = new Cell[21][21];
 
-    // simple example with a square shape
-    // TODO: mazes should be loaded from a text file
-    public static MazeConfig makeExample1() {
-        return new MazeConfig(new Cell[][]{
-                {nTee(DOT),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nTee(DOT)},
-                {vPipe(DOT),    seVee(NOTHING), nTee(NOTHING),  nTee(NOTHING),  swVee(NOTHING), vPipe(DOT)},
-                {vPipe(DOT),     wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
-                {vPipe(DOT),    wTee(NOTHING),  open(NOTHING),  open(NOTHING),  eTee(NOTHING),  vPipe(DOT)},
-                {vPipe(DOT),    neVee(NOTHING), sTee(NOTHING),  sTee(NOTHING),   nwVee(NOTHING), vPipe(DOT)},
-                {neVee(DOT),    hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     hPipe(DOT),     nwVee(DOT)}
-        },
-                new IntCoordinates(3, 0),
-                new IntCoordinates(0, 3),
-                new IntCoordinates(3, 5),
-                new IntCoordinates(5, 5),
-                new IntCoordinates(5, 1)
-        );
+        // Open the file maze.txt
+        File maze = new File("src/main/resources/" + file + ".txt");
+        Scanner myReader;
+        // Try if the file exist
+        try {
+            // Read the file maze.txt
+            myReader = new Scanner(maze);
+            int n = 0;
+            // while there is something to read
+            while (myReader.hasNextLine()) {
+                // Get the curent line
+                String line = myReader.nextLine();
+                // Split everything into a String array
+                String[] data = line.split(",");
+                // For every 2 string
+                for (int i = 0; i < data.length; i ++) {
+                    // create a cell based on what there is inside(NOTHING, DOT, etc.)
+                    switch (data[i]) {
+                        case "ENERGIZER" -> map[n][i] = slot(ENERGIZER);
+                        case "WALL" -> map[n][i] = slot(WALL);
+                        case "DOT" -> map[n][i] = slot(DOT);
+                        default -> map[n][i] = slot(NOTHING);
+                    }
+                }
+                n++;
+            }
+            // close file
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            // If it doesn't find the file
+            throw new RuntimeException(e);
+        }
+        // Init the spawn of the entities
+        IntCoordinates player = new IntCoordinates(10, 15),
+                blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
+                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
+        // return everything
+        return new MazeConfig(map, player, blinky, inky, pinky, clyde);
     }
+
 }
