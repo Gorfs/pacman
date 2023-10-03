@@ -58,12 +58,26 @@ public final class MazeState {
 
     public void update(long deltaTns) {
         for  (var critter: critters) {
-            var curPos = critter.getPos();
-            var nextPos = critter.nextPos(deltaTns);
+            
+            
+            ClydeController.setDirection();
+            // here should be the setting of the next position for all the other AIs to add:
+
+
+
+
+           var curPos = critter.getPos();
+           var nextPos = critter.nextPos(deltaTns);
+
+            // basic debugging to see if the bots are going the right direction
+            Debug.out("Next pos is: " + String.valueOf(nextPos));
+            Debug.out("cur pos is: " + String.valueOf(curPos));
+
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
-            ClydeController.setNextPosition();
+
             Debug.out(critter.toString() + "  " +  critter.getDirection());
+
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: curNeighbours) if (config.getCell(n).initialContent() == Cell.Content.WALL) {
                     switch (critter.getDirection()) {
@@ -72,7 +86,7 @@ public final class MazeState {
                         case SOUTH -> nextPos = curPos.ceilY();
                         case WEST -> nextPos = curPos.floorX();
                     }
-                    // critter.setDirection(Direction.NONE);
+                    critter.setDirection(Direction.NONE);
                     break;
                 }
             }
@@ -112,7 +126,6 @@ public final class MazeState {
     }
 
     private void playerLost() {
-        // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
         lives--;
         if (lives == 0) {
             System.out.println("Game over!");

@@ -1,8 +1,10 @@
 package model;
 
 import java.util.Random;
-import config.MazeConfig;
+
 import javax.swing.text.Position;
+
+import config.MazeConfig;
 import java.util.List;
 
 
@@ -15,15 +17,31 @@ public class ClydeController {
         Debug.out("CLYDE AI started");
         Ghost.CLYDE.setDirection(Direction.EAST);
     }
-    public static void setNextPosition(){
+    public static void setDirection(){
         // should return the next positon of the ghost
+        
+
+        // We get the list from mazestate to get the critter object.
+        // This give us access to current position as well as current neighbours.
         List<Critter> critters = MazeState.getCritters();
-        Critter clyde;
+        Critter clyde = null;
         for (var critter: critters){
             if (critter.toString() == "CLYDE"){
-                critter.setDirection(Direction.EAST);
+                clyde = critter;
+                
             }
         }
+        if (clyde != null){
+            var curPos = clyde.getPos();
+            Debug.out(curPos.toString());
+            var curNeighbours = curPos.intNeighbours();
+            for(var x : curNeighbours){
+                Debug.out(x.toString());
+                Debug.out("current neighbours length is " + curNeighbours.size());
+            }
+            
+        }
+
         
     }
 }
