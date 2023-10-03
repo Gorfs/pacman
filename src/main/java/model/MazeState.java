@@ -18,14 +18,11 @@ public final class MazeState {
     private final boolean[][] gridState;
 
     private final List<Critter> critters;
-    private static int score;
+    private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
     private static int lives = 3;
-
-    public static int getLives(){
-        return lives;
-    }
+    private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
         this.config = config;
@@ -53,6 +50,20 @@ public final class MazeState {
 
     public int getHeight() {
         return height;
+    }
+
+    public static int getLives(){
+        return lives;
+    }
+
+    public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
+        return gameEnded;
+    }
+
+    public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
+        gameEnded = false;
+        lives = 3;
+        score = 0;
     }
 
     public void update(long deltaTns) {
@@ -135,13 +146,10 @@ public final class MazeState {
     }
 
     private void playerLost() {
-        // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
         lives--;
         if (lives == 0) {
-            System.out.println("Game over!");
-            System.exit(0);
+            gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
         }
-        System.out.println("Lives: " + lives);
         resetCritters();
     }
 
