@@ -29,7 +29,7 @@ public final class MazeState {
         this.config = config;
         height = config.getHeight();
         width = config.getWidth();
-        critters = List.of(PacMan.INSTANCE, Ghost.CLYDE, BLINKY, INKY, PINKY);
+        critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
         gridState = new boolean[height][width];
         initialPos = Map.of(
                 PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
@@ -41,7 +41,7 @@ public final class MazeState {
         resetCritters();
     }
 
-    public List<Critter> getCritters() {
+    public static List<Critter> getCritters() {
         return critters;
     }
 
@@ -73,6 +73,8 @@ public final class MazeState {
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
+            ClydeController.setNextPosition();
+            Debug.out(critter.toString() + "  " +  critter.getDirection());
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
                     if (config.getCell(n).initialContent() == Cell.Content.WALL) {
