@@ -57,7 +57,7 @@ public final class PacMan implements Critter {
      * @return whether Pac-Man just ate an energizer
      */
     public boolean isEnergized() {
-        // TODO handle timeout!
+        // TODO handle timeout! le temps que ca dure
         return energized;
     }
 
