@@ -64,7 +64,6 @@ public class App extends Application {
         gameMenu1 = new GameMenu1();
         gameMenu.setVisible(true);
         gameMenu1.setVisible(false);
-        String[] s = {"LEFT","RIGHT","UP","DOWN"};
         root.getChildren().addAll(imgView, gameMenu, gameMenu1);
         Scene scene = new Scene(root);
         
@@ -319,22 +318,22 @@ public class App extends Application {
 
             MenuButton btnf = new MenuButton("FACILE");
             btnf.setOnMouseClicked(event -> {
-                start(primaryS,4,s);
+                start(primaryS,4);
             });
 
             MenuButton btnm = new MenuButton("MEDIUM");
             btnm.setOnMouseClicked(event -> {
-                start(primaryS,3,s);
+                start(primaryS,3);
             });
 
             MenuButton btnh = new MenuButton("HARD");
             btnh.setOnMouseClicked(event -> {
-                start(primaryS,2,s);
+                start(primaryS,2);
             });
 
             MenuButton btne = new MenuButton("EXPERT");
             btne.setOnMouseClicked(event -> {
-                start(primaryS,1,s);
+                start(primaryS,1);
             });
 
             menu3.getChildren().addAll(btnBack1,btnf,btnm,btnh,btne);
@@ -349,7 +348,6 @@ public class App extends Application {
         public MenuButton1(String name) {
             text = new Text(name);
             text.setFont(Font.loadFont("file:src/main/resources/slkscrb.ttf", 100));
-             //Setting color of the text
              text.setFill(Color.BROWN);
              text.setStroke(Color.BLUEVIOLET);
              text.setStrokeWidth(0.5);
@@ -426,7 +424,7 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void start(Stage primaryStage, int l, String[] s) {
+    public void start(Stage primaryStage, int l) {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController();
