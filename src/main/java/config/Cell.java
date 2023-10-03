@@ -19,4 +19,5 @@ public record Cell(boolean northWall, boolean eastWall, boolean southWall, boole
         // Return cell once created
         return new Cell(n, e, s, w, c);
     }
+    
 }
