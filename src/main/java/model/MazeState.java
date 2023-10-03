@@ -11,8 +11,13 @@ import java.util.Map;
 
 import static model.Ghost.*;
 
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
+
+//import javafx.scene.media.Media;
+//import javafx.scene.media.MediaPlayer;
 
 public final class MazeState {
     private final MazeConfig config;
@@ -163,21 +168,31 @@ public final class MazeState {
 
     // ...
 
-    MediaPlayer mediaPlayer;
 
-
+    
     public void music_score(){
-        String s = "src\\main\\resources\\score.mp3";
-        Media h = new Media(Paths.get(s).toUri().toString());
-        mediaPlayer = new MediaPlayer(h);
-        mediaPlayer.play();
+        try {
+            File audioFile = new File("src\\main\\resources\\score.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void music_death(){
-        String s = "src\\main\\resources\\death.mp3";
-        Media h = new Media(Paths.get(s).toUri().toString());
-        mediaPlayer = new MediaPlayer(h);
-        mediaPlayer.play();
+        try {
+            File audioFile = new File("src\\main\\resources\\death.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+    
 
 }
