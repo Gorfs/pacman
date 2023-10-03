@@ -136,6 +136,7 @@ public final class MazeState {
     private void addScore(int increment) {
         score += increment;
         displayScore();
+        music_score();
     }
 
     private void displayScore() {
