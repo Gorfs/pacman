@@ -180,7 +180,7 @@ public final class MazeState {
     
     public void music_score(){
         try {
-            File audioFile = new File("src\\main\\resources\\score.wav"); 
+            File audioFile = new File("src/main/resources/score.wav"); 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
@@ -192,7 +192,7 @@ public final class MazeState {
 
     public void music_death(){
         try {
-            File audioFile = new File("src\\main\\resources\\death.wav"); 
+            File audioFile = new File("src/main/resources/death.wav"); 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);

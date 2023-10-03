@@ -20,7 +20,7 @@ public class App extends Application {
 
     public void playBackgroundMusic() {
         try {
-            File audioFile = new File("src\\main\\resources\\bgm.wav"); 
+            File audioFile = new File("src/main/resources/bgm.wav"); 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
