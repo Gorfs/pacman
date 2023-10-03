@@ -79,14 +79,16 @@ public final class MazeState {
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!gridState[pacPos.y()][pacPos.x()] && config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT && !allPointsCollected()) {
-            addScore(1);
-            gridState[pacPos.y()][pacPos.x()] = true;
-        }else if (!gridState[pacPos.y()][pacPos.x()] && config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER && !allPointsCollected()){
-            // make the pacman energized -->
-            addScore(15);
+        if (!gridState[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
+            if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
+                addScore(1);
+            }else if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER){
+                // make the pacman energized -->
+                addScore(15);
+            }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
+
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
