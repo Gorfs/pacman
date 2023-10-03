@@ -1,21 +1,37 @@
 package gui;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
+
+
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.nio.file.Paths;
+//import java.nio.file.Paths;
 
 import config.MazeConfig;
 import model.MazeState;
 
 public class App extends Application {
+
+    public void playBackgroundMusic() {
+        try {
+            File audioFile = new File("src\\main\\resources\\bgm.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void start(Stage primaryStage) {
-        music();
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController();
@@ -23,19 +39,15 @@ public class App extends Application {
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.mazeFromFile());
         var gameView = new GameView(maze, root, 100.0);
+
+        playBackgroundMusic();
         
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();
     }
 
-    MediaPlayer mediaPlayer;
-    public void music(){
-        String s = "src\\main\\resources\\bgm.mp3";
-        Media h = new Media(Paths.get(s).toUri().toString());
-        mediaPlayer = new MediaPlayer(h);
-        mediaPlayer.play();
-    }
+    
         
     
 }
