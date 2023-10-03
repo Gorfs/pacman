@@ -11,7 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-//import java.nio.file.Paths;
+import java.nio.file.Paths;
 
 import config.MazeConfig;
 import model.MazeState;
