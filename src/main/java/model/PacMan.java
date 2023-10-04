@@ -60,8 +60,10 @@ public final class PacMan implements Critter {
     }
 
     public static void setEnergized() {
+
         // function will now no longer take a boolean,
         //  but suppose that we always want to "energize" pacman rather than de-energize him
+        if (!energized){
         setEnergized(true);
         timer.schedule(new TimerTask() {
 
@@ -81,5 +83,8 @@ public final class PacMan implements Critter {
         }, 0);
         setEnergized(false);
 
-    }
+           }else{
+            System.out.println("already energized, chill out pls");
+           }   }
+
 }

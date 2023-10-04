@@ -94,14 +94,21 @@ public final class MazeState {
        }
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
-        // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-                if (!gridState[pacPos.y()][pacPos.x()] && (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER)){
+
+        // debug to figure out why energizers are treated as dots.
+        Cell[][] grid = config.getGrid();
+        // Debug.gridOut(grid);
+        Debug.out("pac Pos x + y : " + pacPos.x() + " "  + pacPos.y() + " " + String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()));
+    
+
+        if (!gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "ENERGIZER")){
             // make the pacman energized -->
             addScore(15);
             Debug.out("picked up power pellet");
             PacMan.setEnergized();
             gridState[pacPos.y()][pacPos.x()] = true;
-        }else if (!gridState[pacPos.y()][pacPos.x()] && (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT)) {
+
+        }else if (!gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "DOT")) {
             addScore(1);
             Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT ? "DOT" : "NOT DOT");
             Debug.out("Picked up a normal pellet");
