@@ -49,7 +49,7 @@ public final class PacMan implements Critter {
      *
      * @return whether Pac-Man just ate an energizer
      */
-    public boolean isEnergized() {
+    public static boolean isEnergized() {
         // power pellet lasts for 10 seconds 
         return energized;
     }
@@ -73,15 +73,18 @@ public final class PacMan implements Critter {
                 try{
                     for (int i = 0; i < 10; i++){
                         Thread.sleep(100L);
-                        Debug.out("slept for 100 something");
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    setEnergized(false);
+                                    } catch (InterruptedException e) {
+                    // e.printStackTrace();
+                    System.out.println("oh no, anyway.... (the timer for the energizer went wrong , got an intrerruptedException error)");
                 }
-                throw new UnsupportedOperationException("Unimplemented method 'run'");
             }
-        }, 0);
-        setEnergized(false);
+        }, 1000);
+        // timer's second argument is in milliseconds, s 1000 ms = 1s
+
+        // setEnergized(false);
+
 
            }else{
             System.out.println("already energized, chill out pls");
