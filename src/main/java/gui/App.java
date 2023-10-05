@@ -10,12 +10,9 @@ import javafx.stage.Stage;
 import config.MazeConfig;
 import model.MazeState;
 
-import javafx.scene.effect.InnerShadow;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import javafx.scene.effect.Blend; 
-import javafx.scene.effect.BlendMode;
 import javafx.animation.FadeTransition;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Pos;
@@ -32,15 +29,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
 
 public class App extends Application {
     private GameMenu gameMenu;
@@ -263,7 +252,6 @@ public class App extends Application {
     }
     private class GameMenu extends Parent {
         public GameMenu() {
-            String[] s = {"LEFT","RIGHT","UP","DOWN"};
             VBox menu2 = new VBox(10);
             VBox menu3 = new VBox(10);
 
@@ -388,7 +376,8 @@ public class App extends Application {
         
         public MenuButton(String name) {
             text = new Text(name);
-            text.setFont(text.getFont().font(20));
+            text.getFont();
+            text.setFont(Font.font(20));
             text.setFill(Color.WHITE);
 
             Rectangle bg = new Rectangle(250, 30);
