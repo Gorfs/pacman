@@ -5,6 +5,7 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -61,15 +62,14 @@ public final class MazeState {
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
-            if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
-                for (var n: curNeighbours) if (config.getCell(n).initialContent() == Cell.Content.WALL) {
+            if (!Arrays.equals(curNeighbours, nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
+                for (var n: nextNeighbours) if (config.getCell(n).initialContent() == Cell.Content.WALL) {
                     switch (critter.getDirection()) {
-                        case NORTH -> nextPos = curPos.floorY();
-                        case EAST -> nextPos = curPos.ceilX();
-                        case SOUTH -> nextPos = curPos.ceilY();
-                        case WEST -> nextPos = curPos.floorX();
+                        case NORTH -> {nextPos = curPos.floorY();critter.setDirection(Direction.NONE);}
+                        case EAST -> {nextPos = curPos.ceilX();critter.setDirection(Direction.NONE);}
+                        case SOUTH -> {nextPos = curPos.ceilY();critter.setDirection(Direction.NONE);}
+                        case WEST -> {nextPos = curPos.floorX();critter.setDirection(Direction.NONE);}
                     }
-                    critter.setDirection(Direction.NONE);
                     break;
                 }
             }
@@ -79,9 +79,9 @@ public final class MazeState {
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
         if (!gridState[pacPos.y()][pacPos.x()]) {
-            if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
+            if (config.getCell(pacPos).initialContent() == Cell.Content.DOT) {
                 addScore(1);
-            }else if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER){
+            }else if (config.getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
                 addScore(15);
             }
@@ -90,7 +90,6 @@ public final class MazeState {
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
-                    addScore(10);
                     resetCritter(critter);
                 } else {
                     playerLost();
