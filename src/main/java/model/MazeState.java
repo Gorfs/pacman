@@ -5,9 +5,9 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static model.Ghost.*;
 
@@ -62,19 +62,36 @@ public final class MazeState {
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
-            if (!Arrays.equals(curNeighbours, nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
-                for (var n: nextNeighbours) if (config.getCell(n).initialContent() == Cell.Content.WALL) {
-                    switch (critter.getDirection()) {
-                        case NORTH -> {nextPos = curPos.floorY();critter.setDirection(Direction.NONE);}
-                        case EAST -> {nextPos = curPos.ceilX();critter.setDirection(Direction.NONE);}
-                        case SOUTH -> {nextPos = curPos.ceilY();critter.setDirection(Direction.NONE);}
-                        case WEST -> {nextPos = curPos.floorX();critter.setDirection(Direction.NONE);}
+            if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
+                for (var n: nextNeighbours)
+                    if (config.getCell(n).initialContent() == Cell.Content.WALL) {
+                        switch (critter.getDirection()) {
+                            case NORTH -> {System.out.println(curPos.plus(RealCoordinates.NORTH_UNIT).round() + " " + n);
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
+                                    nextPos = curPos.floorY();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                            }
+                            case EAST -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
+                                    nextPos = curPos.ceilX();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                            }
+                            case SOUTH -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
+                                    nextPos = curPos.ceilY();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                            }
+                            case WEST -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
+                                    nextPos = curPos.floorX();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                            }
+                        }
                     }
-                    break;
-                }
             }
             critter.setPos(nextPos.warp(width, height));
         }
+
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());

@@ -1,5 +1,9 @@
 package geometry;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public record RealCoordinates(double x, double y) {
 
     public static final RealCoordinates ZERO = new RealCoordinates(0, 0);
@@ -21,13 +25,15 @@ public record RealCoordinates(double x, double y) {
      *
      * @return the coordinates of all integer squares that a unit square with current coordinates would intersect
       */
-    public IntCoordinates[] intNeighbours() {
-        return new IntCoordinates[] {
+    public Set<IntCoordinates> intNeighbours() {
+        return new HashSet<>(List.of(
                 new IntCoordinates((int) Math.floor(x), (int) Math.floor(y)),
                 new IntCoordinates((int) Math.floor(x), (int) Math.ceil(y)),
                 new IntCoordinates((int) Math.ceil(x), (int) Math.floor(y)),
-                new IntCoordinates((int) Math.ceil(x), (int) Math.ceil(y))};
+                new IntCoordinates((int) Math.ceil(x), (int) Math.ceil(y))
+        ));
     }
+
 
     public IntCoordinates round() {
         return new IntCoordinates((int) Math.round(x), (int) Math.round(y));
