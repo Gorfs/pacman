@@ -31,12 +31,14 @@ public class ClydeController {
                 
             }
         }
+        clyde.setDirection(Direction.EAST);
         if (clyde != null){
             var curPos = clyde.getPos();
             // Debug.out(curPos.toString());
             var curNeighbours = curPos.intNeighbours();
             for(var x : curNeighbours){
                 // Debug.out(x.toString());
+                clyde.setDirection(Direction.EAST);
                 // Debug.out("current neighbours length is " + curNeighbours.size());
             }
             

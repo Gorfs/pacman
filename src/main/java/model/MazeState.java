@@ -4,6 +4,7 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import misc.Debug;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public final class MazeState {
 
     private final boolean[][] gridState;
 
-    private final List<Critter> critters;
+    private  static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
@@ -69,24 +70,13 @@ public final class MazeState {
 
     public void update(long deltaTns) {
         for  (var critter: critters) {
-            
-            
             ClydeController.setDirection();
-            // here should be the setting of the next position for all the other AIs to add:
-
-
-
-
-           var curPos = critter.getPos();
-           var nextPos = critter.nextPos(deltaTns);
-           var curNeighbours = curPos.intNeighbours();
-           var nextNeighbours = nextPos.intNeighbours();
-
-            // basic debugging to see if the bots are going the right direction
-            // Debug.out("Next pos is: " + String.valueOf(nextPos));
-            // Debug.out("cur pos is: " + String.valueOf(curPos));
-            // Debug.out(critter.toString() + "  " +  critter.getDirection());
-
+            var curPos = critter.getPos();
+            var nextPos = critter.nextPos(deltaTns);
+            
+           
+            var curNeighbours = curPos.intNeighbours();
+            var nextNeighbours = nextPos.intNeighbours();
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
                     if (config.getCell(n).initialContent() == Cell.Content.WALL) {
@@ -113,30 +103,33 @@ public final class MazeState {
                             }
                         }
                     }
-                    critter.setDirection(Direction.NONE);
-                    break;
-                }
-                // IMPORTANT -> THIS IS WHERE MOVEMENT HAPPENS
-            critter.setPos(nextPos.warp(width, height));
-
             }
-                    }
+            critter.setPos(nextPos.warp(width, height));
+        }
 
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!gridState[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
-            if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
-                addScore(1);
-            }else if (config.getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
-                // make the pacman energized -->
-                addScore(15);
-            }
+        if (!gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "ENERGIZER")){
+            // make the pacman energized -->
+            addScore(15);
+            // Debug.out("picked up power pellet");
+            PacMan.setEnergized();
+            gridState[pacPos.y()][pacPos.x()] = true;
+
+        }else if (!gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "DOT")) {
+            addScore(1);
+
+            // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT ? "DOT" : "NOT DOT");
+
+            // Debug.out("Picked up a normal pellet");
             gridState[pacPos.y()][pacPos.x()] = true;
         }
+ 
+
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
-                if (PacMan.INSTANCE.isEnergized()) {
+                if (PacMan.isEnergized()) {
                     resetCritter(critter);
                 } else {
                     playerLost();
@@ -150,6 +143,7 @@ public final class MazeState {
             return;
         }
     }
+    
 
     public boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
@@ -170,7 +164,7 @@ public final class MazeState {
         }
     }
 
-}
+
     private void addScore(int increment) {
         score += increment;
         displayScore();
