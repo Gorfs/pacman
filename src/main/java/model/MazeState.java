@@ -69,12 +69,26 @@ public final class MazeState {
 
     public void update(long deltaTns) {
         for  (var critter: critters) {
-            var curPos = critter.getPos();
-            var nextPos = critter.nextPos(deltaTns);
+            
+            
+            ClydeController.setDirection();
+            // here should be the setting of the next position for all the other AIs to add:
+
+
+
+
+           var curPos = critter.getPos();
+           var nextPos = critter.nextPos(deltaTns);
+
+            // basic debugging to see if the bots are going the right direction
+            Debug.out("Next pos is: " + String.valueOf(nextPos));
+            Debug.out("cur pos is: " + String.valueOf(curPos));
+
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
-            ClydeController.setNextPosition();
+
             Debug.out(critter.toString() + "  " +  critter.getDirection());
+
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
                     if (config.getCell(n).initialContent() == Cell.Content.WALL) {
@@ -101,6 +115,12 @@ public final class MazeState {
                             }
                         }
                     }
+<<<<<<< HEAD
+=======
+                    critter.setDirection(Direction.NONE);
+                    break;
+                }
+>>>>>>> 0bf46f4 (managed to make the ghost move, Now I am trying to get all the neighbours around the ghost to figure out the next direction to go, putting issue on hold until collisions are fixed)
             }
             critter.setPos(nextPos.warp(width, height));
         }
