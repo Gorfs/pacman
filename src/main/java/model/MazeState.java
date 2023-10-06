@@ -79,15 +79,13 @@ public final class MazeState {
 
            var curPos = critter.getPos();
            var nextPos = critter.nextPos(deltaTns);
+           var curNeighbours = curPos.intNeighbours();
+           var nextNeighbours = nextPos.intNeighbours();
 
             // basic debugging to see if the bots are going the right direction
-            Debug.out("Next pos is: " + String.valueOf(nextPos));
-            Debug.out("cur pos is: " + String.valueOf(curPos));
-
-            var curNeighbours = curPos.intNeighbours();
-            var nextNeighbours = nextPos.intNeighbours();
-
-            Debug.out(critter.toString() + "  " +  critter.getDirection());
+            // Debug.out("Next pos is: " + String.valueOf(nextPos));
+            // Debug.out("cur pos is: " + String.valueOf(curPos));
+            // Debug.out(critter.toString() + "  " +  critter.getDirection());
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
@@ -115,15 +113,14 @@ public final class MazeState {
                             }
                         }
                     }
-<<<<<<< HEAD
-=======
                     critter.setDirection(Direction.NONE);
                     break;
                 }
->>>>>>> 0bf46f4 (managed to make the ghost move, Now I am trying to get all the neighbours around the ghost to figure out the next direction to go, putting issue on hold until collisions are fixed)
-            }
+                // IMPORTANT -> THIS IS WHERE MOVEMENT HAPPENS
             critter.setPos(nextPos.warp(width, height));
-        }
+
+            }
+                    }
 
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
@@ -137,7 +134,6 @@ public final class MazeState {
             }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
-
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
@@ -174,6 +170,7 @@ public final class MazeState {
         }
     }
 
+}
     private void addScore(int increment) {
         score += increment;
         displayScore();
