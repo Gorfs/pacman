@@ -38,9 +38,6 @@ public class GameView {
         var menu = new Menu(scale * 1.50); //On initialise le Menu
         graphicsUpdaters = new ArrayList<>();
 
-        
-
-        
         for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
         for (int x = 0; x < maze.getWidth(); x++)
             for (int y = 0; y < maze.getHeight(); y++)

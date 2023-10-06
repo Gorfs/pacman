@@ -7,6 +7,7 @@ import geometry.RealCoordinates;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static model.Ghost.*;
 
@@ -73,26 +74,42 @@ public final class MazeState {
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
-                for (var n: curNeighbours) if (config.getCell(n).initialContent() == Cell.Content.WALL) {
-                    switch (critter.getDirection()) {
-                        case NORTH -> nextPos = curPos.floorY();
-                        case EAST -> nextPos = curPos.ceilX();
-                        case SOUTH -> nextPos = curPos.ceilY();
-                        case WEST -> nextPos = curPos.floorX();
+                for (var n: nextNeighbours)
+                    if (config.getCell(n).initialContent() == Cell.Content.WALL) {
+                        switch (critter.getDirection()) {
+                            case NORTH -> {System.out.println(curPos.plus(RealCoordinates.NORTH_UNIT).round() + " " + n);
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
+                                    nextPos = curPos.floorY();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                            }
+                            case EAST -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
+                                    nextPos = curPos.ceilX();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                            }
+                            case SOUTH -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
+                                    nextPos = curPos.ceilY();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                            }
+                            case WEST -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
+                                    nextPos = curPos.floorX();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                            }
+                        }
                     }
-                    critter.setDirection(Direction.NONE);
-                    break;
-                }
             }
             critter.setPos(nextPos.warp(width, height));
         }
+
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
         if (!gridState[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
             if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
                 addScore(1);
-            }else if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.ENERGIZER){
+            }else if (config.getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
                 addScore(15);
             }
@@ -102,7 +119,6 @@ public final class MazeState {
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
-                    addScore(10);
                     resetCritter(critter);
                 } else {
                     playerLost();
