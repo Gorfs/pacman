@@ -71,8 +71,9 @@ public final class PacMan implements Critter {
             public void run() {
                 Debug.out("started timer");
                 try{
+                    // not sure what the thread.sleep does, since the timing is done via the timer.schedule command, but it works.
                     for (int i = 0; i < 10; i++){
-                        Thread.sleep(100L);
+                        Thread.sleep(0);
                     }
                     setEnergized(false);
                                     } catch (InterruptedException e) {
@@ -80,7 +81,7 @@ public final class PacMan implements Critter {
                     System.out.println("oh no, anyway.... (the timer for the energizer went wrong , got an intrerruptedException error)");
                 }
             }
-        }, 1000);
+        }, 10000);
         // timer's second argument is in milliseconds, s 1000 ms = 1s
 
         // setEnergized(false);
