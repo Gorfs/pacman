@@ -42,7 +42,7 @@ public class Menu {
 
         return new GraphicsUpdater() {
             @Override
-            public void update() {
+            public void update(long deltaT) {
                 if (MazeState.getGameEnded()){
                     livesHb.setVisible(false);
                     return;

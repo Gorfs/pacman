@@ -61,7 +61,7 @@ public class GameView {
                 var deltaT = now - last;
                 maze.update(deltaT);
                 for (var updater : graphicsUpdaters) {
-                    updater.update();
+                    updater.update(deltaT);
                 }
                 last = now;
             }
