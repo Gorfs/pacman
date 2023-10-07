@@ -1,6 +1,7 @@
 package gui;
 
 import model.Direction;
+import model.MazeState;
 import model.PacMan;
 import javafx.scene.input.KeyCode;
 

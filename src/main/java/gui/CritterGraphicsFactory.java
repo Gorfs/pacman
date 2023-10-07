@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.Critter;
 import model.Ghost;
+import model.MazeState;
 import model.PacMan;
 
 
@@ -16,7 +17,7 @@ public final class CritterGraphicsFactory {
     }
 
     public GraphicsUpdater makeGraphics(Critter critter) {
-        var size = 0.7;
+        var size = 1.0;
         var url = (critter instanceof PacMan) ? "pacman.png" :
                 switch ((Ghost) critter) {
                     case BLINKY -> "ghost_blinky.png";
@@ -28,9 +29,16 @@ public final class CritterGraphicsFactory {
         return new GraphicsUpdater() {
             @Override
             public void update() {
-                image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
-                image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
-                // Debug.out("sprite updated");
+                if (MazeState.getGameEnded() == false){
+                    image.setVisible(true);
+                    image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
+                    image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
+                    // Debug.out("sprite updated");
+                }
+                else{
+                    image.setVisible(false); //Ici tous les sprites disparaissent parce que "image" contient tous les sprites (joueur + ghosts)
+                    //Si cela ne convient pas il faudra trouver un moyen de séparer les deux types d'images.
+                }
             }
 
             @Override

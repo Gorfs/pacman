@@ -1,11 +1,13 @@
 package model;
 
+import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static model.Ghost.*;
 
@@ -17,12 +19,13 @@ public final class MazeState {
     private final boolean[][] gridState;
 
     private final List<Critter> critters;
-    private int score;
+    private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
-    private int lives = 3;
-    
+
+    private static int lives = 3;
     public void setLive(int l){lives=l;}
+    private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
         this.config = config;
@@ -52,64 +55,101 @@ public final class MazeState {
         return height;
     }
 
+    public static int getLives(){
+        return lives;
+    }
+
+    public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
+        return gameEnded;
+    }
+
+    public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
+        gameEnded = false;
+        lives = 3;
+        score = 0;
+    }
+
     public void update(long deltaTns) {
-        // FIXME: too many things in this method. Maybe some responsibilities can be delegated to other methods or classes?
         for  (var critter: critters) {
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
-                switch (critter.getDirection()) {
-                    case NORTH -> {
-                        for (var n: curNeighbours) if (config.getCell(n).northWall()) {
-                            nextPos = curPos.floorY();
-                            critter.setDirection(Direction.NONE);
-                            break;
+                for (var n: nextNeighbours)
+                    if (config.getCell(n).initialContent() == Cell.Content.WALL) {
+                        switch (critter.getDirection()) {
+                            case NORTH -> {System.out.println(curPos.plus(RealCoordinates.NORTH_UNIT).round() + " " + n);
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
+                                    nextPos = curPos.floorY();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                            }
+                            case EAST -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
+                                    nextPos = curPos.ceilX();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                            }
+                            case SOUTH -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
+                                    nextPos = curPos.ceilY();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                            }
+                            case WEST -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
+                                    nextPos = curPos.floorX();critter.setDirection(Direction.NONE);
+                                } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                            }
                         }
                     }
-                    case EAST -> {
-                        for (var n: curNeighbours) if (config.getCell(n).eastWall()) {
-                            nextPos = curPos.ceilX();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                    case SOUTH -> {
-                        for (var n: curNeighbours) if (config.getCell(n).southWall()) {
-                            nextPos = curPos.ceilY();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                    case WEST -> {
-                        for (var n: curNeighbours) if (config.getCell(n).westWall()) {
-                            nextPos = curPos.floorX();
-                            critter.setDirection(Direction.NONE);
-                            break;
-                        }
-                    }
-                }
-
             }
-
             critter.setPos(nextPos.warp(width, height));
         }
+
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
-        if (!gridState[pacPos.y()][pacPos.x()]) {
-            addScore(1);
+        // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
+        if (!gridState[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
+            if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
+                addScore(1);
+            }else if (config.getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
+                // make the pacman energized -->
+                addScore(15);
+            }
             gridState[pacPos.y()][pacPos.x()] = true;
         }
+
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
                 if (PacMan.INSTANCE.isEnergized()) {
-                    addScore(10);
                     resetCritter(critter);
                 } else {
                     playerLost();
                     return;
                 }
+            }
+        }
+        if(allPointsCollected()){
+            resetCritters();
+            resetGrid();
+            return;
+        }
+    }
+
+    public boolean allPointsCollected() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                if (!gridState[i][j] && config.getCell(new IntCoordinates(i, j)).initialContent() == Cell.Content.DOT) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private void resetGrid() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                gridState[i][j] = false;
             }
         }
     }
@@ -120,19 +160,15 @@ public final class MazeState {
     }
 
     private void displayScore() {
-        // FIXME: this should be displayed in the JavaFX view, not in the console
         System.out.println("Score: " + score);
         System.out.println(PacMan.INSTANCE.getName());
     }
 
     private void playerLost() {
-        // FIXME: this should be displayed in the JavaFX view, not in the console. A game over screen would be nice too.
         lives--;
         if (lives == 0) {
-            System.out.println("Game over!");
-            System.exit(0);
+            gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
         }
-        System.out.println("Lives: " + lives);
         resetCritters();
     }
 
@@ -147,6 +183,10 @@ public final class MazeState {
 
     public MazeConfig getConfig() {
         return config;
+    }
+
+    public static int getScore(){
+        return score;
     }
 
     public boolean getGridState(IntCoordinates pos) {

@@ -31,9 +31,9 @@ public record RealCoordinates(double x, double y) {
                 new IntCoordinates((int) Math.floor(x), (int) Math.ceil(y)),
                 new IntCoordinates((int) Math.ceil(x), (int) Math.floor(y)),
                 new IntCoordinates((int) Math.ceil(x), (int) Math.ceil(y))
-        )
-        );
+        ));
     }
+
 
     public IntCoordinates round() {
         return new IntCoordinates((int) Math.round(x), (int) Math.round(y));
