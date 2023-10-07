@@ -8,6 +8,8 @@ public sealed interface Critter permits Ghost, PacMan {
 
     Direction getDirection();
 
+    Direction getNextDirection();
+
     double getSpeed();
 
     /**
@@ -26,4 +28,5 @@ public sealed interface Critter permits Ghost, PacMan {
 
     void setPos(RealCoordinates realCoordinates);
     void setDirection(Direction direction);
+    void setNextDirection(Direction direction);
 }

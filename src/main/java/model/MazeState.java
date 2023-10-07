@@ -73,29 +73,58 @@ public final class MazeState {
             var nextPos = critter.nextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
+            if (critter.getDirection() == Direction.NONE) critter.setDirection(Direction.NONE);
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
                     if (config.getCell(n).initialContent() == Cell.Content.WALL) {
                         switch (critter.getDirection()) {
-                            case NORTH -> {System.out.println(curPos.plus(RealCoordinates.NORTH_UNIT).round() + " " + n);
+                            case NORTH -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
                                     nextPos = curPos.floorY();critter.setDirection(Direction.NONE);
-                                } else nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                                }
                             }
                             case EAST -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
                                     nextPos = curPos.ceilX();critter.setDirection(Direction.NONE);
-                                } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                                }
                             }
                             case SOUTH -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
                                     nextPos = curPos.ceilY();critter.setDirection(Direction.NONE);
-                                } else nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                                }
                             }
                             case WEST -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
                                     nextPos = curPos.floorX();critter.setDirection(Direction.NONE);
-                                } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                                }
+                            }
+                        }
+
+                    } else {
+                        switch (critter.getNextDirection()) {
+                            case NORTH -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
+                                    nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                                    critter.setNextDirection(Direction.NORTH);
+                                }
+                            }
+                            case EAST -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
+                                    nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                                    critter.setNextDirection(Direction.EAST);
+                                }
+                            }
+                            case SOUTH -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
+                                    nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                                    critter.setNextDirection(Direction.SOUTH);
+                                }
+                            }
+                            case WEST -> {
+                                if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
+                                    nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                                    critter.setNextDirection(Direction.WEST);
+                                }
                             }
                         }
                     }

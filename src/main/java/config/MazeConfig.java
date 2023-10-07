@@ -102,7 +102,7 @@ public class MazeConfig {
         }
         // Init the spawn of the entities
         IntCoordinates player = new IntCoordinates(10, 15),
-                blinky = new IntCoordinates(10, 16), inky = new IntCoordinates(10, 9),
+                blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
                 pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
         // return everything
         return new MazeConfig(map, player, blinky, inky, pinky, clyde);
