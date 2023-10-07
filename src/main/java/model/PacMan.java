@@ -10,7 +10,7 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
     private boolean energized;
 
-    private PacMan() {
+    public PacMan() {
     }
     /**On pourra mettre dans le menu le choix du nom qui s'affichera au dessus du pacman,
      * en plus si on refait un round, le pacman garde quand meme le nom en l'initialisant
@@ -21,11 +21,13 @@ public final class PacMan implements Critter {
         this.name=name;
     }
     public static PacMan getInstance(String name){
-        if(INSTANCE==null){
+        if(INSTANCE.name==null){
             INSTANCE=new PacMan(name);
         }
         return INSTANCE;
     }
+    
+    public static String getName(){return INSTANCE.name;}
 
     @Override
     public RealCoordinates getPos() {

@@ -3,12 +3,12 @@ package gui;
 //inspiré grandement par 
 //https://github.com/AlmasB/FXTutorials/blob/
 //master/src/main/java/com/almasb/tutorial4/GameMenuDemo.java
+import model.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import config.MazeConfig;
-import model.MazeState;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -30,21 +30,69 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
+import javafx.scene.control.*;
 
 public class App extends Application {
+    private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     private GameMenu gameMenu;
     private GameMenu1 gameMenu1;
     private Stage primaryS;
+    private TextField text;
+    private TextField t;
+    private MenuButton2 button = new MenuButton2("Sumbit");
+    private MenuButton2 button1 = new MenuButton2("Sumbit");
+
+    public static KeyCode[] M(String s, KeyCode[] k, int n){
+        if(s.charAt(0)=='a'){k[n]=KeyCode.A;}
+        else if(s.charAt(0)=='z'){k[n]=KeyCode.Z;}
+        else if(s.charAt(0)=='e'){k[n]=KeyCode.E;}
+        else if(s.charAt(0)=='r'){k[n]=KeyCode.R;}
+        else if(s.charAt(0)=='t'){k[n]=KeyCode.T;}
+        else if(s.charAt(0)=='y'){k[n]=KeyCode.Y;}
+        else if(s.charAt(0)=='u'){k[n]=KeyCode.U;}
+        else if(s.charAt(0)=='i'){k[n]=KeyCode.I;}
+        else if(s.charAt(0)=='o'){k[n]=KeyCode.O;}
+        else if(s.charAt(0)=='p'){k[n]=KeyCode.P;}
+        else if(s.charAt(0)=='q'){k[n]=KeyCode.Q;}
+        else if(s.charAt(0)=='s'){k[n]=KeyCode.S;}
+        else if(s.charAt(0)=='d'){k[n]=KeyCode.D;}
+        else if(s.charAt(0)=='f'){k[n]=KeyCode.F;}
+        else if(s.charAt(0)=='g'){k[n]=KeyCode.G;}
+        else if(s.charAt(0)=='h'){k[n]=KeyCode.H;}
+        else if(s.charAt(0)=='j'){k[n]=KeyCode.J;}
+        else if(s.charAt(0)=='k'){k[n]=KeyCode.K;}
+        else if(s.charAt(0)=='l'){k[n]=KeyCode.L;}
+        else if(s.charAt(0)=='m'){k[n]=KeyCode.M;}
+        else if(s.charAt(0)=='w'){k[n]=KeyCode.W;}
+        else if(s.charAt(0)=='x'){k[n]=KeyCode.X;}
+        else if(s.charAt(0)=='c'){k[n]=KeyCode.C;}
+        else if(s.charAt(0)=='v'){k[n]=KeyCode.V;}
+        else if(s.charAt(0)=='b'){k[n]=KeyCode.B;}
+        else if(s.charAt(0)=='n'){k[n]=KeyCode.N;}
+        else if(s.charAt(0)=='1'){k[n]=KeyCode.LEFT;}
+        else if(s.charAt(0)=='2'){k[n]=KeyCode.RIGHT;}
+        else if(s.charAt(0)=='3'){k[n]=KeyCode.UP;}
+        else if(s.charAt(0)=='4'){k[n]=KeyCode.DOWN;}
+        return k;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryS=primaryStage;
-          Pane root = new Pane();
+        Pane root = new Pane();
         root.setPrefSize(860, 600);
 
         InputStream is = Files.newInputStream(Paths.get("src/main/resources/pac.jpeg"));
         Image img = new Image(is);
         is.close();
-
+        TextField te = new TextField();
+        TextField tex = new TextField();
+        text=te;
+        t=tex;
+        button1.setVisible(false);
+        button.setVisible(false);
+        text.setVisible((false));
+        t.setVisible(false);
         ImageView imgView = new ImageView(img);
         imgView.setFitWidth(860);
         imgView.setFitHeight(600);
@@ -53,7 +101,7 @@ public class App extends Application {
         gameMenu1 = new GameMenu1();
         gameMenu.setVisible(true);
         gameMenu1.setVisible(false);
-        root.getChildren().addAll(imgView, gameMenu, gameMenu1);
+        root.getChildren().addAll(imgView, gameMenu, gameMenu1, text, button, t, button1 );
         Scene scene = new Scene(root);
         
         scene.setOnKeyPressed(event -> {
@@ -64,6 +112,10 @@ public class App extends Application {
                     ft.setToValue(0);
 
                     gameMenu.setVisible(false);
+                    text.setVisible(false);
+                    button.setVisible(false);
+                    t.setVisible(false);
+                    button1.setVisible(false);
                     gameMenu1.setVisible(true);
                     ft.play();
 
@@ -74,6 +126,8 @@ public class App extends Application {
                     ft.setToValue(1);
                     ft.setOnFinished(evt -> gameMenu.setVisible(true));
                     gameMenu1.setVisible(false);
+                    t.setVisible(false);
+                    button1.setVisible(false);
                     ft.play();
                 }
             }
@@ -218,19 +272,71 @@ public class App extends Application {
             });
             
             MenuButton btncase1 = new MenuButton("LEFT");
-            btncase1.setOnMouseClicked(event -> {
+            btncase1.setOnMouseClicked(event1 -> {
+                    t.setTranslateY(320);
+                    t.setTranslateX(300);
+                    t.setText("Écrivez votre touche");
+                    t.setVisible((true));
+                    button1.setVisible(true);
+                    button1.setTranslateY(322);
+                    button1.setTranslateX(432);
+                    button1.setOnMouseClicked(event -> {
+                        t.setVisible((false));
+                        button1.setVisible(false);
+                        String s = t.getText();
+                        k=M(s,k,0);
+                    });                
             });
 
             MenuButton btncase2 = new MenuButton("RIGHT");
-            btncase2.setOnMouseClicked(event -> {
+            btncase2.setOnMouseClicked(event1 -> {
+                    t.setTranslateY(320);
+                    t.setTranslateX(300);
+                    t.setText("Écrivez votre touche");
+                    t.setVisible((true));
+                    button1.setVisible(true);
+                    button1.setTranslateY(322);
+                    button1.setTranslateX(432);
+                    button1.setOnMouseClicked(event -> {
+                        String s = t.getText();
+                        k=M(s,k,1);
+                        t.setVisible((false));
+                        button1.setVisible(false);
+                    });
             });
             
             MenuButton btncase3 = new MenuButton("UP");
-            btncase3.setOnMouseClicked(event -> {
+            btncase3.setOnMouseClicked(event1 -> {
+                    t.setTranslateY(320);
+                    t.setTranslateX(300);
+                    t.setText("Écrivez votre touche");
+                    t.setVisible((true));
+                    button1.setVisible(true);
+                    button1.setTranslateY(322);
+                    button1.setTranslateX(432);
+                    button1.setOnMouseClicked(event -> {
+                        String s = t.getText();
+                        k=M(s,k,2);
+                        t.setVisible((false));
+                        button1.setVisible(false);
+                    });
             });
 
             MenuButton btncase4 = new MenuButton("DOWN");
-            btncase4.setOnMouseClicked(event -> {
+            btncase4.setOnMouseClicked(event1 -> {
+                    t.setTranslateY(320);
+                    t.setTranslateX(300);
+                    t.setText("Écrivez votre touche");
+                    t.setVisible((true));
+                    button1.setVisible(true);
+                    button1.setTranslateY(322);
+                    button1.setTranslateX(432);
+                    button1.setOnMouseClicked(event -> {
+                        String s = t.getText();
+                        k=M(s,k,3);
+                        t.setVisible((false));
+                        button1.setVisible(false);
+                    });
             });
 
             MenuButton btns1 = new MenuButton("1");
@@ -254,6 +360,7 @@ public class App extends Application {
         public GameMenu() {
             VBox menu2 = new VBox(10);
             VBox menu3 = new VBox(10);
+            VBox menu4 = new VBox(10);
 
             menu2.setTranslateX(276);
             menu2.setTranslateY(100);
@@ -261,6 +368,8 @@ public class App extends Application {
             menu3.setTranslateX(100);
             menu3.setTranslateY(200);
 
+            menu4.setTranslateX(100);
+            menu4.setTranslateY(200);
 
             final int offset = 400;
 
@@ -268,6 +377,39 @@ public class App extends Application {
             Rectangle bg = new Rectangle(800, 600);
             bg.setFill(Color.GREY);
             bg.setOpacity(0);
+
+            MenuButton btnName = new MenuButton("NAME");
+            btnName.setOnMouseClicked(event -> {
+                text.setTranslateY(320);
+                text.setTranslateX(300);
+                text.setText("Écrivez votre nom");
+                text.setVisible((true));
+                button.setVisible(true);
+                button.setTranslateY(322);
+                button.setTranslateX(432);
+                button.setOnMouseClicked(event1 -> {
+                    text.setVisible(false);
+                    button.setVisible(false);
+                    String a="";
+                    a = text.getText();
+                    System.out.println(a);
+                    PacMan.INSTANCE = new PacMan();
+                    PacMan.INSTANCE.getInstance(a);
+                    getChildren().add(menu3);
+                    TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu4);
+                    tt.setToX(menu4.getTranslateX() + offset);
+
+                    TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu3);
+                    tt1.setToX(menu4.getTranslateX());
+
+                    tt.play();
+                    tt1.play();
+
+                    tt.setOnFinished(evt -> {
+                    getChildren().remove(menu4);
+                    });
+                });
+            });
 
             MenuButton btnBack1 = new MenuButton("BACK");
             btnBack1.setOnMouseClicked(event -> {
@@ -288,12 +430,11 @@ public class App extends Application {
 
             MenuButton1 btnPlay = new MenuButton1("PLAY");
             btnPlay.setOnMouseClicked(event -> {
-                getChildren().add(menu3);
-                bg.setOpacity(0);
+                getChildren().add(menu4);
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu2);
                 tt.setToX(menu2.getTranslateX() - offset);
 
-                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu3);
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu4);
                 tt1.setToX(menu2.getTranslateX());
 
                 tt.play();
@@ -306,39 +447,70 @@ public class App extends Application {
 
             MenuButton btnf = new MenuButton("FACILE");
             btnf.setOnMouseClicked(event -> {
-                start(primaryS,4);
+                start(primaryS,4,k);
             });
 
             MenuButton btnm = new MenuButton("MEDIUM");
             btnm.setOnMouseClicked(event -> {
-                start(primaryS,3);
+                start(primaryS,3,k);
             });
 
             MenuButton btnh = new MenuButton("HARD");
             btnh.setOnMouseClicked(event -> {
-                start(primaryS,2);
+                start(primaryS,2,k);
             });
 
             MenuButton btne = new MenuButton("EXPERT");
             btne.setOnMouseClicked(event -> {
-                start(primaryS,1);
+                start(primaryS,1,k);
             });
-
+            menu4.getChildren().addAll(btnName);
             menu3.getChildren().addAll(btnBack1,btnf,btnm,btnh,btne);
             menu2.getChildren().addAll(btnPlay);
             getChildren().addAll(bg,menu2);
         }
     }
+    private static class MenuButton2 extends StackPane {
+        private Text text;
+
+        public MenuButton2(String name) {
+            text = new Text(name);
+            text.setFont(Font.font(10));
+            text.setStrokeWidth(0.5);
+            text.setFill(Color.BLACK);
+
+            Rectangle bg = new Rectangle(30,20);
+            bg.setFill(Color.WHITE);
+            bg.setOpacity(1);
+            bg.setEffect(new GaussianBlur(3.5));
+
+            setAlignment(Pos.CENTER);
+            setRotate(-0.5);
+            getChildren().addAll(bg, text);
+
+            setOnMouseEntered(event -> {
+                text.setFill(Color.PURPLE);
+            });
+
+            setOnMouseExited(event -> {
+                text.setFill(Color.BLACK);
+            });
+            DropShadow drop = new DropShadow(50, Color.WHITE);
+            drop.setInput(new Glow());
+
+            setOnMousePressed(event -> setEffect(drop));
+            setOnMouseReleased(event -> setEffect(null));
+        }
+    }
     private static class MenuButton1 extends StackPane {
         private Text text;
 
-        
         public MenuButton1(String name) {
             text = new Text(name);
             text.setFont(Font.loadFont("file:src/main/resources/slkscrb.ttf", 100));
-             text.setFill(Color.BROWN);
-             text.setStroke(Color.BLUEVIOLET);
-             text.setStrokeWidth(0.5);
+            text.setFill(Color.BROWN);
+            text.setStroke(Color.BLUEVIOLET);
+            text.setStrokeWidth(0.5);
             text.setFill(Color.WHITE);
 
             Rectangle bg = new Rectangle(332, 100);
@@ -373,10 +545,8 @@ public class App extends Application {
     private static class MenuButton extends StackPane {
         private Text text;
 
-        
         public MenuButton(String name) {
             text = new Text(name);
-            text.getFont();
             text.setFont(Font.font(20));
             text.setFill(Color.WHITE);
 
@@ -413,10 +583,10 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void start(Stage primaryStage, int l) {
+    public void start(Stage primaryStage, int l, KeyCode[] k) {
         var root = new Pane();
         var gameScene = new Scene(root);
-        var pacmanController = new PacmanController();
+        var pacmanController = new PacmanController(k);
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.makeExample1());

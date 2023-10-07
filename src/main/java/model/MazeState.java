@@ -122,6 +122,7 @@ public final class MazeState {
     private void displayScore() {
         // FIXME: this should be displayed in the JavaFX view, not in the console
         System.out.println("Score: " + score);
+        System.out.println(PacMan.INSTANCE.getName());
     }
 
     private void playerLost() {
