@@ -188,7 +188,7 @@ public final class MazeState {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(0.5f); // 在这里设置初始音量
+            gainControl.setValue(0.5f); 
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -202,7 +202,7 @@ public final class MazeState {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(1f); // 在这里设置初始音量
+            gainControl.setValue(1f); 
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();

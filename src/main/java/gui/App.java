@@ -27,7 +27,7 @@ public class App extends Application {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(0.2f); // 在这里设置初始音量
+            gainControl.setValue(0.2f); 
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
