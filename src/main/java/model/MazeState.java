@@ -15,6 +15,8 @@ import static model.Ghost.*;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+
 import java.io.File;
 
 //import javafx.scene.media.Media;
@@ -185,6 +187,8 @@ public final class MazeState {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(0.5f); // 在这里设置初始音量
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -197,6 +201,8 @@ public final class MazeState {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(1f); // 在这里设置初始音量
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();

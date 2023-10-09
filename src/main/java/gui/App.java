@@ -3,6 +3,8 @@ package gui;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+
 import java.io.File;
 
 
@@ -24,6 +26,8 @@ public class App extends Application {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(0.2f); // 在这里设置初始音量
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
