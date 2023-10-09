@@ -12,11 +12,11 @@ import java.util.Objects;
 import static model.Ghost.*;
 
 public final class MazeState {
-    private final MazeConfig config;
-    private final int height;
-    private final int width;
+    private static MazeConfig config;
+    private static int height;
+    private static int width;
 
-    private final boolean[][] gridState;
+    private static boolean[][] gridState;
 
     private final List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
@@ -55,6 +55,10 @@ public final class MazeState {
 
     public static int getLives(){
         return lives;
+    }
+
+    public static boolean[][] getGridState(){
+        return gridState;
     }
 
     public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
@@ -103,21 +107,8 @@ public final class MazeState {
             critter.setPos(nextPos.warp(width, height));
         }
 
-        // FIXME Pac-Man rules should somehow be in Pacman class
-        var pacPos = PacMan.INSTANCE.getPos().round();
-        // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!gridState[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
-            if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
-                addScore(1);
-            }else if (config.getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
-                // make the pacman energized -->
-                addScore(15);
-            }
-            gridState[pacPos.y()][pacPos.x()] = true;
-        }
-
         for (var critter : critters) {
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
+            if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
                 if (PacMan.INSTANCE.isEnergized()) {
                     resetCritter(critter);
                 } else {
@@ -133,7 +124,7 @@ public final class MazeState {
         }
     }
 
-    public boolean allPointsCollected() {
+    public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (!gridState[i][j] && config.getCell(new IntCoordinates(i, j)).initialContent() == Cell.Content.DOT) {
@@ -152,7 +143,7 @@ public final class MazeState {
         }
     }
 
-    private void addScore(int increment) {
+    public static void addScore(int increment) {
         score += increment;
     }
 
@@ -173,7 +164,7 @@ public final class MazeState {
         for (var critter: critters) resetCritter(critter);
     }
 
-    public MazeConfig getConfig() {
+    public static MazeConfig getConfig() {
         return config;
     }
 
