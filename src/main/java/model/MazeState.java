@@ -156,12 +156,6 @@ public final class MazeState {
 
     private void addScore(int increment) {
         score += increment;
-        displayScore();
-    }
-
-    private void displayScore() {
-        System.out.println("Score: " + score);
-        System.out.println(PacMan.INSTANCE.getName());
     }
 
     private void playerLost() {
