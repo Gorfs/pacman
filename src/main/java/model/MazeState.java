@@ -4,7 +4,6 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import misc.Debug;
 
 import java.util.List;
 import java.util.Map;
@@ -75,14 +74,9 @@ public final class MazeState {
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
             
-            
-           
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
-            if (critter.toString() == "CLYDE"){
-            Debug.out(String.valueOf(nextNeighbours)); 
-            Debug.out(String.valueOf(critter.getDirection()));
-            }
+            
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
