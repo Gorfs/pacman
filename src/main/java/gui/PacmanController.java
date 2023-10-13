@@ -10,6 +10,7 @@ public class PacmanController {
     public void keyPressedHandler(KeyEvent event) {
         if (!MazeState.getGameEnded()){ //Lorsque c'est GameOver, on veut que le joueur ne bouge plus. Donc on vérifie que la partie est terminée.
             PacMan.INSTANCE.setNextDirection(
+                    // Store the key pressed into the next move
                     switch (event.getCode()) {
                         case LEFT -> Direction.WEST;
                         case RIGHT -> Direction.EAST;

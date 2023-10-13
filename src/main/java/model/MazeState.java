@@ -71,17 +71,25 @@ public final class MazeState {
         for  (var critter: critters) {
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
+            // Get possible next pos for critter
             var nextNextPos = critter.nextNextPos(deltaTns);
+
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
+            // Get possible next cell
             var nextNextNeighbours = nextNextPos.intNeighbours();
+
+            // Set direction to the next direction if direction is NONE.
             if (critter.getDirection() == Direction.NONE) {
                 critter.setDirection(critter.getNextDirection());
                 critter.setNextDirection(Direction.NONE);
             }
+
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
+                // for next cell, check if this is a wall.
                 for (var n: nextNeighbours)
                     if (config.getCell(n).initialContent() == Cell.Content.WALL) {
+                        // check if the critter is going to the wall and set his direction to direction.NONE if it is.
                         switch (critter.getDirection()) {
                             case NORTH -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
@@ -106,8 +114,10 @@ public final class MazeState {
                         }
 
                     }
+                // for possible next cell, check if this is not a wall.
                 for (var n: nextNextNeighbours)
                     if (config.getCell(n).initialContent() != Cell.Content.WALL) {
+                        // check if the critter is going this way and set his direction to direction.NONE  and update nextPos if it is.
                         switch (critter.getNextDirection()) {
                             case NORTH -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {

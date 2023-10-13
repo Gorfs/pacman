@@ -41,6 +41,7 @@ public final class PacMan implements Critter {
     }
 
     @Override
+    // Storing next move
     public void setNextDirection(Direction nextDirection) {
         this.nextDirection = nextDirection;
     }

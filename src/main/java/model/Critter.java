@@ -26,6 +26,10 @@ public sealed interface Critter permits Ghost, PacMan {
         }).times(getSpeed()*deltaTNanoSeconds * 1E-9));
     }
 
+    /**
+    * @param deltaTNanoSeconds time since the last update in nanoseconds
+    * @return the next position if there is no wall
+    * */
     default RealCoordinates nextNextPos(long deltaTNanoSeconds) {
         return getPos().plus((switch (getNextDirection()) {
             case NONE -> RealCoordinates.ZERO;
