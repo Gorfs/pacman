@@ -71,9 +71,14 @@ public final class MazeState {
         for  (var critter: critters) {
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
+            var nextNextPos = critter.nextNextPos(deltaTns);
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
-            if (critter.getDirection() == Direction.NONE) critter.setDirection(Direction.NONE);
+            var nextNextNeighbours = nextNextPos.intNeighbours();
+            if (critter.getDirection() == Direction.NONE) {
+                critter.setDirection(critter.getNextDirection());
+                critter.setNextDirection(Direction.NONE);
+            }
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
                     if (config.getCell(n).initialContent() == Cell.Content.WALL) {
@@ -100,30 +105,32 @@ public final class MazeState {
                             }
                         }
 
-                    } else {
+                    }
+                for (var n: nextNextNeighbours)
+                    if (config.getCell(n).initialContent() != Cell.Content.WALL) {
                         switch (critter.getNextDirection()) {
                             case NORTH -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
                                     nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
-                                    critter.setNextDirection(Direction.NORTH);
+                                    critter.setDirection(Direction.NONE);
                                 }
                             }
                             case EAST -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
                                     nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
-                                    critter.setNextDirection(Direction.EAST);
+                                    critter.setDirection(Direction.NONE);
                                 }
                             }
                             case SOUTH -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
                                     nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
-                                    critter.setNextDirection(Direction.SOUTH);
+                                    critter.setDirection(Direction.NONE);
                                 }
                             }
                             case WEST -> {
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
                                     nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
-                                    critter.setNextDirection(Direction.WEST);
+                                    critter.setDirection(Direction.NONE);
                                 }
                             }
                         }

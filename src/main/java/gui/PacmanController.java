@@ -9,13 +9,13 @@ import javafx.scene.input.KeyEvent;
 public class PacmanController {
     public void keyPressedHandler(KeyEvent event) {
         if (!MazeState.getGameEnded()){ //Lorsque c'est GameOver, on veut que le joueur ne bouge plus. Donc on vérifie que la partie est terminée.
-            PacMan.INSTANCE.setDirection(
+            PacMan.INSTANCE.setNextDirection(
                     switch (event.getCode()) {
                         case LEFT -> Direction.WEST;
                         case RIGHT -> Direction.EAST;
                         case UP -> Direction.NORTH;
                         case DOWN -> Direction.SOUTH;
-                        default -> PacMan.INSTANCE.getDirection(); // do nothing
+                        default -> PacMan.INSTANCE.getNextDirection(); // do nothing
                     }
             );
         }
