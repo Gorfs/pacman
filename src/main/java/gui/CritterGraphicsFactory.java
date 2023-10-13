@@ -53,20 +53,28 @@ public final class CritterGraphicsFactory {
                         if (timer > .2) timer = 0;
                         if (timer < .1) croppedImage(image, critter, x);
                         else if (timer < .2) croppedImage(image, critter, width);
+                        if (!(critter instanceof PacMan)) {
+                            Image fullImage;
+                            if (PacMan.INSTANCE.isEnergized()) fullImage = new Image("scared_ghost.png");
+                            else fullImage = new Image(url);
 
-
+                            ImageView image = new ImageView(fullImage);
+                            image.setViewport(croppedPortion);
+                            image.setFitWidth(scaledWidth);
+                            image.setFitHeight(scaledHeight);
+                            image.setSmooth(true);
+                        }
                     } else {
                         var croppedPortion = new Rectangle2D(x, y, width, height);
                         image.setViewport(croppedPortion);
                     }
-
                     image.setVisible(true);
                     image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
                     image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
                     // Debug.out("sprite updated");
-                }
-                else{
-                    image.setVisible(false); //Ici tous les sprites disparaissent parce que "image" contient tous les sprites (joueur + ghosts)
+                } else {
+                    image.setVisible(false);
+                    //Ici tous les sprites disparaissent parce que "image" contient tous les sprites (joueur + ghosts)
                     //Si cela ne convient pas, il faudra trouver un moyen de séparer les deux types d'images.
                 }
             }
