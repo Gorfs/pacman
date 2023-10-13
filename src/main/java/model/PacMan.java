@@ -11,24 +11,10 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
     private boolean energized;
 
-    public PacMan() {
+    private PacMan() {
     }
-    /**On pourra mettre dans le menu le choix du nom qui s'affichera au dessus du pacman,
-     * en plus si on refait un round, le pacman garde quand meme le nom en l'initialisant
-     */
-    public static PacMan INSTANCE = new PacMan();
-    public String name;
-    private PacMan(String name){
-        this.name=name;
-    }
-    public static PacMan getInstance(String name){
-        if(INSTANCE.name==null){
-            INSTANCE=new PacMan(name);
-        }
-        return INSTANCE;
-    }
-    
-    public static String getName(){return INSTANCE.name;}
+
+    public static final PacMan INSTANCE = new PacMan();
 
     @Override
     public RealCoordinates getPos() {
@@ -70,7 +56,7 @@ public final class PacMan implements Critter {
      * @return whether Pac-Man just ate an energizer
      */
     public boolean isEnergized() {
-        // TODO handle timeout! le temps que ca dure
+        // TODO handle timeout!
         return energized;
     }
 
