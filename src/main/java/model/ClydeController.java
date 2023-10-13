@@ -10,13 +10,13 @@ import geometry.RealCoordinates;
 import java.util.List;
 import config.Cell;
 
-import misc.Debug;
+// import misc.Debug;
 
 public class ClydeController {
 
     Random rd = new Random();
     public void startAI(){
-        Debug.out("CLYDE AI started");
+        // Debug.out("CLYDE AI started");
         Ghost.CLYDE.setDirection(Direction.EAST);
     }
     public static void setDirection(MazeConfig config){
