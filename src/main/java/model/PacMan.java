@@ -1,7 +1,7 @@
 package model;
 import java.util.Timer;
 import geometry.RealCoordinates;
-import misc.Debug;
+// import misc.Debug;
 
 import java.util.TimerTask;
 
@@ -69,7 +69,7 @@ public final class PacMan implements Critter {
 
             @Override
             public void run() {
-                Debug.out("started timer");
+                // Debug.out("started timer");
                 try{
                     // not sure what the thread.sleep does, since the timing is done via the timer.schedule command, but it works.
                     for (int i = 0; i < 10; i++){
