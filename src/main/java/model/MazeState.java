@@ -58,6 +58,7 @@ public final class MazeState {
         return lives;
     }
 
+
     public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
         return gameEnded;
     }
@@ -70,13 +71,19 @@ public final class MazeState {
 
     public void update(long deltaTns) {
         for  (var critter: critters) {
-            ClydeController.setDirection();
+
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
+            
             
            
             var curNeighbours = curPos.intNeighbours();
             var nextNeighbours = nextPos.intNeighbours();
+            if (critter.toString() == "CLYDE"){
+            Debug.out(String.valueOf(nextNeighbours)); 
+            Debug.out(String.valueOf(critter.getDirection()));
+            }
+
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
                     if (config.getCell(n).initialContent() == Cell.Content.WALL) {
@@ -102,6 +109,7 @@ public final class MazeState {
                                 } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
                             }
                         }
+                    ClydeController.setDirection(config);
                     }
             }
             critter.setPos(nextPos.warp(width, height));
