@@ -23,7 +23,9 @@ public final class MazeState {
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
+
     private static int lives = 3;
+    public void setLive(int l){lives=l;}
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
@@ -175,11 +177,6 @@ public final class MazeState {
 
     private void addScore(int increment) {
         score += increment;
-        displayScore();
-    }
-
-    private void displayScore() {
-        System.out.println("Score: " + score);
     }
 
     private void playerLost() {
