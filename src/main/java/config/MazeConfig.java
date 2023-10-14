@@ -71,24 +71,26 @@ public class MazeConfig {
         // Open the file maze.txt
         InputStream is = MazeConfig.class.getResourceAsStream("/" + file + ".txt");
         Scanner myReader;
-        // Read the file maze.txt
-        myReader = new Scanner(is);
-        int n = 0;
-        // while there is something to read
-        while (myReader.hasNextLine()) {
-            // Get the curent line
-            String line = myReader.nextLine();
-            // Split everything into a String array
-            String[] data = line.split(",");
-
-            // For every 2 string
-            for (int i = 0; i < data.length; i ++) {
-                // create a cell based on what there is inside(NOTHING, DOT, etc.)
-                switch (data[i]) {
-                    case "ENERGIZER" -> map[n][i] = slot(ENERGIZER);
-                    case "WALL" -> map[n][i] = slot(WALL);
-                    case "DOT" -> map[n][i] = slot(DOT);
-                    default -> map[n][i] = slot(NOTHING);
+        // Try if the file exist
+        try {
+            // Read the file maze.txt
+            myReader = new Scanner(maze);
+            int n = 0;
+            // while there is something to read
+            while (myReader.hasNextLine()) {
+                // Get the curent line
+                String line = myReader.nextLine();
+                // Split everything into a String array
+                String[] data = line.split(",");
+                // For every 2 string
+                for (int i = 0; i < data.length; i ++) {
+                    // create a cell based on what there is inside(NOTHING, DOT, etc.)
+                    map[n][i] = switch (data[i]) {
+                        case "E" -> slot(ENERGIZER);
+                        case "W" -> slot(WALL);
+                        case "D" -> slot(DOT);
+                        default -> slot(NOTHING);
+                    };
                 }
             }
             n++;
