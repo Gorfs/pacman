@@ -8,6 +8,8 @@ import geometry.RealCoordinates;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static model.Ghost.*;
 
@@ -113,7 +115,18 @@ public final class MazeState {
             if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
                 addScore(1);
             }else if (config.getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
-                // make the pacman energized -->
+                PacMan.INSTANCE.setEnergized(true);
+                PacMan.INSTANCE.getSpeed();
+                System.out.println("energized -> true");
+                Timer timer = new Timer();
+		        TimerTask task = new TimerTask()
+		        {       
+			        public void run(){
+                        PacMan.INSTANCE.setEnergized(false);
+                        System.out.println("energized -> false");
+			        }
+                };
+                timer.schedule(task, 10000l);
                 addScore(15);
             }
             gridState[pacPos.y()][pacPos.x()] = true;
