@@ -24,7 +24,6 @@ public final class MazeState {
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
-
     private static int lives = 3;
     private static int livesC = 3; //copy du lives, pour que quand on recommence, ça garde le choix de difficulté choisi au menu
     public void setLive(int l){lives=l; livesC=l;}
