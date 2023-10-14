@@ -8,6 +8,8 @@ import geometry.RealCoordinates;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static model.Ghost.*;
 
@@ -23,6 +25,8 @@ public final class MazeState {
 
     private final Map<Critter, RealCoordinates> initialPos;
     private static int lives = 3;
+    private static int livesC = 3; //copy du lives, pour que quand on recommence, ça garde le choix de difficulté choisi au menu
+    public void setLive(int l){lives=l; livesC=l;}
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
@@ -63,7 +67,7 @@ public final class MazeState {
 
     public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
         gameEnded = false;
-        lives = 3;
+        lives = livesC;
         score = 0;
     }
 
@@ -110,7 +114,18 @@ public final class MazeState {
             if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
                 addScore(1);
             }else if (config.getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
-                // make the pacman energized -->
+                PacMan.INSTANCE.setEnergized(true);
+                PacMan.INSTANCE.getSpeed();
+                System.out.println("energized -> true");
+                Timer timer = new Timer();
+		        TimerTask task = new TimerTask()
+		        {       
+			        public void run(){
+                        PacMan.INSTANCE.setEnergized(false);
+                        System.out.println("energized -> false");
+			        }
+                };
+                timer.schedule(task, 10000l);
                 addScore(15);
             }
             gridState[pacPos.y()][pacPos.x()] = true;
