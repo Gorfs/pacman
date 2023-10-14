@@ -24,7 +24,8 @@ public final class MazeState {
     private final Map<Critter, RealCoordinates> initialPos;
 
     private static int lives = 3;
-    public void setLive(int l){lives=l;}
+    private static int livesC = 3; //copy du lives, pour que quand on recommence, ça garde le choix de difficulté choisi au menu
+    public void setLive(int l){lives=l; livesC=l;}
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
@@ -65,7 +66,7 @@ public final class MazeState {
 
     public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
         gameEnded = false;
-        lives = 3;
+        lives = livesC;
         score = 0;
     }
 
