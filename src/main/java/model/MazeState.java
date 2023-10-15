@@ -8,8 +8,6 @@ import geometry.RealCoordinates;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static model.Ghost.*;
 
@@ -25,8 +23,6 @@ public final class MazeState {
 
     private final Map<Critter, RealCoordinates> initialPos;
     private static int lives = 3;
-    private static int livesC = 3; //copy du lives, pour que quand on recommence, ça garde le choix de difficulté choisi au menu
-    public void setLive(int l){lives=l; livesC=l;}
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
@@ -68,7 +64,7 @@ public final class MazeState {
 
     public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
         gameEnded = false;
-        lives = livesC;
+        lives = 3;
         score = 0;
     }
 
@@ -159,14 +155,14 @@ public final class MazeState {
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!allPointsCollected && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "ENERGIZER")){
+        if (!allPointsCollected() && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "ENERGIZER")){
             // make the pacman energized -->
             addScore(15);
             // Debug.out("picked up power pellet");
             PacMan.setEnergized();
             gridState[pacPos.y()][pacPos.x()] = true;
 
-        }else if (!allPointsCollected && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "DOT")) {
+        }else if (!allPointsCollected() && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "DOT")) {
             addScore(1);
 
             // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT ? "DOT" : "NOT DOT");
