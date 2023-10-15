@@ -74,7 +74,7 @@ public final class PacMan implements Critter {
     }
 
 
-    public void update(long deltaTns){
+    public void update(long deltaTns){ //I moved what is related directly to Pacman
         var pacPos = INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
         if (!MazeState.getGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()) {

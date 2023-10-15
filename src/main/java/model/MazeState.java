@@ -68,6 +68,10 @@ public final class MazeState {
         score = 0;
     }
 
+    public static boolean[][] getGridState(){ //Need it for the Pacman Class
+        return gridState;
+    }
+
     public void update(long deltaTns) {
         for  (var critter: critters) {
 
