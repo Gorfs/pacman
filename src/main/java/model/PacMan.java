@@ -1,6 +1,9 @@
 package model;
-
+import java.util.Timer;
 import geometry.RealCoordinates;
+// import misc.Debug;
+
+import java.util.TimerTask;
 
 /**
  * Implements Pac-Man character using singleton pattern. FIXME: check whether singleton is really a good idea.
@@ -9,7 +12,9 @@ public final class PacMan implements Critter {
     private Direction direction = Direction.NONE;
     private Direction nextDirection = Direction.NONE;
     private RealCoordinates pos;
-    private boolean energized;
+    private static boolean energized;
+    private static Timer timer = new Timer("timer", true);
+
 
     private PacMan() {
     }
@@ -55,12 +60,46 @@ public final class PacMan implements Critter {
      *
      * @return whether Pac-Man just ate an energizer
      */
-    public boolean isEnergized() {
-        // TODO handle timeout!
+    public static boolean isEnergized() {
+        // power pellet lasts for 10 seconds 
         return energized;
     }
 
-    public void setEnergized(boolean energized) {
-        this.energized = energized;
+    // this function is just if you need it, not currently used I believe
+    public static void setEnergized(boolean e){
+        energized = e;
     }
+
+    public static void setEnergized() {
+
+        // function will now no longer take a boolean,
+        //  but suppose that we always want to "energize" pacman rather than de-energize him
+        if (!energized){
+        setEnergized(true);
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                // Debug.out("started timer");
+                try{
+                    // not sure what the thread.sleep does, since the timing is done via the timer.schedule command, but it works.
+                    for (int i = 0; i < 10; i++){
+                        Thread.sleep(0);
+                    }
+                    setEnergized(false);
+                                    } catch (InterruptedException e) {
+                    // e.printStackTrace();
+                    System.out.println("oh no, anyway.... (the timer for the energizer went wrong , got an intrerruptedException error)");
+                }
+            }
+        }, 10000);
+        // timer's second argument is in milliseconds, s 1000 ms = 1s
+
+        // setEnergized(false);
+
+
+           }else{
+            System.out.println("already energized, chill out pls");
+           }   }
+
 }

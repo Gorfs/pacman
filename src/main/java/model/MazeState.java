@@ -8,6 +8,8 @@ import geometry.RealCoordinates;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static model.Ghost.*;
 
@@ -18,18 +20,20 @@ public final class MazeState {
 
     private final boolean[][] gridState;
 
-    private final List<Critter> critters;
+    private  static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
     private static int lives = 3;
+    private static int livesC = 3; //copy du lives, pour que quand on recommence, ça garde le choix de difficulté choisi au menu
+    public void setLive(int l){lives=l; livesC=l;}
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
         this.config = config;
         height = config.getHeight();
         width = config.getWidth();
-        critters = List.of(PacMan.INSTANCE, Ghost.CLYDE, BLINKY, INKY, PINKY);
+        critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
         gridState = new boolean[height][width];
         initialPos = Map.of(
                 PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
@@ -41,7 +45,7 @@ public final class MazeState {
         resetCritters();
     }
 
-    public List<Critter> getCritters() {
+    public static List<Critter> getCritters() {
         return critters;
     }
 
@@ -57,18 +61,20 @@ public final class MazeState {
         return lives;
     }
 
+
     public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
         return gameEnded;
     }
 
     public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
         gameEnded = false;
-        lives = 3;
+        lives = livesC;
         score = 0;
     }
 
     public void update(long deltaTns) {
         for  (var critter: critters) {
+
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
             // Get possible next pos for critter
@@ -144,6 +150,7 @@ public final class MazeState {
                                 }
                             }
                         }
+                    ClydeController.setDirection(config);
                     }
             }
             critter.setPos(nextPos.warp(width, height));
@@ -152,19 +159,26 @@ public final class MazeState {
         // FIXME Pac-Man rules should somehow be in Pacman class
         var pacPos = PacMan.INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!gridState[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
-            if (config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
-                addScore(1);
-            }else if (config.getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
-                // make the pacman energized -->
-                addScore(15);
-            }
+        if (!allPointsCollected && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "ENERGIZER")){
+            // make the pacman energized -->
+            addScore(15);
+            // Debug.out("picked up power pellet");
+            PacMan.setEnergized();
+            gridState[pacPos.y()][pacPos.x()] = true;
+
+        }else if (!allPointsCollected && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "DOT")) {
+            addScore(1);
+
+            // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT ? "DOT" : "NOT DOT");
+
+            // Debug.out("Picked up a normal pellet");
             gridState[pacPos.y()][pacPos.x()] = true;
         }
+ 
 
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
-                if (PacMan.INSTANCE.isEnergized()) {
+                if (PacMan.isEnergized()) {
                     resetCritter(critter);
                 } else {
                     playerLost();
@@ -178,6 +192,7 @@ public final class MazeState {
             return;
         }
     }
+    
 
     public boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
@@ -197,6 +212,7 @@ public final class MazeState {
             }
         }
     }
+
 
     private void addScore(int increment) {
         score += increment;
