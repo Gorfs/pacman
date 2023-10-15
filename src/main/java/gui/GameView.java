@@ -43,7 +43,7 @@ public class GameView {
             for (int y = 0; y < maze.getHeight(); y++)
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
         addGraphics(gameover.makeGraphics(maze, new IntCoordinates(0,0))); //Pour pouvoir afficher le GameOver   
-        addGraphics(menu.makeGraphics(maze, new IntCoordinates(400, 0))); //Pour pouvoir afficher le Menu
+        addGraphics(menu.makeGraphics(maze, new IntCoordinates(0, 0))); //Pour pouvoir afficher le Menu
     }
 
     public void animate() {

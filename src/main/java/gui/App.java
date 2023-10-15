@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import config.MazeConfig;
+import model.ClydeController;
 import model.MazeState;
 
 public class App extends Application {
@@ -15,6 +16,8 @@ public class App extends Application {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController();
+        var clydeController = new ClydeController();
+        clydeController.startAI();
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
