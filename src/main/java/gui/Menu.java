@@ -1,7 +1,6 @@
 package gui;
 
 import geometry.IntCoordinates;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
@@ -20,7 +19,6 @@ public class Menu {
     private final double scale;
     private int score;
     private double size = 1;
-
     public Menu(double scale){
         this.scale = scale;
 

@@ -81,6 +81,7 @@ public final class MazeState {
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
                 for (var n: nextNeighbours)
                     if (config.getCell(n).initialContent() == Cell.Content.WALL) {
+                    ClydeController.setDirection(config);
                         switch (critter.getDirection()) {
                             case NORTH -> {System.out.println(curPos.plus(RealCoordinates.NORTH_UNIT).round() + " " + n);
                                 if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
@@ -102,8 +103,11 @@ public final class MazeState {
                                     nextPos = curPos.floorX();critter.setDirection(Direction.NONE);
                                 } else nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
                             }
+                            case NONE -> {
+                                // needed to add a case for Direction.NONE or my editor got mad at me. :(
+                                nextPos = curPos;
+                            }
                         }
-                    ClydeController.setDirection(config);
                     }
             }
             critter.setPos(nextPos.warp(width, height));
@@ -137,7 +141,7 @@ public final class MazeState {
                     playerLost();
                     return;
                 }
-            }
+            
         }
         if(allPointsCollected()){
             resetCritters();
@@ -145,6 +149,7 @@ public final class MazeState {
             return;
         }
     }
+}
     
 
     public boolean allPointsCollected() {
