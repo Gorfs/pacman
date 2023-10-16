@@ -73,6 +73,7 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
+        ClydeController.setDirection(config);
         for  (var critter: critters) {
 
 
@@ -124,7 +125,6 @@ public final class MazeState {
                 // for possible next cell, check if this is not a wall.
                 for (var n: nextNextNeighbours)
                     if (config.getCell(n).initialContent() != Cell.Content.WALL) {
-                        ClydeController.setDirection(config);
                         // check if the critter is going this way and set his direction to direction.NONE  and update nextPos if it is.
                         switch (critter.getNextDirection()) {
                             case NORTH -> {

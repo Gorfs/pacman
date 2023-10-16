@@ -12,6 +12,7 @@ import config.Cell;
 
 public class ClydeController {
 
+    private static Direction clydeLastDirection = Direction.NONE;
     private static Random rd = new Random();
     public void startAI(){
         // Debug.out("CLYDE AI started");
@@ -33,6 +34,7 @@ public class ClydeController {
         // settings a default direction, mostly just for starting the movment when the game starts
         if (clyde.getDirection() == Direction.NONE){
             clyde.setDirection(Direction.EAST);
+            clydeLastDirection = Direction.EAST;
         }
 
         var result = clyde.getDirection();
@@ -53,36 +55,32 @@ public class ClydeController {
             result = clyde.getDirection();
             while(!isDirectionValid(clyde.getDirection(), result, clyde,config)){
                 result = randomDir(clyde);
-                // Debug.out(String.valueOf(result));
-
             }
             clyde.setDirection(result);
-
-        // set the direction to the valid direction given previously
-        
+            clydeLastDirection = result;
         }
     }
 
     private static boolean isDirectionValid(Direction dir1, Direction dir2, Critter clyde, MazeConfig config){
         // the point of this function is to make sure the ghost doesn't turn back on itself
+        // as well as doesn't tell the ghost to run into a wall and cause collision issues.
         Debug.out("isDirectionValid has been called " + dir1 + " " + dir2);
         boolean cellValid = true;
+        if (dir1 == Direction.NONE){
+            dir1 = clydeLastDirection;
+        }
         if (dir1 == dir2){
             return false;
         }else{
-            // Debug.out("The current direction being checked is :" + dir2);
             switch(dir2){
                 case NORTH -> {cellValid =  ((dir1 != Direction.SOUTH) && (config.getCell(clyde.getPos().plus(RealCoordinates.NORTH_UNIT).round()).initialContent()) != Cell.Content.WALL);}
                 case SOUTH -> {cellValid =  ((dir1 != Direction.NORTH) && (config.getCell(clyde.getPos().plus(RealCoordinates.SOUTH_UNIT).round()).initialContent()) != Cell.Content.WALL);}
                 case EAST ->  {cellValid =  ((dir1 != Direction.WEST ) && (config.getCell(clyde.getPos().plus(RealCoordinates.EAST_UNIT ).round()).initialContent()) != Cell.Content.WALL);}
                 case WEST ->  {cellValid =  ((dir1 != Direction.EAST ) && (config.getCell(clyde.getPos().plus(RealCoordinates.WEST_UNIT ).round()).initialContent()) != Cell.Content.WALL);}
-                // might need to be changed to false in the future
                 default -> {cellValid = false;}
             };
         }
-        // Debug.out(String.valueOf(cellValid) + String.valueOf(cellValid));
         return cellValid;
-
     }
 
     private static Direction randomDir(Critter clyde){
@@ -90,12 +88,11 @@ public class ClydeController {
         Direction result;
         result = clyde.getDirection();
         switch(rd.nextInt(0,4)){
-            case 0 -> result =  Direction.NORTH;
+            case 0 -> result = Direction.NORTH;
             case 1 -> result = Direction.EAST;
             case 2 -> result = Direction.SOUTH;
             case 3 -> result = Direction.WEST;
             }
-        // Debug.out("randomDir function input : " + input + " output : " + result );
         return result;
         
     }
