@@ -107,13 +107,7 @@ public class App extends Application {
         var pacmanController = new PacmanController(k, gameMenu2, root, button, btncase1, btncase2, btncase3, btncase4);
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        GhostsController[] ghostsController = {new ClydeController(), new PinkyController(),
-                new BlinkyController(), new InkyController()};
-        for (var ghost: ghostsController) {ghost.startAI();}
-        var maze = new MazeState(ghostsController, MazeConfig.originalMaze("maze2"), gameMenu2);
-        // Generate map from file
-        maze.setLives(l);
-        // Set up game window
+        var maze = new MazeState(MazeConfig.originalMaze("Gr3Ma8h"));
         var gameView = new GameView(maze, root, 30.0);
         Music.playBackgroundMusic();
         primaryStage.setScene(gameScene);
