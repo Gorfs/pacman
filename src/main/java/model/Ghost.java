@@ -8,6 +8,25 @@ public enum Ghost implements Critter {
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDirection = Direction.NONE;
+
+    private float timerAni = 0;
+    private final float[] checkpointAni = {0.25F,0.5F};
+
+    @Override
+    public float[] getCheckpointAni() {
+        return checkpointAni;
+    }
+
+    @Override
+    public void setTimerAni(float timerAni) {
+        this.timerAni = timerAni;
+    }
+
+    @Override
+    public float getTimerAni() {
+        return timerAni;
+    }
+
     @Override
     public RealCoordinates getPos() {
         return pos;

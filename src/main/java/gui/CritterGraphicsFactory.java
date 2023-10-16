@@ -11,8 +11,6 @@ import model.*;
 public final class CritterGraphicsFactory {
     private final double scale;
 
-    private float timer;
-
     public CritterGraphicsFactory(double scale) {
         this.scale = scale;
     }
@@ -47,15 +45,21 @@ public final class CritterGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 if (!MazeState.getGameEnded()){
-
                     if (critter.getDirection() != Direction.NONE) {
-                        timer = (float) (timer + deltaT * 1E-9);
-                        if (timer > .2) timer = 0;
-                        if (timer < .1) croppedImage(image, critter, x);
-                        else if (timer < .2) croppedImage(image, critter, width);
+                        critter.setTimerAni((float) (critter.getTimerAni() + deltaT * 1E-9));
+                        if (critter.getTimerAni() > critter.getCheckpointAni()[critter.getCheckpointAni().length - 1])
+                            critter.setTimerAni(0);
+                        for (int i = 0; i < critter.getCheckpointAni().length; i++) {
+                            System.out.println(x + (width * i));
+                            if (critter.getTimerAni() < critter.getCheckpointAni()[i]) {
+                                croppedImage(image, critter, (width * i));
+                                break;
+                            }
+                        }
+
                         if (!(critter instanceof PacMan)) {
                             Image fullImage;
-                            if (PacMan.INSTANCE.isEnergized()) fullImage = new Image("scared_ghost.png");
+                            if (PacMan.isEnergized()) fullImage = new Image("scared_ghost.png");
                             else fullImage = new Image(url);
 
                             ImageView image = new ImageView(fullImage);

@@ -15,6 +15,8 @@ public final class PacMan implements Critter {
     private static boolean energized;
     private static Timer timer = new Timer("timer", true);
 
+    private float timerAni = 0;
+    private final float[] checkpointAni = {0.15F,0.3F};
 
     private PacMan() {
     }
@@ -24,6 +26,21 @@ public final class PacMan implements Critter {
     @Override
     public RealCoordinates getPos() {
         return pos;
+    }
+
+    @Override
+    public float[] getCheckpointAni() {
+        return checkpointAni;
+    }
+
+    @Override
+    public void setTimerAni(float timerAni) {
+        this.timerAni = timerAni;
+    }
+
+    @Override
+    public float getTimerAni() {
+        return timerAni;
     }
 
     @Override
