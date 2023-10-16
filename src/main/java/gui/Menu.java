@@ -4,6 +4,11 @@ import geometry.IntCoordinates;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import model.MazeState;
@@ -14,7 +19,7 @@ public class Menu {
 
     private final double scale;
     private int score;
-    private double size = 0.5;
+    private double size = 1;
 
     public Menu(double scale){
         this.scale = scale;
@@ -25,6 +30,7 @@ public class Menu {
         // var group = new Group();
 
         HBox menu = new HBox();
+        menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
         Label scoreText = new Label("Score:" + String.valueOf(score) );
         ImageView livesImage = new ImageView( new Image("heart3.png",scale*size , scale * size, true, true));
@@ -37,8 +43,8 @@ public class Menu {
         
         menu.setSpacing(20);
         // centers the values to the top center of the screen.
-        menu.setTranslateX(pos.x()/2);
-        menu.setTranslateY(pos.y());
+        menu.setTranslateX(pos.x() * 20 );
+        menu.setTranslateY(0);
 
         return new GraphicsUpdater() {
             @Override
