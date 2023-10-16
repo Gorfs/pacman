@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 import geometry.IntCoordinates;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -26,7 +25,6 @@ public class Menu {
     private final double scale;
     private int score;
     private double size = 1;
-
     public Menu(double scale){
         this.scale = scale;
 

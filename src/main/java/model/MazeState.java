@@ -149,8 +149,11 @@ public final class MazeState {
                                     critter.setDirection(Direction.NONE);
                                 }
                             }
+                            case NONE -> {
+                                // needed to add a case for Direction.NONE or my editor got mad at me. :(
+                                nextPos = curPos;
+                            }
                         }
-                    ClydeController.setDirection(config);
                     }
             }
             critter.setPos(nextPos.warp(width, height));
@@ -164,7 +167,7 @@ public final class MazeState {
                     playerLost();
                     return;
                 }
-            }
+            
         }
         if(allPointsCollected()){
             resetCritters();
@@ -172,6 +175,7 @@ public final class MazeState {
             return;
         }
     }
+}
     
 
     public static boolean allPointsCollected() {
