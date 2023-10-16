@@ -71,6 +71,7 @@ public final class MazeState {
     public void update(long deltaTns) {
         for  (var critter: critters) {
 
+
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
             // Get possible next pos for critter
@@ -84,7 +85,7 @@ public final class MazeState {
             // Set direction to the next direction if direction is NONE.
             if (critter.getDirection() == Direction.NONE) {
                 critter.setDirection(critter.getNextDirection());
-                critter.setNextDirection(Direction.NONE);
+                // critter.setNextDirection(Direction.NONE);
             }
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
@@ -119,6 +120,7 @@ public final class MazeState {
                 // for possible next cell, check if this is not a wall.
                 for (var n: nextNextNeighbours)
                     if (config.getCell(n).initialContent() != Cell.Content.WALL) {
+                        ClydeController.setDirection(config);
                         // check if the critter is going this way and set his direction to direction.NONE  and update nextPos if it is.
                         switch (critter.getNextDirection()) {
                             case NORTH -> {
@@ -144,10 +146,6 @@ public final class MazeState {
                                     nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
                                     critter.setDirection(Direction.NONE);
                                 }
-                            }
-                            case NONE -> {
-                                // needed to add a case for Direction.NONE or my editor got mad at me. :(
-                                nextPos = curPos;
                             }
                         }
                     }
