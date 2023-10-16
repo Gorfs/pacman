@@ -69,43 +69,55 @@ public class MazeConfig {
         Cell[][] map = new Cell[21][21];
 
         // Open the file maze.txt
-        File maze = new File("src/main/resources/" + file + ".txt");
+        File maze = new File("src/main/resources/mazes/" + file + ".txt");
         Scanner myReader;
         // Try if the file exist
         try {
             // Read the file maze.txt
             myReader = new Scanner(maze);
             int n = 0;
+            // Init the spawn of the entities
+            IntCoordinates player = new IntCoordinates(10, 15),
+                    blinky = new IntCoordinates(10, 16), inky = new IntCoordinates(10, 9),
+                    pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
             // while there is something to read
             while (myReader.hasNextLine()) {
                 // Get the curent line
                 String line = myReader.nextLine();
                 // Split everything into a String array
                 String[] data = line.split(",");
-                // For every 2 string
-                for (int i = 0; i < data.length; i ++) {
-                    // create a cell based on what there is inside(NOTHING, DOT, etc.)
-                    map[n][i] = switch (data[i]) {
-                        case "E" -> slot(ENERGIZER);
-                        case "W" -> slot(WALL);
-                        case "D" -> slot(DOT);
-                        default -> slot(NOTHING);
-                    };
+                if (n < map.length) {
+                   // For every 2 string
+                   for (int i = 0; i < data.length; i++) {
+                       // create a cell based on what there is inside(NOTHING, DOT, etc.)
+                       map[n][i] = switch (data[i]) {
+                           case "E" -> slot(ENERGIZER);
+                           case "W" -> slot(WALL);
+                           case "D" -> slot(DOT);
+                           default -> slot(NOTHING);
+                       };
+                   }
+               } else if (n == map.length) {
+                    // Init the spawn of the entities
+                    player = new IntCoordinates(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+                    blinky = new IntCoordinates(Integer.parseInt(data[2]), Integer.parseInt(data[3]));
+                    inky = new IntCoordinates(Integer.parseInt(data[4]), Integer.parseInt(data[5]));
+                    pinky = new IntCoordinates(Integer.parseInt(data[6]), Integer.parseInt(data[7]));
+                    clyde = new IntCoordinates(Integer.parseInt(data[8]), Integer.parseInt(data[9]));
                 }
+
                 n++;
+
             }
             // close file
             myReader.close();
+
+            // return everything
+            return new MazeConfig(map, player, blinky, inky, pinky, clyde);
         } catch (FileNotFoundException e) {
             // If it doesn't find the file
             throw new RuntimeException(e);
         }
-        // Init the spawn of the entities
-        IntCoordinates player = new IntCoordinates(10, 15),
-                blinky = new IntCoordinates(10, 16), inky = new IntCoordinates(10, 9),
-                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
-        // return everything
-        return new MazeConfig(map, player, blinky, inky, pinky, clyde);
     }
 
 }
