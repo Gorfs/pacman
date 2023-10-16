@@ -27,7 +27,7 @@ public class GameOver {
         Label titleText = new Label("Game Over"); //To change the font size you need to change the value in load font below
         titleText.setStyle("-fx-text-fill:white;");
         try{
-            Font titleFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/Telesys.ttf")), 50); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+            Font titleFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 50); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
             titleText.setFont(titleFont);
         } catch (FileNotFoundException e){
             e.printStackTrace();
@@ -38,7 +38,7 @@ public class GameOver {
         Label restartText = new Label("Press Enter to restart");
         restartText.setStyle("-fx-text-fill:red; -fx-border-color:red;"); //To change the font size you need to change the value in load font below
         try{
-            Font restartFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/Telesys.ttf")), 40); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+            Font restartFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 40); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
             restartText.setFont(restartFont);
         } catch (FileNotFoundException e){
             e.printStackTrace();
