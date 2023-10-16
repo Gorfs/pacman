@@ -12,11 +12,11 @@ import java.util.Objects;
 import static model.Ghost.*;
 
 public final class MazeState {
-    private final MazeConfig config;
-    private final int height;
-    private final int width;
+    private static MazeConfig config;
+    private static int height;
+    private static int width;
 
-    private final boolean[][] gridState;
+    private static boolean[][] gridState;
 
     private  static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
@@ -66,6 +66,10 @@ public final class MazeState {
         gameEnded = false;
         lives = 3;
         score = 0;
+    }
+
+    public static boolean[][] getGridState(){ //Need it for the Pacman Class
+        return gridState;
     }
 
     public void update(long deltaTns) {
@@ -152,29 +156,9 @@ public final class MazeState {
             critter.setPos(nextPos.warp(width, height));
         }
 
-        // FIXME Pac-Man rules should somehow be in Pacman class
-        var pacPos = PacMan.INSTANCE.getPos().round();
-        // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!allPointsCollected() && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "ENERGIZER")){
-            // make the pacman energized -->
-            addScore(15);
-            // Debug.out("picked up power pellet");
-            PacMan.setEnergized();
-            gridState[pacPos.y()][pacPos.x()] = true;
-
-        }else if (!allPointsCollected() && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "DOT")) {
-            addScore(1);
-
-            // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT ? "DOT" : "NOT DOT");
-
-            // Debug.out("Picked up a normal pellet");
-            gridState[pacPos.y()][pacPos.x()] = true;
-        }
- 
-
         for (var critter : critters) {
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
-                if (PacMan.isEnergized()) {
+            if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
+                if (PacMan.INSTANCE.isEnergized()) {
                     resetCritter(critter);
                 } else {
                     playerLost();
@@ -190,7 +174,7 @@ public final class MazeState {
     }
     
 
-    public boolean allPointsCollected() {
+    public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (!gridState[i][j] && config.getCell(new IntCoordinates(i, j)).initialContent() == Cell.Content.DOT) {
@@ -209,8 +193,7 @@ public final class MazeState {
         }
     }
 
-
-    private void addScore(int increment) {
+    public static void addScore(int increment) {
         score += increment;
     }
 
@@ -231,7 +214,7 @@ public final class MazeState {
         for (var critter: critters) resetCritter(critter);
     }
 
-    public MazeConfig getConfig() {
+    public static MazeConfig getConfig() {
         return config;
     }
 
