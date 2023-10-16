@@ -19,4 +19,4 @@ N,W,D,D,D,D,W,D,D,D,W,D,D,D,W,D,D,D,D,W,N
 N,W,D,W,W,W,W,W,W,D,W,D,W,W,W,W,W,W,D,W,N
 N,W,D,D,D,D,D,D,D,D,D,D,D,D,D,D,D,D,D,W,N
 N,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,W,N
-10,15,10,16,10,9,11,9,9,9
+10,15,10,7,10,9,11,9,9,9
