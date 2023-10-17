@@ -57,6 +57,7 @@ public class App extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
         
 
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};

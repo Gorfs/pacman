@@ -215,6 +215,7 @@ public final class MazeState {
 
     private void playerLost() {
         lives--;
+        music_death();
         if (lives == 0) {
             gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
         }
