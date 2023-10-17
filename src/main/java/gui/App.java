@@ -120,6 +120,11 @@ public class App extends Application {
                     ft.play();
 
                 }
+                else if(button.isVisible()){
+                    FadeTransition ft = new FadeTransition(Duration.seconds(0.5), button);
+                    ft.setFromValue(1);
+                    ft.setToValue(0);
+                }
                 else {
                     FadeTransition ft = new FadeTransition(Duration.seconds(0.1), gameMenu);
                     ft.setFromValue(0);
