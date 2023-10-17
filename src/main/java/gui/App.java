@@ -31,6 +31,8 @@ import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
+import model.ClydeController;
+import model.MazeState;
 
 public class App extends Application {
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
@@ -592,10 +594,12 @@ public class App extends Application {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController(k);
+        var clydeController = new ClydeController();
+        clydeController.startAI();
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
-        maze.setLive(l);
+        maze.setLives(l);
         var gameView = new GameView(maze, root, 30.0);
         primaryStage.setScene(gameScene);
         primaryStage.show();

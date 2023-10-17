@@ -1,6 +1,7 @@
 package config;
 
 import geometry.IntCoordinates;
+import misc.Debug;
 
 import static config.Cell.*;
 import static config.Cell.Content.*;
@@ -64,6 +65,10 @@ public class MazeConfig {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
     }
 
+    public Cell[][] getGrid(){
+        return grid;
+    }
+
     public static MazeConfig originalMaze(String file) {
         // New class Cell to store the map
         Cell[][] map = new Cell[21][21];
@@ -82,6 +87,7 @@ public class MazeConfig {
                 String line = myReader.nextLine();
                 // Split everything into a String array
                 String[] data = line.split(",");
+
                 // For every 2 string
                 for (int i = 0; i < data.length; i ++) {
                     // create a cell based on what there is inside(NOTHING, DOT, etc.)
@@ -102,8 +108,8 @@ public class MazeConfig {
         }
         // Init the spawn of the entities
         IntCoordinates player = new IntCoordinates(10, 15),
-                blinky = new IntCoordinates(10, 16), inky = new IntCoordinates(10, 9),
-                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
+                blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
+                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 11);
         // return everything
         return new MazeConfig(map, player, blinky, inky, pinky, clyde);
     }

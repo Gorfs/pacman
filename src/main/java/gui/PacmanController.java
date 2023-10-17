@@ -11,11 +11,18 @@ public class PacmanController {
 
     public void keyPressedHandler(KeyEvent event) {
 
-        if(event.getCode()==k[0]){PacMan.INSTANCE.setDirection(Direction.WEST);}
-        else if(event.getCode()==k[1]){PacMan.INSTANCE.setDirection(Direction.EAST);}
-        else if(event.getCode()==k[2]){PacMan.INSTANCE.setDirection(Direction.NORTH);}
-        else if(event.getCode()==k[3]){PacMan.INSTANCE.setDirection(Direction.SOUTH);}
-        else {PacMan.INSTANCE.getDirection();}
+        
+        if (!MazeState.getGameEnded()){
+            if(event.getCode()==k[0]){PacMan.INSTANCE.setNextDirection(Direction.WEST);}
+            else if(event.getCode()==k[1]){PacMan.INSTANCE.setNextDirection(Direction.EAST);}
+            else if(event.getCode()==k[2]){PacMan.INSTANCE.setNextDirection(Direction.NORTH);}
+            else if(event.getCode()==k[3]){PacMan.INSTANCE.setNextDirection(Direction.SOUTH);}
+            else {PacMan.INSTANCE.getNextDirection();}}
+        else{
+            if (event.getCode() == KeyCode.ENTER){ //Si la partie est terminée mais que le joueur appuie sur ENTER alors on restart
+                MazeState.restart();
+            }
+        }
 
     }
     public void keyReleasedHandler(KeyEvent event) {
