@@ -45,6 +45,18 @@ public final class CritterGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 if (!MazeState.getGameEnded()){
+                    if (!(critter instanceof PacMan)) {
+                        Image fullImage;
+                        if (PacMan.isEnergized())
+                            fullImage = new Image("ghosts/scared_ghost.png");
+                        else fullImage = new Image(url);
+                        image.setImage(fullImage);
+                        image.setViewport(croppedPortion);
+                        image.setFitWidth(scaledWidth);
+                        image.setFitHeight(scaledHeight);
+                        image.setSmooth(true);
+                    }
+
                     if (critter.getDirection() != Direction.NONE) {
                         critter.setTimerAni((float) (critter.getTimerAni() + deltaT * 1E-9));
                         if (critter.getTimerAni() > critter.getCheckpointAni()[critter.getCheckpointAni().length - 1])
@@ -54,14 +66,6 @@ public final class CritterGraphicsFactory {
                                 croppedImage(image, critter, (width * i));
                                 break;
                             }
-                        }
-
-                        if (!(critter instanceof PacMan)) {
-                            ImageView image = new ImageView(fullImage);
-                            image.setViewport(croppedPortion);
-                            image.setFitWidth(scaledWidth);
-                            image.setFitHeight(scaledHeight);
-                            image.setSmooth(true);
                         }
                     } else {
                         var croppedPortion = new Rectangle2D(x, y, width, height);
