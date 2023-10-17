@@ -6,7 +6,6 @@ package gui;
 import model.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import config.MazeConfig;
@@ -83,7 +82,7 @@ public class App extends Application {
         Pane root = new Pane();
         root.setPrefSize(860, 600);
 
-        InputStream is = Files.newInputStream(Paths.get("src/main/resources/pac.jpeg"));
+        InputStream is = Files.newInputStream(Paths.get("src/main/resources/pac.jpg"));
         Image img = new Image(is);
         is.close();
         TextField te = new TextField();

@@ -10,10 +10,23 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
     private boolean energized;
 
-    private PacMan() {
+    public PacMan() {
     }
 
-    public static final PacMan INSTANCE = new PacMan();
+    public static PacMan INSTANCE = new PacMan();
+    public String name;
+    private PacMan(String name){
+        this.name=name;
+    }
+    public PacMan getInstance(String name){
+        if(INSTANCE.name==null){
+            INSTANCE=new PacMan(name);
+        }
+        return INSTANCE;
+    }
+    
+    public static String getName(){return INSTANCE.name;}
+
 
     @Override
     public RealCoordinates getPos() {
