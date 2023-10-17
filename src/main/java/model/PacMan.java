@@ -1,4 +1,7 @@
 package model;
+
+import config.Cell;
+import geometry.IntCoordinates;
 import java.util.Timer;
 import geometry.RealCoordinates;
 // import misc.Debug;
@@ -18,10 +21,23 @@ public final class PacMan implements Critter {
     private float timerAni = 0;
     private final float[] checkpointAni = {0.15F,0.3F};
 
-    private PacMan() {
+    public PacMan() {
     }
 
-    public static final PacMan INSTANCE = new PacMan();
+    public static PacMan INSTANCE = new PacMan();
+    public String name;
+    private PacMan(String name){
+        this.name=name;
+    }
+    public PacMan getInstance(String name){
+        if(INSTANCE.name==null){
+            INSTANCE=new PacMan(name);
+        }
+        return INSTANCE;
+    }
+    
+    public static String getName(){return INSTANCE.name;}
+
 
     @Override
     public RealCoordinates getPos() {
@@ -87,6 +103,20 @@ public final class PacMan implements Critter {
         energized = e;
     }
 
+
+    public void update(long deltaTns){ //I moved what is related directly to Pacman
+        var pacPos = INSTANCE.getPos().round();
+        // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
+        if (!MazeState.getGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()) {
+            if (MazeState.getConfig().getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
+                MazeState.addScore(1);
+            }else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
+                // make the pacman energized -->
+                MazeState.addScore(15);
+            }
+            MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
+        }
+    }
     public static void setEnergized() {
 
         // function will now no longer take a boolean,

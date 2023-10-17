@@ -11,12 +11,22 @@ import java.util.Objects;
 
 import static model.Ghost.*;
 
-public final class MazeState {
-    private final MazeConfig config;
-    private final int height;
-    private final int width;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 
-    private final boolean[][] gridState;
+import java.io.File;
+
+//import javafx.scene.media.Media;
+//import javafx.scene.media.MediaPlayer;
+
+public final class MazeState {
+    private static MazeConfig config;
+    private static int height;
+    private static int width;
+
+    private static boolean[][] gridState;
 
     private  static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
@@ -57,6 +67,8 @@ public final class MazeState {
         return lives;
     }
 
+    public void setLives(int l){lives=l;}
+
 
     public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
         return gameEnded;
@@ -68,8 +80,14 @@ public final class MazeState {
         score = 0;
     }
 
+    public static boolean[][] getGridState(){ //Need it for the Pacman Class
+        return gridState;
+    }
+
     public void update(long deltaTns) {
+        ClydeController.setDirection(config);
         for  (var critter: critters) {
+
 
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
@@ -84,7 +102,7 @@ public final class MazeState {
             // Set direction to the next direction if direction is NONE.
             if (critter.getDirection() == Direction.NONE) {
                 critter.setDirection(critter.getNextDirection());
-                critter.setNextDirection(Direction.NONE);
+                // critter.setNextDirection(Direction.NONE);
             }
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
@@ -146,41 +164,20 @@ public final class MazeState {
                                 }
                             }
                         }
-                    ClydeController.setDirection(config);
                     }
             }
             critter.setPos(nextPos.warp(width, height));
         }
 
-        // FIXME Pac-Man rules should somehow be in Pacman class
-        var pacPos = PacMan.INSTANCE.getPos().round();
-        // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!allPointsCollected() && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "ENERGIZER")){
-            // make the pacman energized -->
-            addScore(15);
-            // Debug.out("picked up power pellet");
-            PacMan.setEnergized();
-            gridState[pacPos.y()][pacPos.x()] = true;
-
-        }else if (!allPointsCollected() && !gridState[pacPos.y()][pacPos.x()] && (String.valueOf(config.getCell(new IntCoordinates(pacPos.x(), pacPos.y())).initialContent()) == "DOT")) {
-            addScore(1);
-
-            // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT ? "DOT" : "NOT DOT");
-
-            // Debug.out("Picked up a normal pellet");
-            gridState[pacPos.y()][pacPos.x()] = true;
-        }
- 
-
         for (var critter : critters) {
-            if (critter instanceof Ghost && critter.getPos().round().equals(pacPos)) {
-                if (PacMan.isEnergized()) {
+            if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
+                if (PacMan.INSTANCE.isEnergized()) {
                     resetCritter(critter);
                 } else {
                     playerLost();
                     return;
                 }
-            }
+            
         }
         if(allPointsCollected()){
             resetCritters();
@@ -188,9 +185,10 @@ public final class MazeState {
             return;
         }
     }
+}
     
 
-    public boolean allPointsCollected() {
+    public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 if (!gridState[i][j] && config.getCell(new IntCoordinates(i, j)).initialContent() == Cell.Content.DOT) {
@@ -209,10 +207,11 @@ public final class MazeState {
         }
     }
 
-
-    private void addScore(int increment) {
+    public static void addScore(int increment) {
         score += increment;
+        music_score();
     }
+
 
     private void playerLost() {
         lives--;
@@ -231,7 +230,7 @@ public final class MazeState {
         for (var critter: critters) resetCritter(critter);
     }
 
-    public MazeConfig getConfig() {
+    public static MazeConfig getConfig() {
         return config;
     }
 
@@ -242,4 +241,38 @@ public final class MazeState {
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
     }
+
+    // ...
+
+
+    
+    public static void music_score(){
+        try {
+            File audioFile = new File("src/main/resources/score.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(0.5f); 
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void music_death(){
+        try {
+            File audioFile = new File("src/main/resources/death.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(1f); 
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+
 }
