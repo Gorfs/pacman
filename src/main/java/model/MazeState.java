@@ -11,6 +11,16 @@ import java.util.Objects;
 
 import static model.Ghost.*;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+
+import java.io.File;
+
+//import javafx.scene.media.Media;
+//import javafx.scene.media.MediaPlayer;
+
 public final class MazeState {
     private static MazeConfig config;
     private static int height;
@@ -199,7 +209,9 @@ public final class MazeState {
 
     public static void addScore(int increment) {
         score += increment;
+        music_score();
     }
+
 
     private void playerLost() {
         lives--;
@@ -229,4 +241,38 @@ public final class MazeState {
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
     }
+
+    // ...
+
+
+    
+    public static void music_score(){
+        try {
+            File audioFile = new File("src/main/resources/score.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(0.5f); 
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void music_death(){
+        try {
+            File audioFile = new File("src/main/resources/death.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(1f); 
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+
 }
