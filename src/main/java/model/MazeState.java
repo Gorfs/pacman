@@ -57,6 +57,8 @@ public final class MazeState {
         return lives;
     }
 
+    public void setLives(int l){lives=l;}
+
 
     public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
         return gameEnded;
