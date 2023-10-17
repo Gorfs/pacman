@@ -33,6 +33,7 @@ public final class MazeState {
 
     private final Map<Critter, RealCoordinates> initialPos;
     private static int lives = 3;
+    private static int livesC = 3;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
@@ -67,7 +68,7 @@ public final class MazeState {
         return lives;
     }
 
-    public void setLives(int l){lives=l;}
+    public void setLives(int l){lives=l; livesC=l;}
 
 
     public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
@@ -76,7 +77,7 @@ public final class MazeState {
 
     public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
         gameEnded = false;
-        lives = 3;
+        lives = livesC;
         score = 0;
     }
 
