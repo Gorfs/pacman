@@ -102,7 +102,8 @@ public final class MazeState {
             // Set direction to the next direction if direction is NONE.
             if (critter.getDirection() == Direction.NONE) {
                 critter.setDirection(critter.getNextDirection());
-                // critter.setNextDirection(Direction.NONE);
+                if (critter instanceof PacMan)
+                    critter.setNextDirection(Direction.NONE);
             }
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
@@ -186,7 +187,6 @@ public final class MazeState {
         }
     }
 }
-    
 
     public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {

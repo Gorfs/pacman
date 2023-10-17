@@ -19,10 +19,10 @@ public final class CritterGraphicsFactory {
         var size = 1.0;
         var url = (critter instanceof PacMan) ? "pacman.png" :
                 switch ((Ghost) critter) {
-                    case BLINKY -> "ghost_blinky.png";
-                    case CLYDE -> "ghost_clyde.png";
-                    case INKY -> "ghost_inky.png";
-                    case PINKY -> "ghost_pinky.png";
+                    case BLINKY -> "ghosts/ghost_blinky.png";
+                    case CLYDE -> "ghosts/ghost_clyde.png";
+                    case INKY -> "ghosts/ghost_inky.png";
+                    case PINKY -> "ghosts/ghost_pinky.png";
                 };
 
         Image fullImage = new Image(url);
@@ -50,7 +50,6 @@ public final class CritterGraphicsFactory {
                         if (critter.getTimerAni() > critter.getCheckpointAni()[critter.getCheckpointAni().length - 1])
                             critter.setTimerAni(0);
                         for (int i = 0; i < critter.getCheckpointAni().length; i++) {
-                            System.out.println(x + (width * i));
                             if (critter.getTimerAni() < critter.getCheckpointAni()[i]) {
                                 croppedImage(image, critter, (width * i));
                                 break;
@@ -58,10 +57,6 @@ public final class CritterGraphicsFactory {
                         }
 
                         if (!(critter instanceof PacMan)) {
-                            Image fullImage;
-                            if (PacMan.isEnergized()) fullImage = new Image("scared_ghost.png");
-                            else fullImage = new Image(url);
-
                             ImageView image = new ImageView(fullImage);
                             image.setViewport(croppedPortion);
                             image.setFitWidth(scaledWidth);
