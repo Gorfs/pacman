@@ -47,12 +47,12 @@ public class App extends Application {
 
     public void playBackgroundMusic() {
         try {
-            File audioFile = new File("src/main/resources/bgm.wav"); 
+            File audioFile = new File("src/main/resources/bgm.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(0.2f); 
+            gainControl.setValue(0.2f);
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -66,8 +66,8 @@ public class App extends Application {
     private Stage primaryS;
     private TextField text;
     private TextField t;
-    private MenuButton2 button = new MenuButton2("Sumbit");
-    private MenuButton2 button1 = new MenuButton2("Sumbit");
+    private MenuButton2 button = new MenuButton2("Submit");
+    private MenuButton2 button1 = new MenuButton2("Submit");
 
     public static KeyCode[] M(String s, KeyCode[] k, int n){
         if(s.charAt(0)=='a'){k[n]=KeyCode.A;}
