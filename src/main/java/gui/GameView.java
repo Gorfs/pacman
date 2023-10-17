@@ -4,6 +4,7 @@ import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import model.MazeState;
+import model.PacMan;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,7 @@ public class GameView {
                 maze.update(deltaT);
                 for (var updater : graphicsUpdaters) {
                     updater.update();
+                    PacMan.INSTANCE.update();
                 }
                 last = now;
             }

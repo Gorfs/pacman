@@ -45,6 +45,20 @@ import model.MazeState;
 public class App extends Application {
 
 
+    public void playBackgroundMusic() {
+        try {
+            File audioFile = new File("src/main/resources/bgm.wav");
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(0.2f);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+        
 
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     private GameMenu gameMenu;
