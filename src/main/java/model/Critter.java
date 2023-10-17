@@ -8,6 +8,8 @@ public sealed interface Critter permits Ghost, PacMan {
 
     Direction getDirection();
 
+    Direction getNextDirection();
+
     double getSpeed();
 
     /**
@@ -24,6 +26,21 @@ public sealed interface Critter permits Ghost, PacMan {
         }).times(getSpeed()*deltaTNanoSeconds * 1E-9));
     }
 
+    /**
+    * @param deltaTNanoSeconds time since the last update in nanoseconds
+    * @return the next position if there is no wall
+    * */
+    default RealCoordinates nextNextPos(long deltaTNanoSeconds) {
+        return getPos().plus((switch (getNextDirection()) {
+            case NONE -> RealCoordinates.ZERO;
+            case NORTH -> RealCoordinates.NORTH_UNIT;
+            case EAST -> RealCoordinates.EAST_UNIT;
+            case SOUTH -> RealCoordinates.SOUTH_UNIT;
+            case WEST -> RealCoordinates.WEST_UNIT;
+        }).times(getSpeed()*deltaTNanoSeconds * 1E-9));
+    }
+
     void setPos(RealCoordinates realCoordinates);
     void setDirection(Direction direction);
+    void setNextDirection(Direction direction);
 }
