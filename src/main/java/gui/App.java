@@ -45,19 +45,6 @@ import model.MazeState;
 public class App extends Application {
 
 
-    public void playBackgroundMusic() {
-        try {
-            File audioFile = new File("src/main/resources/bgm.wav"); 
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(0.2f); 
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
 
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     private GameMenu gameMenu;
@@ -65,8 +52,9 @@ public class App extends Application {
     private Stage primaryS;
     private TextField text;
     private TextField t;
-    private MenuButton2 button = new MenuButton2("Sumbit");
-    private MenuButton2 button1 = new MenuButton2("Sumbit");
+    private float a=1;
+    private MenuButton2 button = new MenuButton2("Submit");
+    private MenuButton2 button1 = new MenuButton2("Submit");
 
     public static KeyCode[] M(String s, KeyCode[] k, int n){
         if(s.charAt(0)=='a'){k[n]=KeyCode.A;}
@@ -372,7 +360,7 @@ public class App extends Application {
             });
 
             MenuButton btns1 = new MenuButton("1");
-
+            
             MenuButton btns2 = new MenuButton("2");
             
             MenuButton btns3 = new MenuButton("3");
@@ -479,22 +467,22 @@ public class App extends Application {
 
             MenuButton btnf = new MenuButton("FACILE");
             btnf.setOnMouseClicked(event -> {
-                start(primaryS,4,k);
+                start(primaryS,4,k, a);
             });
 
             MenuButton btnm = new MenuButton("MEDIUM");
             btnm.setOnMouseClicked(event -> {
-                start(primaryS,3,k);
+                start(primaryS,3,k,a);
             });
 
             MenuButton btnh = new MenuButton("HARD");
             btnh.setOnMouseClicked(event -> {
-                start(primaryS,2,k);
+                start(primaryS,2,k,a);
             });
 
             MenuButton btne = new MenuButton("EXPERT");
             btne.setOnMouseClicked(event -> {
-                start(primaryS,1,k);
+                start(primaryS,1,k,a);
             });
             menu4.getChildren().addAll(btnName);
             menu3.getChildren().addAll(btnBack1,btnf,btnm,btnh,btne);
@@ -615,7 +603,20 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void start(Stage primaryStage, int l, KeyCode[] k) {
+    public void playBackgroundMusic(float l) {
+        try {
+            File audioFile = new File("src/main/resources/bgm.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(a); 
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void start(Stage primaryStage, int l, KeyCode[] k, float a) {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController(k);
@@ -626,7 +627,7 @@ public class App extends Application {
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
         maze.setLives(l);
         var gameView = new GameView(maze, root, 30.0);
-        playBackgroundMusic();
+        playBackgroundMusic(a);
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();
