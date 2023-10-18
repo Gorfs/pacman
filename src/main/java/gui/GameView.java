@@ -49,6 +49,13 @@ public class GameView {
         addGraphics(menu.makeGraphics(maze, new IntCoordinates(0, 0))); //Pour pouvoir afficher le Menu
     }
 
+    public double getRootWidth(){
+        return gameRoot.getWidth(); 
+    }
+    // I don't know why the height is an int and the width is a double, they should both be ints 
+    public double getRootHeight(){
+        return gameRoot.getHeight();
+    }
     public void animate() {
         new AnimationTimer() {
             long last = 0;

@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import config.MazeConfig;
 import geometry.IntCoordinates;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+// unused imports are used when debugging and therefore should be kept unless pushing to master.
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
@@ -15,6 +17,7 @@ import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import misc.Debug;
 import model.MazeState;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,7 +26,8 @@ public class Menu {
 
     private final double scale;
     private int score;
-    private double size = 1;
+    private double size = 0.5;
+    
     public Menu(double scale){
         this.scale = scale;
 
@@ -32,20 +36,33 @@ public class Menu {
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos){
         // initializing JavaFX items and styles.
         HBox menu = new HBox();
-        menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+        // uncomment the line under this to have a border around the menu object in the game.
+        // menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
+
+        // the number of lives at the start of the game based on difficulty.
+        int initLives = MazeState.getInitLives();
 
         Label scoreText = new Label("Score:" + String.valueOf(score) );
-        ImageView livesImage = new ImageView( new Image("heart3.png",scale*size , scale * size, true, true));
+
+
+        // setting up the javaFX objects for the livres display.
+        ImageView[] livesArray = new ImageView[initLives];
+        for(int i = 0 ; i < initLives; i++){
+            livesArray[i] = new ImageView(new Image("heart.png", scale*size,scale*size, true, true));
+        }
         
         HBox scoreHb = new HBox();
         HBox livesHb = new HBox();
         // adding nodes to parent "menu"
         scoreHb.getChildren().addAll(scoreText);
-        livesHb.getChildren().addAll(livesImage);
+        for(ImageView image: livesArray){
+            livesHb.getChildren().addAll(image);
+        }
         menu.getChildren().addAll(livesHb, scoreHb);
         
-        menu.setSpacing(20);
-        menu.setTranslateX(pos.x() * 20 );
+        menu.setSpacing(40);
+        // TODO once constants are added make translateX based on width instead of random constant
+        menu.setTranslateX((state.getWidth() * 12));
         menu.setTranslateY(0);
 
         return new GraphicsUpdater() {
@@ -59,31 +76,46 @@ public class Menu {
                 livesHb.setVisible(true);
                 // Debug.out("score updated");
                 score = MazeState.getScore();
-                scoreHb.getChildren().remove(0);
-                livesHb.getChildren().remove(0);
+
+
+
+                // empty out the horizontal boxes
+                for(int i = 0 ; i < scoreHb.getChildren().size(); i++){
+                    scoreHb.getChildren().remove(0);
+                }
+                for(int i = 0 ; i < initLives ; i++){
+                    livesHb.getChildren().remove(0);
+                }
 
                 // updating the score on the Label.
-                Label scoreText = new Label("Score : " + String.valueOf(MazeState.getScore()));
+                Label scoreText = new Label("Score : " + String.valueOf(score));
 
-                // la division de la taille reduit la taille de l'image progressivement pour que elle prend pas tous l'ecran.
-                ImageView livesImage = new ImageView( new Image(("heart" + String.valueOf(MazeState.getLives()) + ".png"),scale*(size)/(4 - MazeState.getLives()) , scale * size, true, true));
+
+                // resetting and updating the hearts counter.
+                String heartUrl = "heart.png";
+                ImageView[] livesArray = new ImageView[initLives];
+                for(int i = 0 ; i < initLives; i++){
+                    if ((MazeState.getLives()) <= i){
+                        heartUrl = "heart_grey.png"; 
+                    }
+                    livesArray[i] = new ImageView(new Image(heartUrl, scale*size,scale*size, true, true));
+                }
                 
                 // custom font settings.
                 scoreText.setStyle("-fx-text-fill: white;"); //To change the font size you need to change the value in load font below
                 try{
-                    Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 12); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now.
+
+                    Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 16); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
                     scoreText.setFont(scoreFont);
                 } catch (FileNotFoundException e){
                     e.printStackTrace();
                 }
 
-                // the actual update of the item.
+                // the final step, adding the updated objects back into the javaFX objects.
                 scoreHb.getChildren().add(scoreText);
-                livesHb.getChildren().add(livesImage);
-                
-                
-
-
+                for(ImageView image: livesArray){
+                    livesHb.getChildren().addAll(image);
+                }               
             }
 
             @Override
