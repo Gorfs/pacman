@@ -27,7 +27,7 @@ public class Menu {
 
     private final double scale;
     private int score;
-    private double size = 0.7;
+    private double size = 0.5;
     
     public Menu(double scale){
         this.scale = scale;
@@ -105,6 +105,7 @@ public class Menu {
                 // custom font settings.
                 scoreText.setStyle("-fx-text-fill: white;"); //To change the font size you need to change the value in load font below
                 try{
+
                     Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 16); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
                     scoreText.setFont(scoreFont);
                 } catch (FileNotFoundException e){
