@@ -64,7 +64,7 @@ public class ClydeController {
     private static boolean isDirectionValid(Direction dir1, Direction dir2, Critter clyde, MazeConfig config){
         // the point of this function is to make sure the ghost doesn't turn back on itself
         // as well as doesn't tell the ghost to run into a wall and cause collision issues.
-        Debug.out("isDirectionValid has been called " + dir1 + " " + dir2);
+        // Debug.out("isDirectionValid has been called " + dir1 + " " + dir2);
         boolean cellValid = true;
         if (dir1 == Direction.NONE){
             dir1 = clydeLastDirection;
