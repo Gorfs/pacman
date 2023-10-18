@@ -32,7 +32,11 @@ public final class MazeState {
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
+
+    // TODO: these should be changed to constants determined by player or in seperate file.
     private static int lives = 3;
+    private static int initLives = lives;
+
     private static int livesC = 3;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
@@ -64,6 +68,9 @@ public final class MazeState {
         return height;
     }
 
+    public static int getInitLives(){
+        return initLives;
+    }
     public static int getLives(){
         return lives;
     }
