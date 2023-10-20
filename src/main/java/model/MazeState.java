@@ -228,6 +228,9 @@ public final class MazeState {
 
     private void resetCritter(Critter critter) {
         critter.setDirection(Direction.NONE);
+        // Forgot to add this in the issue #26
+        if (critter instanceof PacMan)
+            critter.setNextDirection(Direction.NONE);
         critter.setPos(initialPos.get(critter));
     }
 

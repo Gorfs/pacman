@@ -3,7 +3,6 @@ package gui;
 import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
-import model.Critter;
 import model.MazeState;
 import model.PacMan;
 
@@ -65,6 +64,7 @@ public class GameView {
                 for (var updater : graphicsUpdaters) {
                     updater.update(deltaT);
                 }
+                // Removed this update from loop for because we just need to call it once.
                 PacMan.INSTANCE.update(deltaT);
                 last = now;
             }

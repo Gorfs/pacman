@@ -75,6 +75,7 @@ public final class CritterGraphicsFactory {
                             }
                         }
                     } else if (PacMan.INSTANCE.getIsDying() && critter instanceof PacMan) {
+                        // Updated dying animation for pacman
                         for (int i = 0; i < PacMan.INSTANCE.getCheckpointDeathAni().length; i++) {
                             if (PacMan.INSTANCE.getDeathTimerAni() < PacMan.INSTANCE.getCheckpointDeathAni()[i]) {
                                 image.setViewport(new Rectangle2D(width*i, 65*4, 65, 65));

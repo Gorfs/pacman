@@ -18,12 +18,18 @@ public final class PacMan implements Critter {
     private static boolean energized;
     private static Timer timer = new Timer("timer", true);
 
+    // movement animation related
     private float timerAni = 0;
+    // each keyframe we need to change sprite
     private final float[] checkpointAni = {0.15F,0.3F};
 
+    // Death animation related
     private float deathTimerAni = 0;
+    // each keyframe we need to change sprite
     private final float[] checkpointDeathAni = {.1F,.2F,.3F,.4F,.5F};
+    // When to start death animation
     private boolean isDying = false;
+    // So we don't have death animation instantly when death animation is finish and then create a loop.
     private boolean startedDeathAni = false;
 
     public PacMan() {
@@ -62,10 +68,6 @@ public final class PacMan implements Critter {
         return deathTimerAni;
     }
 
-    public void setDeathTimerAni(float deathTimerAni) {
-        this.deathTimerAni = deathTimerAni;
-    }
-
     @Override
     public void setTimerAni(float timerAni) {
         this.timerAni = timerAni;
@@ -78,6 +80,7 @@ public final class PacMan implements Critter {
 
     @Override
     public double getSpeed() {
+        // Changed so that when pacman is dying, it doesn't move anymore.
         return getIsDying()? 0:(isEnergized() ? 6 : 4);
     }
 
