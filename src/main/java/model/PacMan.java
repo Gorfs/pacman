@@ -41,13 +41,11 @@ public final class PacMan implements Critter {
         this.name=name;
     }
     public PacMan getInstance(String name){
-        if(INSTANCE.name==null){
-            INSTANCE=new PacMan(name);
-        }
+        INSTANCE=new PacMan(name);
         return INSTANCE;
     }
     
-    public static String getName(){return INSTANCE.name;}
+    public String getName(){return INSTANCE.name;}
 
 
     @Override

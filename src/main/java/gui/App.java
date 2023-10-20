@@ -66,8 +66,8 @@ public class App extends Application {
     private Stage primaryS;
     private TextField text;
     private TextField t;
-    private MenuButton2 button = new MenuButton2("Sumbit");
-    private MenuButton2 button1 = new MenuButton2("Sumbit");
+    private MenuButton2 button = new MenuButton2("Submit");
+    private MenuButton2 button1 = new MenuButton2("Submit");
 
     public static KeyCode[] M(String s, KeyCode[] k, int n){
         if(s.charAt(0)=='a'){k[n]=KeyCode.A;}
