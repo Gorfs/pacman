@@ -21,6 +21,11 @@ public final class PacMan implements Critter {
     private float timerAni = 0;
     private final float[] checkpointAni = {0.15F,0.3F};
 
+    private float deathTimerAni = 0;
+    private final float[] checkpointDeathAni = {.1F,.2F,.3F,.4F,.5F};
+    private boolean isDying = false;
+    private boolean startedDeathAni = false;
+
     public PacMan() {
     }
 
@@ -49,6 +54,18 @@ public final class PacMan implements Critter {
         return checkpointAni;
     }
 
+    public float[] getCheckpointDeathAni() {
+        return checkpointDeathAni;
+    }
+
+    public float getDeathTimerAni() {
+        return deathTimerAni;
+    }
+
+    public void setDeathTimerAni(float deathTimerAni) {
+        this.deathTimerAni = deathTimerAni;
+    }
+
     @Override
     public void setTimerAni(float timerAni) {
         this.timerAni = timerAni;
@@ -61,7 +78,7 @@ public final class PacMan implements Critter {
 
     @Override
     public double getSpeed() {
-        return isEnergized() ? 6 : 4;
+        return getIsDying()? 0:(isEnergized() ? 6 : 4);
     }
 
     @Override
@@ -104,7 +121,7 @@ public final class PacMan implements Critter {
     }
 
 
-    public void update(){ //I moved what is related directly to Pacman
+    public void update(long deltaT){ //I moved what is related directly to Pacman
         var pacPos = INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
         if (!MazeState.getGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()) {
@@ -117,7 +134,35 @@ public final class PacMan implements Critter {
             }
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
+        if (this.isDying) {
+            this.deathTimerAni += (float) ((float) deltaT * 1E-9);
+            System.out.println(this.deathTimerAni);
+            if (this.deathTimerAni > this.checkpointDeathAni[this.checkpointDeathAni.length - 1]) {
+                this.deathTimerAni = 0.0F;
+                this.isDying = false;
+            }
+        }
     }
+
+    public boolean getIsDying() {
+        return this.isDying;
+    }
+
+    public void setDying(boolean dying) {
+        if (!this.startedDeathAni) {
+            this.startedDeathAni = true;
+            this.isDying = dying;
+        }
+    }
+
+    public boolean isStartedDeathAni() {
+        return startedDeathAni;
+    }
+
+    public void setStartedDeathAni(boolean deathAni) {
+        this.startedDeathAni = deathAni;
+    }
+
     public static void setEnergized() {
 
         // function will now no longer take a boolean,

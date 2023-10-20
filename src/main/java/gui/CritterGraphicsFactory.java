@@ -35,6 +35,7 @@ public final class CritterGraphicsFactory {
         double scaledWidth = size * scale;
         double scaledHeight = size * scale;
 
+        // Initialize image var.
         ImageView image = new ImageView(fullImage);
         image.setViewport(croppedPortion);
         image.setFitWidth(scaledWidth);
@@ -45,25 +46,38 @@ public final class CritterGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 if (!MazeState.getGameEnded()){
+                    // Pacman doesn't have a scared version so i check if critter isn't pacman
                     if (!(critter instanceof PacMan)) {
                         Image fullImage;
+                        // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
                         if (PacMan.isEnergized())
                             fullImage = new Image("ghosts/scared_ghost.png");
                         else fullImage = new Image(url);
                         image.setImage(fullImage);
+                        // Crop the image to get the right sprite.
                         image.setViewport(croppedPortion);
                         image.setFitWidth(scaledWidth);
                         image.setFitHeight(scaledHeight);
                         image.setSmooth(true);
                     }
-
-                    if (critter.getDirection() != Direction.NONE) {
+                    // If critter is moving update animation, else just keep the curent sprite.
+                    if (critter.getDirection() != Direction.NONE && !PacMan.INSTANCE.getIsDying()) {
+                        // I added to each critter an animation timer called timerAni that update each frame critter is moving.
                         critter.setTimerAni((float) (critter.getTimerAni() + deltaT * 1E-9));
+                        // Reset timerAni when all sprites were used once.
                         if (critter.getTimerAni() > critter.getCheckpointAni()[critter.getCheckpointAni().length - 1])
                             critter.setTimerAni(0);
+                        // For each sprite, display it a certain amount of time.
                         for (int i = 0; i < critter.getCheckpointAni().length; i++) {
                             if (critter.getTimerAni() < critter.getCheckpointAni()[i]) {
                                 croppedImage(image, critter, (width * i));
+                                break;
+                            }
+                        }
+                    } else if (PacMan.INSTANCE.getIsDying() && critter instanceof PacMan) {
+                        for (int i = 0; i < PacMan.INSTANCE.getCheckpointDeathAni().length; i++) {
+                            if (PacMan.INSTANCE.getDeathTimerAni() < PacMan.INSTANCE.getCheckpointDeathAni()[i]) {
+                                image.setViewport(new Rectangle2D(width*i, 65*4, 65, 65));
                                 break;
                             }
                         }
@@ -71,9 +85,12 @@ public final class CritterGraphicsFactory {
                         var croppedPortion = new Rectangle2D(x, y, width, height);
                         image.setViewport(croppedPortion);
                     }
+                    // Display critter's new sprite at the right pos
                     image.setVisible(true);
-                    image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
-                    image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
+                    if (!PacMan.INSTANCE.getIsDying()) {
+                        image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
+                        image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
+                    }
                     // Debug.out("sprite updated");
                 } else {
                     image.setVisible(false);
@@ -88,8 +105,9 @@ public final class CritterGraphicsFactory {
             }
         };
     }
-
     private void croppedImage(ImageView image, Critter critter, int x) {
+        // Update image and get the pos of the sprite we need in the image.
+        // By default, we are using the sprite that going to the right.
         image.setViewport(switch (critter.getDirection()) {
             case NORTH -> new Rectangle2D(x, 65 * 3, 65, 65);
             case WEST -> new Rectangle2D(x, 65 * 2, 65, 65);

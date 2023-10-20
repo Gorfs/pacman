@@ -36,7 +36,7 @@ public final class MazeState {
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
-        this.config = config;
+        MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
@@ -172,9 +172,11 @@ public final class MazeState {
 
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
-                if (PacMan.INSTANCE.isEnergized()) {
+                if (PacMan.isEnergized()) {
                     resetCritter(critter);
                 } else {
+                    if (!PacMan.INSTANCE.isStartedDeathAni())
+                        PacMan.INSTANCE.setDying(true);
                     playerLost();
                     return;
                 }
@@ -214,11 +216,14 @@ public final class MazeState {
 
 
     private void playerLost() {
-        lives--;
-        if (lives == 0) {
-            gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
+        if (!PacMan.INSTANCE.getIsDying()) {
+            lives--;
+            if (lives == 0) {
+                gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
+            }
+            PacMan.INSTANCE.setStartedDeathAni(false);
+            resetCritters();
         }
-        resetCritters();
     }
 
     private void resetCritter(Critter critter) {

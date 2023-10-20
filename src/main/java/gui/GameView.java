@@ -3,6 +3,7 @@ package gui;
 import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
+import model.Critter;
 import model.MazeState;
 import model.PacMan;
 
@@ -49,7 +50,6 @@ public class GameView {
 
     public void animate() {
         new AnimationTimer() {
-            
             long last = 0;
 
             @Override
@@ -60,11 +60,12 @@ public class GameView {
                 }
                 
                 var deltaT = now - last;
-                maze.update(deltaT);
+                if (!PacMan.INSTANCE.getIsDying())
+                    maze.update(deltaT);
                 for (var updater : graphicsUpdaters) {
                     updater.update(deltaT);
-                    PacMan.INSTANCE.update();
                 }
+                PacMan.INSTANCE.update(deltaT);
                 last = now;
             }
         }.start();
