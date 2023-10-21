@@ -1,12 +1,13 @@
 package gui;
 
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
 import java.io.File;
+
+
 
 //inspiré grandement par 
 //https://github.com/AlmasB/FXTutorials/blob/
@@ -39,11 +40,8 @@ import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
-import model.ClydeController;
-import model.MazeState;
 
 public class App extends Application {
-
 
     public void playBackgroundMusic() {
         try {
@@ -52,13 +50,26 @@ public class App extends Application {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(0.2f);
+            gainControl.setValue(20f * (float) Math.log10(BGMManager.getVolume()));
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-        
+
+    public class BGMManager {
+        private static float volume = 1.0f;
+    
+        public static void setVolume(float volumeLevel) {
+            if(volumeLevel < 0.0f) volume = 0.0f;
+            else if(volumeLevel > 1.0f) volume = 1.0f;
+            else volume = volumeLevel;
+        }
+    
+        public static float getVolume() {
+            return volume;
+        }
+    }    
 
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     private GameMenu gameMenu;
@@ -101,7 +112,6 @@ public class App extends Application {
         else if(s.charAt(0)=='3'){k[n]=KeyCode.UP;}
         else if(s.charAt(0)=='4'){k[n]=KeyCode.DOWN;}
         return k;
-
     }
 
     @Override
@@ -270,6 +280,8 @@ public class App extends Application {
                 });
             });
 
+            
+
             MenuButton btnSound = new MenuButton("SOUND");
             btnSound.setOnMouseClicked(event -> {
                 getChildren().add(menu3);
@@ -373,14 +385,20 @@ public class App extends Application {
             });
 
             MenuButton btns1 = new MenuButton("1");
+            btns1.setOnMouseClicked(event -> BGMManager.setVolume(0.2f));
 
             MenuButton btns2 = new MenuButton("2");
-            
+            btns2.setOnMouseClicked(event -> BGMManager.setVolume(0.4f));
+
             MenuButton btns3 = new MenuButton("3");
+            btns3.setOnMouseClicked(event -> BGMManager.setVolume(0.6f));
 
             MenuButton btns4 = new MenuButton("4");
+            btns4.setOnMouseClicked(event -> BGMManager.setVolume(0.8f));
 
             MenuButton btns5 = new MenuButton("5");
+            btns5.setOnMouseClicked(event -> BGMManager.setVolume(1.0f));
+
 
             menu2.getChildren().addAll(btnBack1, btncase1, btncase2, btncase3, btncase4);
             menu3.getChildren().addAll(btnBack2, btns1, btns2, btns3, btns4, btns5);
@@ -633,6 +651,3 @@ public class App extends Application {
         gameView.animate();
     }
 }
-      
-
-
