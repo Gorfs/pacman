@@ -48,40 +48,6 @@ public class App extends Application {
     private MenuButton btncase2 = new MenuButton("Press a Key");
     private MenuButton btncase3 = new MenuButton("Press a Key");
     private MenuButton btncase4 = new MenuButton("Press a Key");
-
-    public static KeyCode[] M(String s, KeyCode[] k, int n){
-        if(s.charAt(0)=='a'){k[n]=KeyCode.A;}
-        else if(s.charAt(0)=='z'){k[n]=KeyCode.Z;}
-        else if(s.charAt(0)=='e'){k[n]=KeyCode.E;}
-        else if(s.charAt(0)=='r'){k[n]=KeyCode.R;}
-        else if(s.charAt(0)=='t'){k[n]=KeyCode.T;}
-        else if(s.charAt(0)=='y'){k[n]=KeyCode.Y;}
-        else if(s.charAt(0)=='u'){k[n]=KeyCode.U;}
-        else if(s.charAt(0)=='i'){k[n]=KeyCode.I;}
-        else if(s.charAt(0)=='o'){k[n]=KeyCode.O;}
-        else if(s.charAt(0)=='p'){k[n]=KeyCode.P;}
-        else if(s.charAt(0)=='q'){k[n]=KeyCode.Q;}
-        else if(s.charAt(0)=='s'){k[n]=KeyCode.S;}
-        else if(s.charAt(0)=='d'){k[n]=KeyCode.D;}
-        else if(s.charAt(0)=='f'){k[n]=KeyCode.F;}
-        else if(s.charAt(0)=='g'){k[n]=KeyCode.G;}
-        else if(s.charAt(0)=='h'){k[n]=KeyCode.H;}
-        else if(s.charAt(0)=='j'){k[n]=KeyCode.J;}
-        else if(s.charAt(0)=='k'){k[n]=KeyCode.K;}
-        else if(s.charAt(0)=='l'){k[n]=KeyCode.L;}
-        else if(s.charAt(0)=='m'){k[n]=KeyCode.M;}
-        else if(s.charAt(0)=='w'){k[n]=KeyCode.W;}
-        else if(s.charAt(0)=='x'){k[n]=KeyCode.X;}
-        else if(s.charAt(0)=='c'){k[n]=KeyCode.C;}
-        else if(s.charAt(0)=='v'){k[n]=KeyCode.V;}
-        else if(s.charAt(0)=='b'){k[n]=KeyCode.B;}
-        else if(s.charAt(0)=='n'){k[n]=KeyCode.N;}
-        else if(s.charAt(0)=='1'){k[n]=KeyCode.LEFT;}
-        else if(s.charAt(0)=='2'){k[n]=KeyCode.RIGHT;}
-        else if(s.charAt(0)=='3'){k[n]=KeyCode.UP;}
-        else if(s.charAt(0)=='4'){k[n]=KeyCode.DOWN;}
-        return k;
-    }
     
     public static void K(KeyCode [] k, int n, KeyCode key){
             k[n]=key;
