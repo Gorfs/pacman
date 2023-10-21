@@ -3,6 +3,6 @@ package gui;
 import javafx.scene.Node;
 
 public interface GraphicsUpdater {
-    void update();
+    void update(long deltaT);
     Node getNode();
 }
