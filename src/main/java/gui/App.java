@@ -1,5 +1,13 @@
 package gui;
 
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+
+import java.io.File;
+
 //inspiré grandement par 
 //https://github.com/AlmasB/FXTutorials/blob/
 //master/src/main/java/com/almasb/tutorial4/GameMenuDemo.java
@@ -36,6 +44,23 @@ import model.MazeState;
 
 
 public class App extends Application {
+
+
+    public void playBackgroundMusic() {
+        try {
+            File audioFile = new File("src/main/resources/bgm.wav");
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(0.2f);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+        
+
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     private GameMenu gameMenu;
     private GameMenu1 gameMenu1;
@@ -48,7 +73,7 @@ public class App extends Application {
     private MenuButton btncase2 = new MenuButton("Press a Key");
     private MenuButton btncase3 = new MenuButton("Press a Key");
     private MenuButton btncase4 = new MenuButton("Press a Key");
-    
+
     public static void K(KeyCode [] k, int n, KeyCode key){
             k[n]=key;
     }
@@ -628,6 +653,7 @@ public class App extends Application {
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
         maze.setLives(l);
         var gameView = new GameView(maze, root, 30.0);
+        playBackgroundMusic();
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();

@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 
 import geometry.IntCoordinates;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderStroke;
@@ -31,8 +30,7 @@ public class Menu {
 
     }
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos){
-        // var group = new Group();
-
+        // initializing JavaFX items and styles.
         HBox menu = new HBox();
         menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
@@ -41,18 +39,19 @@ public class Menu {
         
         HBox scoreHb = new HBox();
         HBox livesHb = new HBox();
+        // adding nodes to parent "menu"
         scoreHb.getChildren().addAll(scoreText);
         livesHb.getChildren().addAll(livesImage);
         menu.getChildren().addAll(livesHb, scoreHb);
         
         menu.setSpacing(20);
-        // centers the values to the top center of the screen.
         menu.setTranslateX(pos.x() * 20 );
         menu.setTranslateY(0);
 
         return new GraphicsUpdater() {
             @Override
             public void update() {
+                // runs on every update cycle.
                 if (MazeState.getGameEnded()){
                     livesHb.setVisible(false);
                     return;
@@ -63,14 +62,13 @@ public class Menu {
                 scoreHb.getChildren().remove(0);
                 livesHb.getChildren().remove(0);
 
-               // Label livesText = new Label("Lives : " + String.valueOf(MazeState.getLives()));
-               
+                // updating the score on the Label.
                 Label scoreText = new Label("Score : " + String.valueOf(MazeState.getScore()));
 
                 // la division de la taille reduit la taille de l'image progressivement pour que elle prend pas tous l'ecran.
-                ImageView livesImage = new ImageView( new Image(("heart" + String.valueOf(MazeState.getLives()) + ".png"),scale*(size)/(4 - MazeState.getLives()) , scale * size/1, true, true));
+                ImageView livesImage = new ImageView( new Image(("heart" + String.valueOf(MazeState.getLives()) + ".png"),scale*(size)/(4 - MazeState.getLives()) , scale * size, true, true));
                 
-                // livesText.setStyle("-fx-text-fill: white; -fx-font-size: 16px;");
+                // custom font settings.
                 scoreText.setStyle("-fx-text-fill: white;"); //To change the font size you need to change the value in load font below
                 try{
                     Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 12); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
@@ -78,6 +76,8 @@ public class Menu {
                 } catch (FileNotFoundException e){
                     e.printStackTrace();
                 }
+
+                // the actual update of the item.
                 scoreHb.getChildren().add(scoreText);
                 livesHb.getChildren().add(livesImage);
                 

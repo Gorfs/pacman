@@ -85,7 +85,7 @@ public final class PacMan implements Critter {
     }
 
 
-    public void update(long deltaTns){ //I moved what is related directly to Pacman
+    public void update(){ //I moved what is related directly to Pacman
         var pacPos = INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
         if (!MazeState.getGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()) {
@@ -94,6 +94,7 @@ public final class PacMan implements Critter {
             }else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
                 MazeState.addScore(15);
+                PacMan.setEnergized();
             }
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
@@ -113,21 +114,16 @@ public final class PacMan implements Critter {
                     // not sure what the thread.sleep does, since the timing is done via the timer.schedule command, but it works.
                     for (int i = 0; i < 10; i++){
                         Thread.sleep(0);
-                    }
-                    setEnergized(false);
-                                    } catch (InterruptedException e) {
+                    } setEnergized(false);
+                } catch (InterruptedException e) {
                     // e.printStackTrace();
                     System.out.println("oh no, anyway.... (the timer for the energizer went wrong , got an intrerruptedException error)");
                 }
             }
         }, 10000);
         // timer's second argument is in milliseconds, s 1000 ms = 1s
-
         // setEnergized(false);
-
-
-           }else{
-            System.out.println("already energized, chill out pls");
-           }   }
+       } else System.out.println("already energized, chill out pls");
+    }
 
 }
