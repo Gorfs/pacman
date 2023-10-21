@@ -225,17 +225,17 @@ public final class MazeState {
 
     public static void addScore(int increment) {
         score += increment;
-        music_score();
+        music_score(); //lorsque le score++ lance le music score
     }
 
 
     private void playerLost() {
         if (!PacMan.INSTANCE.getIsDying()) {
-            music_death();
+            music_death(); //lorsque le live--, lance music death
             lives--;
             if (lives == 0) {
-                App.stopBackgroundMusic();
-                music_gameover();
+                App.stopBackgroundMusic(); // lorsqu'on a plus de live, on arrête le bgm
+                music_gameover(); // Et on lance le music de game over 
                 gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
             }
             PacMan.INSTANCE.setStartedDeathAni(false);
@@ -270,7 +270,7 @@ public final class MazeState {
     // ...
 
 
-    
+    //les 3 fonctions pour lancer les effets sonores de score, death et game over
     public static void music_score(){
         try {
             File audioFile = new File("src/main/resources/score.wav");

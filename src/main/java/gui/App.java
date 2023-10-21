@@ -46,7 +46,7 @@ public class App extends Application {
 
     private static Clip bgmClip;
 
-    public static void playBackgroundMusic() {
+    public static void playBackgroundMusic() { // fonction pour lancer le bgm
         try {
             File audioFile = new File("src/main/resources/bgm.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
@@ -61,13 +61,13 @@ public class App extends Application {
         }
     }
 
-    public static void stopBackgroundMusic() {
+    public static void stopBackgroundMusic() { // fonction pour arrêter le bgm
         if (bgmClip != null && bgmClip.isRunning()) {
             bgmClip.stop(); 
         }
     }
 
-    public class BGMManager {
+    public class BGMManager { //class pour la réglage du bgm et de l'effet sonore
         private static float volume = 0.6f;
     
         public static void setVolume(float volumeLevel) {
@@ -423,7 +423,8 @@ public class App extends Application {
                     getChildren().remove(menu3);
                 });
                 });
-
+            
+            // bouton de niveau de son (entre 0 et 5)
             MenuButton btn_bgm0 = new MenuButton("0");
             btn_bgm0.setOnMouseClicked(event -> BGMManager.setVolume(0.0f));
 
