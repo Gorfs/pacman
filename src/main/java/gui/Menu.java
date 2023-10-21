@@ -40,7 +40,7 @@ public class Menu {
         // menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
         // the number of lives at the start of the game based on difficulty.
-        int initLives = MazeState.getInitLives();
+        int initLives = MazeState.getInitLives() - 1;
 
         Label scoreText = new Label("Score:" + String.valueOf(score) );
 
@@ -95,7 +95,7 @@ public class Menu {
                 String heartUrl = "heart.png";
                 ImageView[] livesArray = new ImageView[initLives];
                 for(int i = 0 ; i < initLives; i++){
-                    if ((MazeState.getLives()) <= i){
+                    if ((MazeState.getLives() - 1) <= i){
                         heartUrl = "heart_grey.png"; 
                     }
                     livesArray[i] = new ImageView(new Image(heartUrl, scale*size,scale*size, true, true));
