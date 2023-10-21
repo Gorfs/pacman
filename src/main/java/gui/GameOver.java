@@ -55,7 +55,7 @@ public class GameOver {
         return new GraphicsUpdater() {
             @Override
             public void update(long deltaT){
-
+                
                 if (MazeState.getGameEnded()){
                     vb.setVisible(true);
                 }

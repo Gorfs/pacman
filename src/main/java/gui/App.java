@@ -48,7 +48,7 @@ public class App extends Application {
 
     public static void playBackgroundMusic() { // fonction pour lancer le bgm
         try {
-            File audioFile = new File("src/main/resources/bgm.wav");
+            File audioFile = new File("src/main/resources/music/bgm.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             bgmClip = AudioSystem.getClip();
             bgmClip.open(audioInputStream);

@@ -273,7 +273,7 @@ public final class MazeState {
     //les 3 fonctions pour lancer les effets sonores de score, death et game over
     public static void music_score(){
         try {
-            File audioFile = new File("src/main/resources/score.wav");
+            File audioFile = new File("src/main/resources/music/score.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
@@ -287,7 +287,7 @@ public final class MazeState {
 
     public void music_death(){
         try {
-            File audioFile = new File("src/main/resources/death.wav");
+            File audioFile = new File("src/main/resources/music/death.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
@@ -301,7 +301,7 @@ public final class MazeState {
 
     public void music_gameover(){
         try {
-            File audioFile = new File("src/main/resources/game_over.wav");
+            File audioFile = new File("src/main/resources/music/game_over.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
