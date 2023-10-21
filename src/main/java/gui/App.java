@@ -7,7 +7,7 @@ import javax.sound.sampled.FloatControl;
 
 import java.io.File;
 
-
+import model.MazeState.EffetSonoreManager;
 
 //inspiré grandement par 
 //https://github.com/AlmasB/FXTutorials/blob/
@@ -41,24 +41,34 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
 
+
 public class App extends Application {
 
-    public void playBackgroundMusic() {
+    private static Clip bgmClip;
+
+    public static void playBackgroundMusic() {
         try {
             File audioFile = new File("src/main/resources/bgm.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            bgmClip = AudioSystem.getClip();
+            bgmClip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) bgmClip.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(20f * (float) Math.log10(BGMManager.getVolume()));
-            clip.start();
+            bgmClip.loop(Clip.LOOP_CONTINUOUSLY); 
+            bgmClip.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public static void stopBackgroundMusic() {
+        if (bgmClip != null && bgmClip.isRunning()) {
+            bgmClip.stop(); 
+        }
+    }
+
     public class BGMManager {
-        private static float volume = 1.0f;
+        private static float volume = 0.6f;
     
         public static void setVolume(float volumeLevel) {
             if(volumeLevel < 0.0f) volume = 0.0f;
@@ -79,39 +89,13 @@ public class App extends Application {
     private TextField t;
     private MenuButton2 button = new MenuButton2("Submit");
     private MenuButton2 button1 = new MenuButton2("Submit");
+    private MenuButton btncase1 = new MenuButton("Press a Key");
+    private MenuButton btncase2 = new MenuButton("Press a Key");
+    private MenuButton btncase3 = new MenuButton("Press a Key");
+    private MenuButton btncase4 = new MenuButton("Press a Key");
 
-    public static KeyCode[] M(String s, KeyCode[] k, int n){
-        if(s.charAt(0)=='a'){k[n]=KeyCode.A;}
-        else if(s.charAt(0)=='z'){k[n]=KeyCode.Z;}
-        else if(s.charAt(0)=='e'){k[n]=KeyCode.E;}
-        else if(s.charAt(0)=='r'){k[n]=KeyCode.R;}
-        else if(s.charAt(0)=='t'){k[n]=KeyCode.T;}
-        else if(s.charAt(0)=='y'){k[n]=KeyCode.Y;}
-        else if(s.charAt(0)=='u'){k[n]=KeyCode.U;}
-        else if(s.charAt(0)=='i'){k[n]=KeyCode.I;}
-        else if(s.charAt(0)=='o'){k[n]=KeyCode.O;}
-        else if(s.charAt(0)=='p'){k[n]=KeyCode.P;}
-        else if(s.charAt(0)=='q'){k[n]=KeyCode.Q;}
-        else if(s.charAt(0)=='s'){k[n]=KeyCode.S;}
-        else if(s.charAt(0)=='d'){k[n]=KeyCode.D;}
-        else if(s.charAt(0)=='f'){k[n]=KeyCode.F;}
-        else if(s.charAt(0)=='g'){k[n]=KeyCode.G;}
-        else if(s.charAt(0)=='h'){k[n]=KeyCode.H;}
-        else if(s.charAt(0)=='j'){k[n]=KeyCode.J;}
-        else if(s.charAt(0)=='k'){k[n]=KeyCode.K;}
-        else if(s.charAt(0)=='l'){k[n]=KeyCode.L;}
-        else if(s.charAt(0)=='m'){k[n]=KeyCode.M;}
-        else if(s.charAt(0)=='w'){k[n]=KeyCode.W;}
-        else if(s.charAt(0)=='x'){k[n]=KeyCode.X;}
-        else if(s.charAt(0)=='c'){k[n]=KeyCode.C;}
-        else if(s.charAt(0)=='v'){k[n]=KeyCode.V;}
-        else if(s.charAt(0)=='b'){k[n]=KeyCode.B;}
-        else if(s.charAt(0)=='n'){k[n]=KeyCode.N;}
-        else if(s.charAt(0)=='1'){k[n]=KeyCode.LEFT;}
-        else if(s.charAt(0)=='2'){k[n]=KeyCode.RIGHT;}
-        else if(s.charAt(0)=='3'){k[n]=KeyCode.UP;}
-        else if(s.charAt(0)=='4'){k[n]=KeyCode.DOWN;}
-        return k;
+    public static void K(KeyCode [] k, int n, KeyCode key){
+            k[n]=key;
     }
 
     @Override
@@ -128,6 +112,10 @@ public class App extends Application {
         text=te;
         t=tex;
         button1.setVisible(false);
+        btncase1.setVisible(false);
+        btncase2.setVisible(false);
+        btncase3.setVisible(false);
+        btncase4.setVisible(false);
         button.setVisible(false);
         text.setVisible((false));
         t.setVisible(false);
@@ -139,10 +127,34 @@ public class App extends Application {
         gameMenu1 = new GameMenu1();
         gameMenu.setVisible(true);
         gameMenu1.setVisible(false);
-        root.getChildren().addAll(imgView, gameMenu, gameMenu1, text, button, t, button1 );
+        root.getChildren().addAll(imgView, btncase1, btncase2, btncase3, btncase4, gameMenu, gameMenu1, text, button, t, button1 );
         Scene scene = new Scene(root);
         
         scene.setOnKeyPressed(event -> {
+            if(btncase1.isVisible()){
+                if(event.getCode()!=null){
+                    K(k, 0, event.getCode());
+                    btncase1.setVisible(false);
+                }
+            }
+            if(btncase2.isVisible()){
+                if(event.getCode()!=null){
+                    K(k, 1, event.getCode());
+                    btncase2.setVisible(false);
+                }
+            }
+            if(btncase3.isVisible()){
+                if(event.getCode()!=null){
+                    K(k, 2, event.getCode());
+                    btncase3.setVisible(false);
+                }
+            }
+            if(btncase4.isVisible()){
+                if(event.getCode()!=null){
+                    K(k, 3, event.getCode());
+                    btncase4.setVisible(false);
+                }
+            }
             if (event.getCode() == KeyCode.ESCAPE) {
                 if (gameMenu.isVisible()) {
                     FadeTransition ft = new FadeTransition(Duration.seconds(0.5), gameMenu);
@@ -185,6 +197,8 @@ public class App extends Application {
             VBox menu1 = new VBox(10);
             VBox menu2 = new VBox(10);
             VBox menu3 = new VBox(10);
+            VBox menu4 = new VBox(10);
+            VBox menu5 = new VBox(10);
 
             menu0.setTranslateX(100);
             menu0.setTranslateY(200);
@@ -197,6 +211,12 @@ public class App extends Application {
 
             menu3.setTranslateX(100);
             menu3.setTranslateY(200);
+
+            menu4.setTranslateX(100);
+            menu4.setTranslateY(200);
+
+            menu5.setTranslateX(100);
+            menu5.setTranslateY(200);
 
             final int offset = 400;
 
@@ -316,94 +336,139 @@ public class App extends Application {
                 });
             });
             
-            MenuButton btncase1 = new MenuButton("LEFT");
-            btncase1.setOnMouseClicked(event1 -> {
-                    t.setTranslateY(320);
-                    t.setTranslateX(300);
-                    t.setText("Écrivez votre touche");
-                    t.setVisible((true));
-                    button1.setVisible(true);
-                    button1.setTranslateY(322);
-                    button1.setTranslateX(432);
-                    button1.setOnMouseClicked(event -> {
-                        t.setVisible((false));
-                        button1.setVisible(false);
-                        String s = t.getText();
-                        k=M(s,k,0);
-                    });                
+            MenuButton btncaseLeft = new MenuButton("LEFT");
+            btncaseLeft.setOnMouseClicked(event -> {
+                btncase1.setVisible(true);
             });
-
-            MenuButton btncase2 = new MenuButton("RIGHT");
-            btncase2.setOnMouseClicked(event1 -> {
-                    t.setTranslateY(320);
-                    t.setTranslateX(300);
-                    t.setText("Écrivez votre touche");
-                    t.setVisible((true));
-                    button1.setVisible(true);
-                    button1.setTranslateY(322);
-                    button1.setTranslateX(432);
-                    button1.setOnMouseClicked(event -> {
-                        String s = t.getText();
-                        k=M(s,k,1);
-                        t.setVisible((false));
-                        button1.setVisible(false);
-                    });
+            MenuButton btncaseRight = new MenuButton("RIGHT");
+            btncaseRight.setOnMouseClicked(event1 -> {
+                btncase2.setVisible(true);
             });
             
-            MenuButton btncase3 = new MenuButton("UP");
-            btncase3.setOnMouseClicked(event1 -> {
-                    t.setTranslateY(320);
-                    t.setTranslateX(300);
-                    t.setText("Écrivez votre touche");
-                    t.setVisible((true));
-                    button1.setVisible(true);
-                    button1.setTranslateY(322);
-                    button1.setTranslateX(432);
-                    button1.setOnMouseClicked(event -> {
-                        String s = t.getText();
-                        k=M(s,k,2);
-                        t.setVisible((false));
-                        button1.setVisible(false);
-                    });
+            MenuButton btncaseUp = new MenuButton("UP");
+            btncaseUp.setOnMouseClicked(event1 -> {
+                btncase3.setVisible(true);
             });
 
-            MenuButton btncase4 = new MenuButton("DOWN");
-            btncase4.setOnMouseClicked(event1 -> {
-                    t.setTranslateY(320);
-                    t.setTranslateX(300);
-                    t.setText("Écrivez votre touche");
-                    t.setVisible((true));
-                    button1.setVisible(true);
-                    button1.setTranslateY(322);
-                    button1.setTranslateX(432);
-                    button1.setOnMouseClicked(event -> {
-                        String s = t.getText();
-                        k=M(s,k,3);
-                        t.setVisible((false));
-                        button1.setVisible(false);
-                    });
+            MenuButton btncaseDown = new MenuButton("DOWN");
+            btncaseDown.setOnMouseClicked(event1 -> {
+                btncase4.setVisible(true);
             });
 
-            MenuButton btns1 = new MenuButton("1");
-            btns1.setOnMouseClicked(event -> BGMManager.setVolume(0.2f));
 
-            MenuButton btns2 = new MenuButton("2");
-            btns2.setOnMouseClicked(event -> BGMManager.setVolume(0.4f));
+            MenuButton btnBack3 = new MenuButton("BACK");
+            btnBack3.setOnMouseClicked(event -> {
+                getChildren().add(menu3);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu4);
+                tt.setToX(menu4.getTranslateX() + offset);
 
-            MenuButton btns3 = new MenuButton("3");
-            btns3.setOnMouseClicked(event -> BGMManager.setVolume(0.6f));
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu3);
+                tt1.setToX(menu4.getTranslateX());
 
-            MenuButton btns4 = new MenuButton("4");
-            btns4.setOnMouseClicked(event -> BGMManager.setVolume(0.8f));
+                tt.play();
+                tt1.play();
 
-            MenuButton btns5 = new MenuButton("5");
-            btns5.setOnMouseClicked(event -> BGMManager.setVolume(1.0f));
+                tt.setOnFinished(evt -> {
+                    getChildren().remove(menu4);
+                });
+            });
+
+            MenuButton btns1 = new MenuButton("Background music");
+            btns1.setOnMouseClicked(event -> {
+                getChildren().add(menu4);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu3);
+                tt.setToX(menu3.getTranslateX() - offset);
+
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu4);
+                tt1.setToX(menu3.getTranslateX());
+
+                tt.play();
+                tt1.play();
+
+                tt.setOnFinished(evt -> {
+                    getChildren().remove(menu3);
+                });
+                });
+            
+            MenuButton btnBack4 = new MenuButton("BACK");
+            btnBack4.setOnMouseClicked(event -> {
+                getChildren().add(menu3);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu5);
+                tt.setToX(menu5.getTranslateX() + offset);
+
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu3);
+                tt1.setToX(menu5.getTranslateX());
+
+                tt.play();
+                tt1.play();
+
+                tt.setOnFinished(evt -> {
+                    getChildren().remove(menu5);
+                });
+            });
+
+            MenuButton btns2 = new MenuButton("Sound effects");
+            btns2.setOnMouseClicked(event -> {
+                getChildren().add(menu5);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu3);
+                tt.setToX(menu3.getTranslateX() - offset);
+
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu5);
+                tt1.setToX(menu3.getTranslateX());
+
+                tt.play();
+                tt1.play();
+
+                tt.setOnFinished(evt -> {
+                    getChildren().remove(menu3);
+                });
+                });
+
+            MenuButton btn_bgm0 = new MenuButton("0");
+            btn_bgm0.setOnMouseClicked(event -> BGMManager.setVolume(0.0f));
+
+            MenuButton btn_bgm1 = new MenuButton("1");
+            btn_bgm1.setOnMouseClicked(event -> BGMManager.setVolume(0.2f));
+
+            MenuButton btn_bgm2 = new MenuButton("2");
+            btn_bgm2.setOnMouseClicked(event -> BGMManager.setVolume(0.4f));
+
+            MenuButton btn_bgm3 = new MenuButton("3");
+            btn_bgm3.setOnMouseClicked(event -> BGMManager.setVolume(0.6f));
+
+            MenuButton btn_bgm4 = new MenuButton("4");
+            btn_bgm4.setOnMouseClicked(event -> BGMManager.setVolume(0.8f));
+
+            MenuButton btn_bgm5 = new MenuButton("5");
+            btn_bgm5.setOnMouseClicked(event -> BGMManager.setVolume(1.0f));
+
+            MenuButton btn_eff0 = new MenuButton("0");
+            btn_eff0.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.0f));
+
+            MenuButton btn_eff1 = new MenuButton("1");
+            btn_eff1.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.2f));
+
+            MenuButton btn_eff2 = new MenuButton("2");
+            btn_eff2.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.4f));
+
+            MenuButton btn_eff3 = new MenuButton("3");
+            btn_eff3.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.6f));
+
+            MenuButton btn_eff4 = new MenuButton("4");
+            btn_eff4.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.8f));
+
+            MenuButton btn_eff5 = new MenuButton("5");
+            btn_eff5.setOnMouseClicked(event -> EffetSonoreManager.setVolume(1.0f));
 
 
-            menu2.getChildren().addAll(btnBack1, btncase1, btncase2, btncase3, btncase4);
-            menu3.getChildren().addAll(btnBack2, btns1, btns2, btns3, btns4, btns5);
+            menu2.getChildren().addAll(btnBack1, btncaseLeft, btncaseRight, btncaseUp, btncaseDown);
+            menu3.getChildren().addAll(btnBack2, btns1, btns2);
             menu0.getChildren().addAll(btnOptions, btnExit);
             menu1.getChildren().addAll(btnBack, btnSound, btnKey);
+            menu4.getChildren().addAll(btnBack3, btn_bgm0, btn_bgm1, btn_bgm2, btn_bgm3, btn_bgm4, btn_bgm5); 
+            //creation des menu qui suivent apres avoir cliqué 
+            //sur btns1 et respectivement btns2
+            menu5.getChildren().addAll(btnBack4, btn_eff0, btn_eff1, btn_eff2, btn_eff3, btn_eff4, btn_eff5);
             getChildren().addAll(bg,menu0);
         }
     }

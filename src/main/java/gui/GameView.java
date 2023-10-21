@@ -49,7 +49,6 @@ public class GameView {
 
     public void animate() {
         new AnimationTimer() {
-            
             long last = 0;
 
             @Override
@@ -60,11 +59,13 @@ public class GameView {
                 }
                 
                 var deltaT = now - last;
-                maze.update(deltaT);
+                if (!PacMan.INSTANCE.getIsDying())
+                    maze.update(deltaT);
                 for (var updater : graphicsUpdaters) {
-                    updater.update();
-                    PacMan.INSTANCE.update();
+                    updater.update(deltaT);
                 }
+                // Removed this update from loop for because we just need to call it once.
+                PacMan.INSTANCE.update(deltaT);
                 last = now;
             }
         }.start();

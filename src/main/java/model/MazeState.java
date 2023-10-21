@@ -4,6 +4,7 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import gui.App;
 
 import java.util.List;
 import java.util.Map;
@@ -16,10 +17,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
-import java.io.File;
 
-//import javafx.scene.media.Media;
-//import javafx.scene.media.MediaPlayer;
+import java.io.File;
 
 public final class MazeState {
     private static MazeConfig config;
@@ -37,7 +36,7 @@ public final class MazeState {
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
-        this.config = config;
+        MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
@@ -51,6 +50,20 @@ public final class MazeState {
         );
         resetCritters();
     }
+
+    public class EffetSonoreManager {
+        private static float volume = 0.6f;
+    
+        public static void setVolume(float volumeLevel) {
+            if(volumeLevel < 0.0f) volume = 0.0f;
+            else if(volumeLevel > 1.0f) volume = 1.0f;
+            else volume = volumeLevel;
+        }
+    
+        public static float getVolume() {
+            return volume;
+        }
+    }   
 
     public static List<Critter> getCritters() {
         return critters;
@@ -103,7 +116,8 @@ public final class MazeState {
             // Set direction to the next direction if direction is NONE.
             if (critter.getDirection() == Direction.NONE) {
                 critter.setDirection(critter.getNextDirection());
-                // critter.setNextDirection(Direction.NONE);
+                if (critter instanceof PacMan)
+                    critter.setNextDirection(Direction.NONE);
             }
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
@@ -172,9 +186,11 @@ public final class MazeState {
 
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
-                if (PacMan.INSTANCE.isEnergized()) {
+                if (PacMan.isEnergized()) {
                     resetCritter(critter);
                 } else {
+                    if (!PacMan.INSTANCE.isStartedDeathAni())
+                        PacMan.INSTANCE.setDying(true);
                     playerLost();
                     return;
                 }
@@ -187,7 +203,6 @@ public final class MazeState {
         }
     }
 }
-    
 
     public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
@@ -215,16 +230,24 @@ public final class MazeState {
 
 
     private void playerLost() {
-        lives--;
-        music_death();
-        if (lives == 0) {
-            gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
+        if (!PacMan.INSTANCE.getIsDying()) {
+            music_death();
+            lives--;
+            if (lives == 0) {
+                App.stopBackgroundMusic();
+                music_gameover();
+                gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
+            }
+            PacMan.INSTANCE.setStartedDeathAni(false);
+            resetCritters();
         }
-        resetCritters();
     }
 
     private void resetCritter(Critter critter) {
         critter.setDirection(Direction.NONE);
+        // Forgot to add this in the issue #26
+        if (critter instanceof PacMan)
+            critter.setNextDirection(Direction.NONE);
         critter.setPos(initialPos.get(critter));
     }
 
@@ -250,12 +273,12 @@ public final class MazeState {
     
     public static void music_score(){
         try {
-            File audioFile = new File("src/main/resources/score.wav"); 
+            File audioFile = new File("src/main/resources/score.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(0.5f); 
+            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -264,12 +287,26 @@ public final class MazeState {
 
     public void music_death(){
         try {
-            File audioFile = new File("src/main/resources/death.wav"); 
+            File audioFile = new File("src/main/resources/death.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(1f); 
+            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void music_gameover(){
+        try {
+            File audioFile = new File("src/main/resources/game_over.wav");
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();

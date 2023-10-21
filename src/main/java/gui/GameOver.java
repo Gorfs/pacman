@@ -13,6 +13,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import model.MazeState;
 
+import gui.App;
+
 public class GameOver {
 
     private final double scale;
@@ -52,7 +54,7 @@ public class GameOver {
 
         return new GraphicsUpdater() {
             @Override
-            public void update(){
+            public void update(long deltaT){
 
                 if (MazeState.getGameEnded()){
                     vb.setVisible(true);

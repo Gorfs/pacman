@@ -10,6 +10,14 @@ public sealed interface Critter permits Ghost, PacMan {
 
     Direction getNextDirection();
 
+    float timerAni = 0;
+    float[] checkpointAni = new float[2];
+
+    void setTimerAni(float timerAni);
+
+    float getTimerAni();
+    float[] getCheckpointAni();
+
     double getSpeed();
 
     /**
