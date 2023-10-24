@@ -13,6 +13,30 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import model.MazeState;
 
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import javafx.animation.FadeTransition;
+import javafx.animation.TranslateTransition;
+import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.GaussianBlur;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
+import javafx.scene.input.KeyCode;
+import javafx.scene.text.Font;
+import javafx.scene.control.*;
+import model.ClydeController;
+import model.MazeState;
+
 
 public class App extends Application {
 
