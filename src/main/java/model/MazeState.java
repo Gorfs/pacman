@@ -191,7 +191,10 @@ public final class MazeState {
                 } else {
                     if (!PacMan.INSTANCE.isStartedDeathAni())
                         PacMan.INSTANCE.setDying(true);
+                        resetCritters();
+                        music_death();
                     playerLost();
+                    
                     return;
                 }
             
@@ -231,15 +234,15 @@ public final class MazeState {
 
     private void playerLost() {
         if (!PacMan.INSTANCE.getIsDying()) {
-            music_death(); //lorsque le live--, lance music death
+            //music_death(); //lorsque le live--, lance music death
             lives--;
             if (lives == 0) {
-                App.stopBackgroundMusic(); // lorsqu'on a plus de live, on arrête le bgm
+                App.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
                 music_gameover(); // Et on lance le music de game over 
                 gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
             }
             PacMan.INSTANCE.setStartedDeathAni(false);
-            resetCritters();
+            
         }
     }
 
@@ -285,9 +288,9 @@ public final class MazeState {
         }
     }
 
-    public void music_death(){
+    public static void music_death(){
         try {
-            File audioFile = new File("src/main/resources/music/death.wav");
+            File audioFile = new File("src/main/resources/music/death2.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
