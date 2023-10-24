@@ -3,12 +3,30 @@ package model;
 import geometry.RealCoordinates;
 
 public enum Ghost implements Critter {
-
-    // TODO: implement a different AI for each ghost, according to the description in Wikipedia's page
     BLINKY, INKY, PINKY, CLYDE;
 
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
+    private Direction nextDirection = Direction.NONE;
+
+    private float timerAni = 0;
+    private final float[] checkpointAni = {0.25F,0.5F};
+
+    @Override
+    public float[] getCheckpointAni() {
+        return checkpointAni;
+    }
+
+    @Override
+    public void setTimerAni(float timerAni) {
+        this.timerAni = timerAni;
+    }
+
+    @Override
+    public float getTimerAni() {
+        return timerAni;
+    }
+
     @Override
     public RealCoordinates getPos() {
         return pos;
@@ -21,7 +39,8 @@ public enum Ghost implements Critter {
 
     @Override
     public void setDirection(Direction direction) {
-        this.direction = direction;
+        this.direction = this.nextDirection;
+        this.nextDirection = direction;
     }
 
     @Override
@@ -30,8 +49,19 @@ public enum Ghost implements Critter {
     }
 
     @Override
+    public Direction getNextDirection() {
+        return nextDirection;
+    }
+
+    @Override
+    public void setNextDirection(Direction nextDirection) {
+        this.nextDirection = nextDirection;
+    }
+
+    @Override
     public double getSpeed() {
-        return 0;
+        // speed is constant, we should probably get this from a file such as a CONSTANT.json
+        return 2;
     }
 
 }

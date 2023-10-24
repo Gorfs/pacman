@@ -1,6 +1,7 @@
 package config;
 
 import geometry.IntCoordinates;
+import misc.Debug;
 
 import static config.Cell.*;
 import static config.Cell.Content.*;
@@ -64,12 +65,16 @@ public class MazeConfig {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
     }
 
+    public Cell[][] getGrid(){
+        return grid;
+    }
+
     public static MazeConfig originalMaze(String file) {
         // New class Cell to store the map
         Cell[][] map = new Cell[21][21];
 
         // Open the file maze.txt
-        File maze = new File("src/main/resources/mazes/" + file + ".txt");
+        File maze = new File("src/main/resources/" + file + ".txt");
         Scanner myReader;
         // Try if the file exist
         try {
@@ -105,9 +110,7 @@ public class MazeConfig {
                     pinky = new IntCoordinates(Integer.parseInt(data[6]), Integer.parseInt(data[7]));
                     clyde = new IntCoordinates(Integer.parseInt(data[8]), Integer.parseInt(data[9]));
                 }
-
                 n++;
-
             }
             // close file
             myReader.close();

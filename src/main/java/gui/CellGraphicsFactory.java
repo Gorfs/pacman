@@ -111,7 +111,7 @@ public class CellGraphicsFactory {
 
         return new GraphicsUpdater() {
             @Override
-            public void update() {
+            public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
             }
 
