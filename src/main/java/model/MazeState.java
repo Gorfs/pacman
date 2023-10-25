@@ -234,7 +234,6 @@ public final class MazeState {
 
     private void playerLost() {
         if (!PacMan.INSTANCE.getIsDying()) {
-            //music_death(); //lorsque le live--, lance music death
             lives--;
             if (lives == 0) {
                 App.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
