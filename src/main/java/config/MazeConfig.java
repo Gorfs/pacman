@@ -73,7 +73,7 @@ public class MazeConfig {
         int n = 0;
         // Init the spawn of the entities
             IntCoordinates player = new IntCoordinates(10, 15),
-                    blinky = new IntCoordinates(10, 16), inky = new IntCoordinates(10, 9),
+                    blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
                     pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
             // while there is something to read
             while (myReader.hasNextLine()) {
