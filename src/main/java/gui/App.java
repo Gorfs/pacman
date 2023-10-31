@@ -651,7 +651,7 @@ public class App extends Application {
         clydeController.startAI();
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        var maze = new MazeState(MazeConfig.originalMaze("Gr3Ma8h"));
+        var maze = new MazeState(MazeConfig.originalMaze("maze2"));
         var gameView = new GameView(maze, root, 30.0);
         playBackgroundMusic();
         primaryStage.setScene(gameScene);
