@@ -314,23 +314,24 @@ public class App extends Application {
                 });
             });
             
-            MenuButton btncaseLeft = new MenuButton("LEFT");
+            MenuButton btncaseLeft = new MenuButton("LEFT");// a faire : mettre le nom de la touche prise par le jeu -> k[i] a coté du bouton
             btncaseLeft.setOnMouseClicked(event -> {
-                btncase1.setVisible(true);
+                if(!btncase2.isVisible() && !btncase3.isVisible() && !btncase4.isVisible()){btncase1.setVisible(true);}
+                // ou tous les mettre false de base sauf le btn en question -> ca revient a mettre une prio sur le dernier bouton au lieu du premier
             });
             MenuButton btncaseRight = new MenuButton("RIGHT");
             btncaseRight.setOnMouseClicked(event1 -> {
-                btncase2.setVisible(true);
+                if(!btncase1.isVisible() && !btncase3.isVisible() && !btncase4.isVisible()){btncase2.setVisible(true);}
             });
             
             MenuButton btncaseUp = new MenuButton("UP");
             btncaseUp.setOnMouseClicked(event1 -> {
-                btncase3.setVisible(true);
+                if(!btncase2.isVisible() && !btncase1.isVisible() && !btncase4.isVisible()){btncase3.setVisible(true);}
             });
 
             MenuButton btncaseDown = new MenuButton("DOWN");
             btncaseDown.setOnMouseClicked(event1 -> {
-                btncase4.setVisible(true);
+                if(!btncase2.isVisible() && !btncase3.isVisible() && !btncase1.isVisible()){btncase4.setVisible(true);}
             });
 
             MenuButton btnBack3 = new MenuButton("BACK");
