@@ -194,7 +194,7 @@ public final class MazeState {
     public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                if (!gridState[i][j] && config.getCell(new IntCoordinates(i, j)).initialContent() == Cell.Content.DOT) {
+                if (!gridState[i][j] && config.getCell(new IntCoordinates(j, i)).initialContent() == Cell.Content.DOT) {
                     return false;
                 }
             }
