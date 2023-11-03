@@ -1,12 +1,13 @@
 package gui;
 
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
 import java.io.File;
+
+import model.MazeState.EffetSonoreManager;
 
 //inspiré grandement par 
 //https://github.com/AlmasB/FXTutorials/blob/
@@ -39,27 +40,46 @@ import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
-import model.ClydeController;
-import model.MazeState;
 
 
 public class App extends Application {
 
+    private static Clip bgmClip;
 
-    public void playBackgroundMusic() {
+    public static void playBackgroundMusic() { // fonction pour lancer le bgm
         try {
-            File audioFile = new File("src/main/resources/bgm.wav");
+            File audioFile = new File("src/main/resources/music/bgm.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(0.2f);
-            clip.start();
+            bgmClip = AudioSystem.getClip();
+            bgmClip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) bgmClip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(20f * (float) Math.log10(BGMManager.getVolume()));
+            bgmClip.loop(Clip.LOOP_CONTINUOUSLY); 
+            bgmClip.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-        
+
+    public static void stopBackgroundMusic() { // fonction pour arrêter le bgm
+        if (bgmClip != null && bgmClip.isRunning()) {
+            bgmClip.stop(); 
+        }
+    }
+
+    public class BGMManager { //class pour la réglage du bgm et de l'effet sonore
+        private static float volume = 0.6f;
+    
+        public static void setVolume(float volumeLevel) {
+            if(volumeLevel < 0.0f) volume = 0.0f;
+            else if(volumeLevel > 1.0f) volume = 1.0f;
+            else volume = volumeLevel;
+        }
+    
+        public static float getVolume() {
+            return volume;
+        }
+    }    
 
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     private GameMenu gameMenu;
@@ -280,6 +300,8 @@ public class App extends Application {
                 });
             });
 
+            
+
             MenuButton btnSound = new MenuButton("SOUND");
             btnSound.setOnMouseClicked(event -> {
                 getChildren().add(menu3);
@@ -332,6 +354,7 @@ public class App extends Application {
             btncaseDown.setOnMouseClicked(event1 -> {
                 btncase4.setVisible(true);
             });
+
 
             MenuButton btnBack3 = new MenuButton("BACK");
             btnBack3.setOnMouseClicked(event -> {
@@ -400,18 +423,53 @@ public class App extends Application {
                     getChildren().remove(menu3);
                 });
                 });
+            
+            // bouton de niveau de son (entre 0 et 5)
+            MenuButton btn_bgm0 = new MenuButton("0");
+            btn_bgm0.setOnMouseClicked(event -> BGMManager.setVolume(0.0f));
 
-            MenuButton btnBS = new MenuButton("à toi de le faire");
-            MenuButton btnSE = new MenuButton("la même");
+            MenuButton btn_bgm1 = new MenuButton("1");
+            btn_bgm1.setOnMouseClicked(event -> BGMManager.setVolume(0.2f));
+
+            MenuButton btn_bgm2 = new MenuButton("2");
+            btn_bgm2.setOnMouseClicked(event -> BGMManager.setVolume(0.4f));
+
+            MenuButton btn_bgm3 = new MenuButton("3");
+            btn_bgm3.setOnMouseClicked(event -> BGMManager.setVolume(0.6f));
+
+            MenuButton btn_bgm4 = new MenuButton("4");
+            btn_bgm4.setOnMouseClicked(event -> BGMManager.setVolume(0.8f));
+
+            MenuButton btn_bgm5 = new MenuButton("5");
+            btn_bgm5.setOnMouseClicked(event -> BGMManager.setVolume(1.0f));
+
+            MenuButton btn_eff0 = new MenuButton("0");
+            btn_eff0.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.0f));
+
+            MenuButton btn_eff1 = new MenuButton("1");
+            btn_eff1.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.2f));
+
+            MenuButton btn_eff2 = new MenuButton("2");
+            btn_eff2.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.4f));
+
+            MenuButton btn_eff3 = new MenuButton("3");
+            btn_eff3.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.6f));
+
+            MenuButton btn_eff4 = new MenuButton("4");
+            btn_eff4.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.8f));
+
+            MenuButton btn_eff5 = new MenuButton("5");
+            btn_eff5.setOnMouseClicked(event -> EffetSonoreManager.setVolume(1.0f));
+
 
             menu2.getChildren().addAll(btnBack1, btncaseLeft, btncaseRight, btncaseUp, btncaseDown);
             menu3.getChildren().addAll(btnBack2, btns1, btns2);
             menu0.getChildren().addAll(btnOptions, btnExit);
             menu1.getChildren().addAll(btnBack, btnSound, btnKey);
-            menu4.getChildren().addAll(btnBack3, btnBS); 
+            menu4.getChildren().addAll(btnBack3, btn_bgm0, btn_bgm1, btn_bgm2, btn_bgm3, btn_bgm4, btn_bgm5); 
             //creation des menu qui suivent apres avoir cliqué 
             //sur btns1 et respectivement btns2
-            menu5.getChildren().addAll(btnBack4, btnSE);
+            menu5.getChildren().addAll(btnBack4, btn_eff0, btn_eff1, btn_eff2, btn_eff3, btn_eff4, btn_eff5);
             getChildren().addAll(bg,menu0);
         }
     }
@@ -659,6 +717,3 @@ public class App extends Application {
         gameView.animate();
     }
 }
-      
-
-
