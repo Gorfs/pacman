@@ -34,7 +34,6 @@ public final class PacMan implements Critter {
 
     public PacMan() {
     }
-
     public static PacMan INSTANCE = new PacMan();
     public String name;
     private PacMan(String name){

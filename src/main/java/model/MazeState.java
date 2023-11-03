@@ -4,6 +4,8 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import gui.ClydeController;
+import gui.GhostsController;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import java.io.File;
 //import javafx.scene.media.MediaPlayer;
 
 public final class MazeState {
+    private final GhostsController ghostsController = new ClydeController();
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -86,9 +89,9 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
-        ClydeController.setDirection(config);
         for  (var critter: critters) {
-
+            // Get the next direction of ghosts
+            if (!(critter instanceof PacMan)) ghostsController.setDirection(config, critter);
 
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
@@ -103,8 +106,7 @@ public final class MazeState {
             // Set direction to the next direction if direction is NONE.
             if (critter.getDirection() == Direction.NONE) {
                 critter.setDirection(critter.getNextDirection());
-                if (critter instanceof PacMan)
-                    critter.setNextDirection(Direction.NONE);
+                critter.setNextDirection(Direction.NONE);
             }
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
@@ -282,6 +284,4 @@ public final class MazeState {
             e.printStackTrace();
         }
     }
-    
-
 }

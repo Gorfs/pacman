@@ -39,7 +39,6 @@ import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
-import model.ClydeController;
 import model.MazeState;
 
 
@@ -646,8 +645,8 @@ public class App extends Application {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController(k);
-        var clydeController = new ClydeController();
-        clydeController.startAI();
+        GhostsController[] ghostsController = {new ClydeController()};
+        for (var ghost: ghostsController) {ghost.startAI();}
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
@@ -659,6 +658,3 @@ public class App extends Application {
         gameView.animate();
     }
 }
-      
-
-
