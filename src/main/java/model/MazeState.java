@@ -4,21 +4,12 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import gui.App;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import static model.Ghost.*;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-
-
-import java.io.File;
 
 public final class MazeState {
     private static MazeConfig config;
