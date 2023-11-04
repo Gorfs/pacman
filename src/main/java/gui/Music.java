@@ -7,12 +7,10 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
-import model.MazeState.EffetSonoreManager;
-
-
 public class Music {
     private static Clip bgmClip;
     private static float volume = 0.6f;
+    private static float sfxVolume = 0.6f;
     
     public static void setVolume(float volumeLevel) {
             if(volumeLevel < 0.0f) volume = 0.0f;
@@ -22,6 +20,14 @@ public class Music {
     
     public static float getVolume() {
             return volume;
+    }
+
+    public static void setSFXVolume(float volume) {
+        sfxVolume = volume;
+    }
+    
+    public static float getSFXVolume() {
+        return sfxVolume;
     }
 
     public static void stopBackgroundMusic() { // fonction pour arrêter le bgm
@@ -53,7 +59,7 @@ public class Music {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
+            gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +73,7 @@ public class Music {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
+            gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +87,7 @@ public class Music {
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
+            gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
             clip.start();
         } catch (Exception e) {
             e.printStackTrace();

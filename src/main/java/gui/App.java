@@ -1,7 +1,5 @@
 package gui;
 
-import model.MazeState.EffetSonoreManager;
-
 //inspiré grandement par 
 //https://github.com/AlmasB/FXTutorials/blob/
 //master/src/main/java/com/almasb/tutorial4/GameMenuDemo.java
@@ -380,53 +378,36 @@ public class App extends Application {
                     getChildren().remove(menu3);
                 });
                 });
+
+            // Curseur de volume Bgm
+            Slider volumeSliderBgm = new Slider(0, 1, Music.getVolume());
+            volumeSliderBgm.setMajorTickUnit(0.1);
+            volumeSliderBgm.setBlockIncrement(0.05);
+            volumeSliderBgm.setShowTickMarks(true);
+            volumeSliderBgm.setShowTickLabels(true);
+            volumeSliderBgm.valueProperty().addListener((observable, oldValue, newValue) -> {
+                Music.setVolume(newValue.floatValue());
+            });
+
+            // Curseur de volume Effet sonore
+            Slider volumeSliderEff = new Slider(0, 1, Music.getSFXVolume());
+            volumeSliderEff.setMajorTickUnit(0.1);
+            volumeSliderEff.setBlockIncrement(0.05);
+            volumeSliderEff.setShowTickMarks(true);
+            volumeSliderEff.setShowTickLabels(true);
+            volumeSliderEff.valueProperty().addListener((observable, oldValue, newValue) -> {
+                Music.setSFXVolume(newValue.floatValue());
+            });
             
-            // bouton de niveau de son (entre 0 et 5)
-            MenuButton btn_bgm0 = new MenuButton("0");
-            btn_bgm0.setOnMouseClicked(event -> Music.setVolume(0.0f));
-
-            MenuButton btn_bgm1 = new MenuButton("1");
-            btn_bgm1.setOnMouseClicked(event -> Music.setVolume(0.2f));
-
-            MenuButton btn_bgm2 = new MenuButton("2");
-            btn_bgm2.setOnMouseClicked(event -> Music.setVolume(0.4f));
-
-            MenuButton btn_bgm3 = new MenuButton("3");
-            btn_bgm3.setOnMouseClicked(event -> Music.setVolume(0.6f));
-
-            MenuButton btn_bgm4 = new MenuButton("4");
-            btn_bgm4.setOnMouseClicked(event -> Music.setVolume(0.8f));
-
-            MenuButton btn_bgm5 = new MenuButton("5");
-            btn_bgm5.setOnMouseClicked(event -> Music.setVolume(1.0f));
-
-            MenuButton btn_eff0 = new MenuButton("0");
-            btn_eff0.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.0f));
-
-            MenuButton btn_eff1 = new MenuButton("1");
-            btn_eff1.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.2f));
-
-            MenuButton btn_eff2 = new MenuButton("2");
-            btn_eff2.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.4f));
-
-            MenuButton btn_eff3 = new MenuButton("3");
-            btn_eff3.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.6f));
-
-            MenuButton btn_eff4 = new MenuButton("4");
-            btn_eff4.setOnMouseClicked(event -> EffetSonoreManager.setVolume(0.8f));
-
-            MenuButton btn_eff5 = new MenuButton("5");
-            btn_eff5.setOnMouseClicked(event -> EffetSonoreManager.setVolume(1.0f));
-
 
             menu2.getChildren().addAll(btnBack1, btncaseLeft, btncaseRight, btncaseUp, btncaseDown);
             menu3.getChildren().addAll(btnBack2, btns1, btns2);
             menu0.getChildren().addAll(btnOptions, btnExit);
             menu1.getChildren().addAll(btnBack, btnSound, btnKey);
-            menu4.getChildren().addAll(btnBack3, btn_bgm0, btn_bgm1, btn_bgm2, btn_bgm3, btn_bgm4, btn_bgm5); 
             //creation des menu qui suivent apres avoir cliqué 
-            //sur btns1 et respectivement btns2
-            menu5.getChildren().addAll(btnBack4, btn_eff0, btn_eff1, btn_eff2, btn_eff3, btn_eff4, btn_eff5);
+            //sur btns1 et respectivement btns2 
+            menu4.getChildren().addAll(btnBack3, volumeSliderBgm);
+            menu5.getChildren().addAll(btnBack4, volumeSliderEff);
             getChildren().addAll(bg,menu0);
         }
     }

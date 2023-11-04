@@ -42,20 +42,6 @@ public final class MazeState {
         resetCritters();
     }
 
-    public class EffetSonoreManager {
-        private static float volume = 0.6f;
-    
-        public static void setVolume(float volumeLevel) {
-            if(volumeLevel < 0.0f) volume = 0.0f;
-            else if(volumeLevel > 1.0f) volume = 1.0f;
-            else volume = volumeLevel;
-        }
-    
-        public static float getVolume() {
-            return volume;
-        }
-    }   
-
     public static List<Critter> getCritters() {
         return critters;
     }
