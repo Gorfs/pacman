@@ -1,8 +1,8 @@
 package gui;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import geometry.IntCoordinates;
 import javafx.scene.Node;
@@ -29,14 +29,15 @@ public class Menu {
 
 
     }
-    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos){
+    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) throws Exception {
         // initializing JavaFX items and styles.
         HBox menu = new HBox();
         menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
         Label scoreText = new Label("Score:" + String.valueOf(score) );
-        ImageView livesImage = new ImageView( new Image("heart3.png",scale*size , scale * size, true, true));
-        
+        InputStream is = Files.newInputStream(Paths.get("src/main/resources/heart3.png"));
+        ImageView livesImage = new ImageView( new Image(is,scale*size , scale * size, true, true));
+        is.close();
         HBox scoreHb = new HBox();
         HBox livesHb = new HBox();
         // adding nodes to parent "menu"
@@ -50,7 +51,7 @@ public class Menu {
 
         return new GraphicsUpdater() {
             @Override
-            public void update(long deltaT) {
+            public void update(long deltaT) throws IOException {
                 // runs on every update cycle.
                 if (MazeState.getGameEnded()){
                     livesHb.setVisible(false);
@@ -66,8 +67,9 @@ public class Menu {
                 Label scoreText = new Label("Score : " + String.valueOf(MazeState.getScore()));
 
                 // la division de la taille reduit la taille de l'image progressivement pour que elle prend pas tous l'ecran.
-                ImageView livesImage = new ImageView( new Image(("heart" + String.valueOf(MazeState.getLives()) + ".png"),scale*(size)/(4 - MazeState.getLives()) , scale * size, true, true));
-                
+                InputStream is = Files.newInputStream(Paths.get("src/main/resources/heart" + String.valueOf(MazeState.getLives()) + ".png"));
+                ImageView livesImage = new ImageView( new Image(is,scale*(size)/(4 - MazeState.getLives()) , scale * size, true, true));
+                is.close();
                 // custom font settings.
                 scoreText.setStyle("-fx-text-fill: white;"); //To change the font size you need to change the value in load font below
                 try{

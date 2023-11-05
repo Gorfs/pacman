@@ -502,22 +502,38 @@ public class App extends Application {
 
             MenuButton btnf = new MenuButton("FACILE");
             btnf.setOnMouseClicked(event -> {
-                start(primaryS,4,k);
+                try {
+                    start(primaryS,4,k);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             });
 
             MenuButton btnm = new MenuButton("MEDIUM");
             btnm.setOnMouseClicked(event -> {
-                start(primaryS,3,k);
+                try {
+                    start(primaryS,3,k);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             });
 
             MenuButton btnh = new MenuButton("HARD");
             btnh.setOnMouseClicked(event -> {
-                start(primaryS,2,k);
+                try {
+                    start(primaryS,2,k);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             });
 
             MenuButton btne = new MenuButton("EXPERT");
             btne.setOnMouseClicked(event -> {
-                start(primaryS,1,k);
+                try {
+                    start(primaryS,1,k);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
             });
             menu4.getChildren().addAll(btnName);
             menu3.getChildren().addAll(btnBack1,btnf,btnm,btnh,btne);
@@ -638,7 +654,7 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void start(Stage primaryStage, int l, KeyCode[] k) {
+    public void start(Stage primaryStage, int l, KeyCode[] k) throws Exception {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController(k);

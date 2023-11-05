@@ -7,6 +7,12 @@ import javafx.scene.image.ImageView;
 
 import model.*;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 
 public final class CritterGraphicsFactory {
     private final double scale;
@@ -15,18 +21,18 @@ public final class CritterGraphicsFactory {
         this.scale = scale;
     }
 
-    public GraphicsUpdater makeGraphics(Critter critter) {
+    public GraphicsUpdater makeGraphics(Critter critter) throws Exception {
         var size = 1.0;
-        var url = (critter instanceof PacMan) ? "pacman.png" :
+        var url = (critter instanceof PacMan) ? "src/main/resources/pacman.png" :
                 switch ((Ghost) critter) {
-                    case BLINKY -> "ghosts/ghost_blinky.png";
-                    case CLYDE -> "ghosts/ghost_clyde.png";
-                    case INKY -> "ghosts/ghost_inky.png";
-                    case PINKY -> "ghosts/ghost_pinky.png";
+                    case BLINKY -> "src/main/resources/ghosts/ghost_blinky.png";
+                    case CLYDE -> "src/main/resources/ghosts/ghost_clyde.png";
+                    case INKY -> "src/main/resources/ghosts/ghost_inky.png";
+                    case PINKY -> "src/main/resources/ghosts/ghost_pinky.png";
                 };
-
-        Image fullImage = new Image(url);
-
+        InputStream is = Files.newInputStream(Paths.get(url));
+        Image fullImage = new Image(is);
+        is.close();
         int y = 0, x = 0;
         final int width = 65, height = 65;
         var croppedPortion =  new Rectangle2D(x, y, width, height);
@@ -44,15 +50,19 @@ public final class CritterGraphicsFactory {
 
         return new GraphicsUpdater() {
             @Override
-            public void update(long deltaT) {
+            public void update(long deltaT) throws IOException {
                 if (!MazeState.getGameEnded()){
                     // Pacman doesn't have a scared version so i check if critter isn't pacman
                     if (!(critter instanceof PacMan)) {
                         Image fullImage;
+                        InputStream is = Files.newInputStream(Paths.get(url));
+                        InputStream isAlternative = Files.newInputStream(Paths.get("src/main/resources/ghosts/scared_ghost.png"));
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
                         if (PacMan.isEnergized())
-                            fullImage = new Image("ghosts/scared_ghost.png");
-                        else fullImage = new Image(url);
+                            fullImage = new Image(isAlternative);
+                        else fullImage = new Image(is);
+                        is.close();
+                        isAlternative.close();
                         image.setImage(fullImage);
                         // Crop the image to get the right sprite.
                         image.setViewport(croppedPortion);
