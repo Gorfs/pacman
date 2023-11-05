@@ -13,8 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import model.MazeState;
 
-import gui.App;
-
 public class GameOver {
 
     private final double scale;
