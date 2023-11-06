@@ -7,6 +7,7 @@ import geometry.RealCoordinates;
 import gui.ClydeController;
 import gui.GhostsController;
 import gui.App;
+import gui.PinkyInkyController;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ import javax.sound.sampled.FloatControl;
 import java.io.File;
 
 public final class MazeState {
-    private final GhostsController ghostsController = new ClydeController();
+    private final GhostsController[] ghostsController = {new ClydeController(), new PinkyInkyController()};
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -103,8 +104,10 @@ public final class MazeState {
     public void update(long deltaTns) {
         for  (var critter: critters) {
             // Get the next direction of ghosts
-            if (!(critter instanceof PacMan)) ghostsController.setDirection(config, critter);
-
+            if (!(critter instanceof PacMan)) {
+                if (Objects.equals(critter.toString(), "CLYDE")) ghostsController[0].setDirection(config, critter);
+                else if (Objects.equals(critter.toString(), "PINKY")) ghostsController[1].setDirection(config, critter);
+            }
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
             // Get possible next pos for critter
