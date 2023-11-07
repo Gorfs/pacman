@@ -33,9 +33,7 @@ public final class MazeState {
 
     // TODO: these should be changed to constants determined by player or in seperate file.
     private static int lives = 3;
-    private static int initLives = lives;
-
-    private static int livesC = 3;
+    private static int livesC = lives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config, GameMenu2 gameMenu) {
@@ -189,6 +187,7 @@ public final class MazeState {
                         PacMan.INSTANCE.setDying(true);
                         resetCritters();
                         playerLost();
+                        gui.Music.music_death();
                     }
                 
                     
