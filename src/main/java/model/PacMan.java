@@ -171,7 +171,7 @@ public final class PacMan implements Critter {
         }
         if (this.isDying) {
             this.deathTimerAni += (float) ((float) deltaT * 1E-9);
-            System.out.println(this.deathTimerAni);
+            // System.out.println(this.deathTimerAni);
             if (this.deathTimerAni > this.checkpointDeathAni[this.checkpointDeathAni.length - 1]) {
                 this.deathTimerAni = 0.0F;
                 this.isDying = false;
