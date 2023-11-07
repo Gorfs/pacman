@@ -94,6 +94,7 @@ public class Menu {
                 // resetting and updating the hearts counter.
                 String heartUrl = "heart.png";
                 ImageView[] livesArray = new ImageView[initLives];
+                // Debug.out(MazeState.getLives() + "");
                 for(int i = 0 ; i < initLives; i++){
                     if ((MazeState.getLives() - 1) <= i){
                         heartUrl = "heart_grey.png"; 

@@ -4,6 +4,7 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import misc.Debug;
 
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,7 @@ public final class MazeState {
 
     // TODO: these should be changed to constants determined by player or in seperate file.
     private static int lives = 3;
-    private static int initLives = lives;
-
-    private static int livesC = 3;
+    private static int livesC = lives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     public MazeState(MazeConfig config) {
@@ -59,7 +58,7 @@ public final class MazeState {
     }
 
     public static int getInitLives(){
-        return initLives;
+        return livesC;
     }
     public static int getLives(){
         return lives;
@@ -173,11 +172,13 @@ public final class MazeState {
                 if (PacMan.isEnergized()) {
                     resetCritter(critter);
                 } else {
-                    if (!PacMan.INSTANCE.isStartedDeathAni())
+                    playerLost();
+                    if (!PacMan.INSTANCE.isStartedDeathAni()){
                         PacMan.INSTANCE.setDying(true);
                         resetCritters();
                         gui.Music.music_death();
-                    playerLost();
+                    }
+                
                     
                     return;
                 }
@@ -217,8 +218,10 @@ public final class MazeState {
 
 
     private void playerLost() {
+        Debug.out("player is going to lso ea live 2");
         if (!PacMan.INSTANCE.getIsDying()) {
             lives--;
+            Debug.out("Player lost a life");
             if (lives == 0) {
                 gui.Music.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
                 gui.Music.music_gameover(); // Et on lance le music de game over 
