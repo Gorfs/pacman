@@ -12,8 +12,7 @@ public sealed abstract class GhostsController permits ClydeController, PinkyInky
     public abstract void startAI();
 
     public void setDirection(MazeConfig config, Critter critter) {
-        var result = critter.getDirection();
-        result = nextDirection(critter, config);
+        Direction result = nextDirection(critter, config);
         critter.setNextDirection(result);
     }
 

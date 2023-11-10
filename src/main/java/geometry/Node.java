@@ -26,7 +26,7 @@ public class Node {
     }
 
     public IntCoordinates[] cheminPlusCourt(Node objectif, MazeConfig config) {
-        Node[] closedList = new Node[200];
+        Node[] closedList = new Node[441];
         int n = 0;
         Set<Node> openList = new HashSet<>();
         openList.add(this);
