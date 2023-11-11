@@ -50,7 +50,7 @@ public class Menu {
 
         return new GraphicsUpdater() {
             @Override
-            public void update() {
+            public void update(long deltaT) {
                 // runs on every update cycle.
                 if (MazeState.getGameEnded()){
                     livesHb.setVisible(false);
@@ -71,7 +71,7 @@ public class Menu {
                 // custom font settings.
                 scoreText.setStyle("-fx-text-fill: white;"); //To change the font size you need to change the value in load font below
                 try{
-                    Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 12); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+                    Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 12); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now.
                     scoreText.setFont(scoreFont);
                 } catch (FileNotFoundException e){
                     e.printStackTrace();
