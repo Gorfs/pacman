@@ -1,13 +1,5 @@
 package gui;
 
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-
-import java.io.File;
-
 //inspiré grandement par 
 //https://github.com/AlmasB/FXTutorials/blob/
 //master/src/main/java/com/almasb/tutorial4/GameMenuDemo.java
@@ -39,27 +31,10 @@ import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
-import model.ClydeController;
-import model.MazeState;
 
 
 public class App extends Application {
 
-
-    public void playBackgroundMusic() {
-        try {
-            File audioFile = new File("src/main/resources/bgm.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(0.2f);
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-        
 
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     private GameMenu gameMenu;
@@ -281,6 +256,8 @@ public class App extends Application {
                 });
             });
 
+            
+
             MenuButton btnSound = new MenuButton("SOUND");
             btnSound.setOnMouseClicked(event -> {
                 getChildren().add(menu3);
@@ -333,6 +310,7 @@ public class App extends Application {
             btncaseDown.setOnMouseClicked(event1 -> {
                 btncase4.setVisible(true);
             });
+
 
             MenuButton btnBack3 = new MenuButton("BACK");
             btnBack3.setOnMouseClicked(event -> {
@@ -402,17 +380,35 @@ public class App extends Application {
                 });
                 });
 
-            MenuButton btnBS = new MenuButton("à toi de le faire");
-            MenuButton btnSE = new MenuButton("la même");
+            // Curseur de volume Bgm
+            Slider volumeSliderBgm = new Slider(0, 1, Music.getVolume());
+            volumeSliderBgm.setMajorTickUnit(0.1);
+            volumeSliderBgm.setBlockIncrement(0.05);
+            volumeSliderBgm.setShowTickMarks(true);
+            volumeSliderBgm.setShowTickLabels(true);
+            volumeSliderBgm.valueProperty().addListener((observable, oldValue, newValue) -> {
+                Music.setVolume(newValue.floatValue());
+            });
+
+            // Curseur de volume Effet sonore
+            Slider volumeSliderEff = new Slider(0, 1, Music.getSFXVolume());
+            volumeSliderEff.setMajorTickUnit(0.1);
+            volumeSliderEff.setBlockIncrement(0.05);
+            volumeSliderEff.setShowTickMarks(true);
+            volumeSliderEff.setShowTickLabels(true);
+            volumeSliderEff.valueProperty().addListener((observable, oldValue, newValue) -> {
+                Music.setSFXVolume(newValue.floatValue());
+            });
+            
 
             menu2.getChildren().addAll(btnBack1, btncaseLeft, btncaseRight, btncaseUp, btncaseDown);
             menu3.getChildren().addAll(btnBack2, btns1, btns2);
             menu0.getChildren().addAll(btnOptions, btnExit);
             menu1.getChildren().addAll(btnBack, btnSound, btnKey);
-            menu4.getChildren().addAll(btnBack3, btnBS); 
             //creation des menu qui suivent apres avoir cliqué 
-            //sur btns1 et respectivement btns2
-            menu5.getChildren().addAll(btnBack4, btnSE);
+            //sur btns1 et respectivement btns2 
+            menu4.getChildren().addAll(btnBack3, volumeSliderBgm);
+            menu5.getChildren().addAll(btnBack4, volumeSliderEff);
             getChildren().addAll(bg,menu0);
         }
     }
@@ -673,6 +669,3 @@ public class App extends Application {
         gameView.animate();
     }
 }
-      
-
-

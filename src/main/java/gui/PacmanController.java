@@ -5,6 +5,7 @@ import model.MazeState;
 import model.PacMan;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
 public class PacmanController {
     private KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     public PacmanController(KeyCode[] k){this.k=k;}
@@ -21,6 +22,8 @@ public class PacmanController {
         else{
             if (event.getCode() == KeyCode.ENTER){ //Si la partie est terminée mais que le joueur appuie sur ENTER alors on restart
                 MazeState.restart();
+                Music.playBackgroundMusic();
+
             }
         }
 
