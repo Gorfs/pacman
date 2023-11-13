@@ -25,7 +25,7 @@ public class Node {
         return node;
     }
 
-    public IntCoordinates[] cheminPlusCourt(Node objectif, MazeConfig config) {
+    public IntCoordinates[] cheminPlusCourt(Node objectif, IntCoordinates unavailable, MazeConfig config) {
         Node[] closedList = new Node[441];
         int n = 0;
         Set<Node> openList = new HashSet<>();
@@ -43,16 +43,15 @@ public class Node {
             voisins[3] = new Node(u.pos.toRealCoordinates(1.0).plus(RealCoordinates.WEST_UNIT).round(), u);
             for (var v: voisins) {
                 if (config.getCell(v.pos).initialContent() != Cell.Content.WALL && 0 < u.pos.x() && 0 < u.pos.y() && u.pos.x() < config.getHeight() && u.pos.y() < config.getWidth()) {
-                    if (!(contain(closedList, v.pos) || v.existInferiorCost(openList))) {
+                    if (!(contain(closedList, v.pos) || v.existInferiorCost(openList) || (v.pos.x() == unavailable.x() && v.pos.y() == unavailable.y()))) {
                         v.cost = u.cost + 1;
                         v.heuristic = v.cost + (Math.abs(v.pos.x() - objectif.pos.x()) + Math.abs(v.pos.y() - objectif.pos.y()));
                         openList.add(v);
                     }
                 }
             } closedList[n] = u; n++;
-
-        } throw new RuntimeException("Aucun chemin possible trouvé.");
-
+        } System.out.println("Aucun chemin trouvé !");
+        return new IntCoordinates[0];
     }
 
     private IntCoordinates[] reconstituerChemin(Node[] closedList, Node depart) {

@@ -8,6 +8,8 @@ public enum Ghost implements Critter {
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDirection = Direction.NONE;
+    private boolean scatterMode = false;
+    private boolean scaredMode = false;
 
     private float timerAni = 0;
     private final float[] checkpointAni = {0.25F,0.5F};
@@ -64,4 +66,19 @@ public enum Ghost implements Critter {
         return 2;
     }
 
+    public boolean isScatterMode() {
+        return scatterMode;
+    }
+
+    public void setScatterMode(boolean scatterMode) {
+        this.scatterMode = scatterMode;
+    }
+
+    public boolean isScaredMode() {
+        return scaredMode;
+    }
+
+    public void setScaredMode(boolean scaredMode) {
+        this.scaredMode = scaredMode;
+    }
 }

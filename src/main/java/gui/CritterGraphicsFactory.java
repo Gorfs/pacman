@@ -50,7 +50,7 @@ public final class CritterGraphicsFactory {
                     if (!(critter instanceof PacMan)) {
                         Image fullImage;
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
-                        if (PacMan.isEnergized())
+                        if (PacMan.isEnergized() && ((Ghost) critter).isScaredMode())
                             fullImage = new Image("ghosts/scared_ghost.png");
                         else fullImage = new Image(url);
                         image.setImage(fullImage);

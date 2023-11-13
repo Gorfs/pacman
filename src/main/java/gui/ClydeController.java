@@ -16,6 +16,11 @@ public final class ClydeController extends GhostsController {
     }
 
     @Override
+    public Direction scatterPathing(Critter critter, MazeConfig config) {
+        return null;
+    }
+
+    @Override
     public Direction nextDirection(Critter clyde, MazeConfig config){
         RealCoordinates direction;
         var curPos = clyde.getPos();

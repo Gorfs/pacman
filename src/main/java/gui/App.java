@@ -702,7 +702,7 @@ public class App extends Application {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController(k);
-        GhostsController[] ghostsController = {new ClydeController(), new PinkyInkyController()};
+        GhostsController[] ghostsController = {new ClydeController(), new PinkyController()};
         for (var ghost: ghostsController) {ghost.startAI();}
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);

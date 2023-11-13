@@ -7,7 +7,7 @@ import geometry.RealCoordinates;
 import gui.ClydeController;
 import gui.GhostsController;
 import gui.App;
-import gui.PinkyInkyController;
+import gui.PinkyController;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,7 @@ import javax.sound.sampled.FloatControl;
 import java.io.File;
 
 public final class MazeState {
-    private final GhostsController[] ghostsController = {new ClydeController(), new PinkyInkyController()};
+    private final GhostsController[] ghostsController = {new ClydeController(), new PinkyController()};
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -104,9 +104,9 @@ public final class MazeState {
     public void update(long deltaTns) {
         for  (var critter: critters) {
             // Get the next direction of ghosts
-            if (!(critter instanceof PacMan)) {
-                if (Objects.equals(critter.toString(), "CLYDE")) ghostsController[0].setDirection(config, critter);
-                else if (Objects.equals(critter.toString(), "PINKY")) ghostsController[1].setDirection(config, critter);
+            if (critter instanceof Ghost) {
+                if (Objects.equals(critter.toString(), "CLYDE")) ghostsController[0].setDirection(config, (Ghost) critter);
+                else if (Objects.equals(critter.toString(), "PINKY")) ghostsController[1].setDirection(config, (Ghost) critter);
             }
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
@@ -249,11 +249,20 @@ public final class MazeState {
     }
 
     private void resetCritter(Critter critter) {
-        critter.setDirection(Direction.NONE);
-        // Forgot to add this in the issue #26
-        if (critter instanceof PacMan)
+        if (critter instanceof Ghost) {
+            if (PacMan.isEnergized() && ((Ghost) critter).isScaredMode()) {
+                critter.setDirection(Direction.NONE);
+                critter.setPos(initialPos.get(critter));
+                ((Ghost) critter).setScaredMode(false);
+            } else {
+                resetCritter(PacMan.INSTANCE);
+            }
+        } else {
+            critter.setDirection(Direction.NONE);
+            // Forgot to add this in the issue #26
             critter.setNextDirection(Direction.NONE);
-        critter.setPos(initialPos.get(critter));
+            critter.setPos(initialPos.get(critter));
+        }
     }
 
     private void resetCritters() {
