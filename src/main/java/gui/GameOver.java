@@ -27,7 +27,7 @@ public class GameOver {
         Label titleText = new Label("Game Over"); //To change the font size you need to change the value in load font below
         titleText.setStyle("-fx-text-fill:white;");
         try{
-            Font titleFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 50); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+            Font titleFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), scale*2.5); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
             titleText.setFont(titleFont);
         } catch (FileNotFoundException e){
             e.printStackTrace();

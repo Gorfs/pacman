@@ -30,13 +30,16 @@ public class GameView {
         this.maze = maze;
         this.gameRoot = root;
         // pixels per cell
-        root.setMinWidth(maze.getWidth() * scale);
-        root.setMinHeight(maze.getHeight() * scale);
+        double w = maze.getWidth() * 1.5;
+        double h = maze.getHeight() * 1.5;
+        root.setMinWidth(w * scale);
+        root.setMinHeight(h* scale);
+        
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
-        var gameover = new GameOver(scale * 1.50); //On initialise le GameOver
-        var menu = new Menu(scale * 1.50); //On initialise le Menu
+        var gameover = new GameOver(scale * 1.5); //On initialise le GameOver
+        var menu = new Menu(scale * 1.5); //On initialise le Menu
         graphicsUpdaters = new ArrayList<>();
 
         for (var critter : MazeState.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
