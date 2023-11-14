@@ -11,12 +11,13 @@ public final class ClydeController extends GhostsController {
     private boolean tryTurn = false;
 
     @Override
-    public void startAI(){
+    public void startAI(String filename){
+        this.filename = filename;
         Ghost.CLYDE.setNextDirection(Direction.EAST);
     }
 
     @Override
-    public Direction scatterPathing(Critter critter, MazeConfig config) {
+    public Direction scatterPathing(Critter critter, MazeConfig config, String filename) {
         return null;
     }
 

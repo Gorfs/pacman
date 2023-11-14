@@ -47,6 +47,9 @@ public class App extends Application {
 
     private static Clip bgmClip;
 
+    // final à enlever lorsqu'on pourra choisir plusieurs niveaux différents.
+    private final static String filename = "maze2";
+
     public static void playBackgroundMusic() { // fonction pour lancer le bgm
         try {
             File audioFile = new File("src/main/resources/music/bgm.wav");
@@ -702,11 +705,11 @@ public class App extends Application {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController(k);
-        GhostsController[] ghostsController = {new ClydeController(), new PinkyController()};
-        for (var ghost: ghostsController) {ghost.startAI();}
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        var maze = new MazeState(MazeConfig.originalMaze("maze2"));
+        var maze = new MazeState(MazeConfig.originalMaze(filename));
+        GhostsController[] ghostsController = {new ClydeController(), new PinkyController()};
+        for (var ghost: ghostsController) {ghost.startAI("maze2");}
         maze.setLives(l);
         var gameView = new GameView(maze, root, 30.0);
         playBackgroundMusic();

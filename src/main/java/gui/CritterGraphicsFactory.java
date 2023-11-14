@@ -46,11 +46,11 @@ public final class CritterGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 if (!MazeState.getGameEnded()){
-                    // Pacman doesn't have a scared version so i check if critter isn't pacman
-                    if (!(critter instanceof PacMan)) {
+                    // Only ghosts have a scared version, so I check if critter is a ghost
+                    if (critter instanceof Ghost) {
                         Image fullImage;
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
-                        if (PacMan.isEnergized() && ((Ghost) critter).isScaredMode())
+                        if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode())
                             fullImage = new Image("ghosts/scared_ghost.png");
                         else fullImage = new Image(url);
                         image.setImage(fullImage);

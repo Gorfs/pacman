@@ -58,9 +58,9 @@ public class Node {
         IntCoordinates[] path = new IntCoordinates[getLength(closedList)];
         if (getLength(closedList) != 0) {
             path[0] = this.pos;
-            Node temp = this;
+            Node temp = this.parent;
             int n = 1;
-            while (temp.parent != depart) {
+            while (temp != depart) {
                 path[n] = temp.pos;
                         n++;
                         temp = temp.parent;

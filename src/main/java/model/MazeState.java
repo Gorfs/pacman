@@ -30,7 +30,7 @@ public final class MazeState {
 
     private static boolean[][] gridState;
 
-    private  static List<Critter> critters;
+    private static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
@@ -190,8 +190,10 @@ public final class MazeState {
 
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
-                if (PacMan.isEnergized()) {
-                    resetCritter(critter);
+                if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
+                    critter.setDirection(Direction.NONE);
+                    critter.setPos(initialPos.get(critter));
+                    ((Ghost) critter).setScaredMode(false);
                 } else {
                     if (!PacMan.INSTANCE.isStartedDeathAni()) {
                         PacMan.INSTANCE.setDying(true);
@@ -200,15 +202,13 @@ public final class MazeState {
                     } playerLost();
                     return;
                 }
-            
+            }
         }
         if(allPointsCollected()){
             resetCritters();
             resetGrid();
-            return;
         }
     }
-}
 
     public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
@@ -249,20 +249,10 @@ public final class MazeState {
     }
 
     private void resetCritter(Critter critter) {
-        if (critter instanceof Ghost) {
-            if (PacMan.isEnergized() && ((Ghost) critter).isScaredMode()) {
-                critter.setDirection(Direction.NONE);
-                critter.setPos(initialPos.get(critter));
-                ((Ghost) critter).setScaredMode(false);
-            } else {
-                resetCritter(PacMan.INSTANCE);
-            }
-        } else {
-            critter.setDirection(Direction.NONE);
-            // Forgot to add this in the issue #26
-            critter.setNextDirection(Direction.NONE);
-            critter.setPos(initialPos.get(critter));
-        }
+        critter.setDirection(Direction.NONE);
+        critter.setNextDirection(Direction.NONE);
+        critter.setPos(initialPos.get(critter));
+
     }
 
     private void resetCritters() {

@@ -1,12 +1,11 @@
 package model;
 
 import config.Cell;
-import geometry.IntCoordinates;
 import java.util.Timer;
 import geometry.RealCoordinates;
-// import misc.Debug;
-
 import java.util.TimerTask;
+
+import static model.MazeState.getCritters;
 
 /**
  * Implements Pac-Man character using singleton pattern. FIXME: check whether singleton is really a good idea.
@@ -110,13 +109,13 @@ public final class PacMan implements Critter {
      *
      * @return whether Pac-Man just ate an energizer
      */
-    public static boolean isEnergized() {
+    public boolean isEnergized() {
         // power pellet lasts for 10 seconds 
         return energized;
     }
 
     // this function is just if you need it, not currently used I believe
-    public static void setEnergized(boolean e){
+    public void setEnergized(boolean e){
         energized = e;
     }
 
@@ -130,7 +129,8 @@ public final class PacMan implements Critter {
             }else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
                 MazeState.addScore(15);
-                PacMan.setEnergized();
+                for (var critter:getCritters()) if (critter instanceof Ghost) ((Ghost) critter).setScaredMode(true);
+                setEnergized();
             }
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
@@ -162,7 +162,7 @@ public final class PacMan implements Critter {
         this.startedDeathAni = deathAni;
     }
 
-    public static void setEnergized() {
+    public void setEnergized() {
 
         // function will now no longer take a boolean,
         //  but suppose that we always want to "energize" pacman rather than de-energize him

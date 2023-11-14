@@ -73,12 +73,12 @@ public class MazeConfig {
         // New class Cell to store the map
         Cell[][] map = new Cell[21][21];
 
-        // Open the file maze.txt
+        // Open the file maze2.txt
         File maze = new File("src/main/resources/" + file + ".txt");
         Scanner myReader;
         // Try if the file exist
         try {
-            // Read the file maze.txt
+            // Read the file maze2.txt
             myReader = new Scanner(maze);
             int n = 0;
             // while there is something to read
