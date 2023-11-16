@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;
+import gui.GameView;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 // unused imports are used when debugging and therefore should be kept unless pushing to master.
@@ -62,9 +63,8 @@ public class Menu {
         
         menu.setSpacing(40);
         // TODO once constants are added make translateX based on width instead of random constant
-        menu.setTranslateX((state.getWidth() * 12));
-        menu.setTranslateY(0);
-
+        menu.setTranslateX((20));
+        menu.setTranslateY(670); // TODO set width and height to use root width and height instead of constants
         return new GraphicsUpdater() {
             @Override
             public void update(long deltaT) {
