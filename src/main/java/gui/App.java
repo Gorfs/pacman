@@ -1,14 +1,6 @@
 package gui;
 
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-
 import java.awt.Dimension;
-import java.io.File;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -114,24 +106,12 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void playBackgroundMusic() {//méthode qui met un une valeur de volume à la musique fond (in-game)
-        try {
-            File audioFile = new File("src/main/resources/bgm.wav"); 
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(son_effect); 
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     public static void start(Stage primaryStage, int l, KeyCode[] k, float son_effect) {
         var root = new Pane();
-        double d1 = root.maxHeight(root.getMaxHeight());
-        double d2 = root.maxWidth(root.getMaxWidth());
-        root.setPrefSize(d2, d1);
+        Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();//on récupère les dimensions de l'écran du joueur
+        double height = d.getHeight();
+        double width = d.getWidth();
+        root.setPrefSize(width, height);//on incrémente les dimensions de l'écran dans la fenêtre
         var gameScene = new Scene(root);
         GameMenu2 gameMenu2 = new GameMenu2(root, k, button, btncase1, btncase2, btncase3, btncase4, son_effect);
         //on initialise les options in-game

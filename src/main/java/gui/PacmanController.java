@@ -33,13 +33,12 @@ public class PacmanController {
                     if(!gameMenu1.isVisible()){
                         gameMenu1.setVisible(true);
                         root1.getChildren().addAll(gameMenu1);
-                        //gameMenu1.base(); /*pas fini*/
+                        gameMenu1.base(); /*pas fini*/
                         //methode qui permet que quand on quitte les options in-game, et que on reouvre, on ne revienne pas dans menui, mais dans menu0
                     }
                     else if(gameMenu1.isVisible()){
                         root1.getChildren().removeAll(gameMenu1); 
                         gameMenu1.setVisible(false);
-                        //gameMenu1.base();
                     }
             }
             if(btncase1a.isVisible()){//même principe que dans App.java

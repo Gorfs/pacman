@@ -22,6 +22,8 @@ public class GameMenu2 extends Parent {
 
     private static float son_effect;
 
+    private static MenuButton b;
+
     private VBox menua;
     public VBox getMenua(){return menua;}
     public void setMenua(VBox menua){this.menua=menua;}
@@ -101,6 +103,8 @@ public class GameMenu2 extends Parent {
                     getChildren().remove(menu0);
                 });
             });
+
+            b=btnOptions;
 
             MenuButton btnExit = new MenuButton("EXIT");
             btnExit.setOnMouseClicked(event -> {
@@ -306,7 +310,9 @@ public class GameMenu2 extends Parent {
             volumeSliderEff.setShowTickMarks(true);
             volumeSliderEff.setShowTickLabels(true);
             volumeSliderEff.valueProperty().addListener((observable, oldValue, newValue) -> {
+                Music.stopBackgroundMusic();
                 Music.setSFXVolume(newValue.floatValue());
+                Music.playBackgroundMusic();
             });
 
             btnOptions.setTranslateX(0);
@@ -385,12 +391,12 @@ public class GameMenu2 extends Parent {
         }
     }
         public void base(){
-            if(menua==actuelle)getChildren().remove(menua);
-            else if(menub==actuelle)getChildren().remove(menub);
-            else if(menuc==actuelle)getChildren().remove(menuc);
-            else if(menud==actuelle)getChildren().remove(menud);
-            else if(menue==actuelle)getChildren().remove(menue);
-            getChildren().add(menua);
+            menua.getChildren().addAll(menua);
+            getChildren().addAll(menua);
+            if(menub==actuelle){getChildren().remove(menub);}
+            else if(menuc==actuelle){getChildren().remove(menuc);}
+            else if(menud==actuelle){getChildren().remove(menud);}
+            else if(menue==actuelle){getChildren().remove(menue);}
         }
 
     }
