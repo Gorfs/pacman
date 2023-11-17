@@ -27,7 +27,7 @@ public class Menu {
 
     private final double scale;
     private int score;
-    private double size = 0.5;
+    private double size = 0.7;
     
     public Menu(double scale){
         this.scale = scale;
