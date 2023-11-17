@@ -103,11 +103,6 @@ public final class MazeState {
 
     public void update(long deltaTns) {
         for  (var critter: critters) {
-            // Get the next direction of ghosts
-            if (critter instanceof Ghost) {
-                if (Objects.equals(critter.toString(), "CLYDE")) ghostsController[0].setDirection(config, (Ghost) critter);
-                else if (Objects.equals(critter.toString(), "PINKY")) ghostsController[1].setDirection(config, (Ghost) critter);
-            }
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
             // Get possible next pos for critter
@@ -122,6 +117,12 @@ public final class MazeState {
             if (critter.getDirection() == Direction.NONE) {
                 critter.setDirection(critter.getNextDirection());
                 critter.setNextDirection(Direction.NONE);
+            }
+
+            // Get the next direction of ghosts
+            if (critter instanceof Ghost) {
+                if (Objects.equals(critter.toString(), "CLYDE")) ghostsController[0].setDirection((Ghost) critter, config);
+                else if (Objects.equals(critter.toString(), "PINKY")) ghostsController[1].setDirection((Ghost) critter, config);
             }
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?

@@ -70,8 +70,9 @@ public enum Ghost implements Critter {
         return scatterMode;
     }
 
-    public void setScatterMode(boolean scatterMode) {
-        this.scatterMode = scatterMode;
+    public void changeScatterMode() {
+        this.scatterMode = !this.scatterMode;
+
     }
 
     public boolean isScaredMode() {

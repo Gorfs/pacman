@@ -5,24 +5,20 @@ import geometry.IntCoordinates;
 import model.Critter;
 import model.Direction;
 import model.Ghost;
-import model.PacMan;
 
-
-public final class PinkyController extends GhostsController {
-
+public final class BlinkyController extends GhostsController{
     @Override
     public void startAI() {
-        Ghost.PINKY.setNextDirection(Direction.NORTH);
+        Ghost.BLINKY.setDirection(Direction.EAST);
     }
 
     @Override
     public IntCoordinates scatterDirection(Critter critter, MazeConfig config) {
-        return findPathing(critter, new IntCoordinates(0, 0), config);
+        return findPathing(critter, new IntCoordinates(config.getWidth(), 0), config);
     }
 
     @Override
     public IntCoordinates nextDirection(Critter critter, MazeConfig config) {
-        IntCoordinates pos = PacMan.INSTANCE.getPos().plus(getDirection(PacMan.INSTANCE).times(-1)).round();
-        return findPathing(critter, pos, config);
+        return findPathing(critter, null, config);
     }
 }

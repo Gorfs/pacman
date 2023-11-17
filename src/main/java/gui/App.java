@@ -709,7 +709,7 @@ public class App extends Application {
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.originalMaze(filename));
         GhostsController[] ghostsController = {new ClydeController(), new PinkyController()};
-        for (var ghost: ghostsController) {ghost.startAI("maze2");}
+        for (var ghost: ghostsController) {ghost.startAI();}
         maze.setLives(l);
         var gameView = new GameView(maze, root, 30.0);
         playBackgroundMusic();
