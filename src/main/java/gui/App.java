@@ -114,7 +114,7 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void playBackgroundMusic(float l) {//méthode qui met un une valeur de volume à la musique fond (in-game)
+    public void playBackgroundMusic() {//méthode qui met un une valeur de volume à la musique fond (in-game)
         try {
             File audioFile = new File("src/main/resources/bgm.wav"); 
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
