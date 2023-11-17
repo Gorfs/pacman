@@ -104,7 +104,20 @@ public class App extends Application {
     }
 
     public static double correctScale(double height, double widht){
-        double correct = (height+widht)/60;
+        int diagonale = (int)(Math.sqrt(height*height+widht*widht));
+        int correct = diagonale/45;
+        System.out.println(correct);
+        // if(correct==1){return correct;}
+        // else if(correct<1){
+        //     while(correct!=1){
+        //         correct+=1;
+        //     }
+        // }
+        // else{
+        //     while(correct!=1){
+        //         correct-=1;
+        //     }
+        // }
         return correct;
     }
 
@@ -116,6 +129,7 @@ public class App extends Application {
         Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();//on récupère les dimensions de l'écran du joueur
         double height = d.getHeight();
         double width = d.getWidth();
+        System.out.println(width +" "+ height);
         root.setPrefSize(width, height);//on incrémente les dimensions de l'écran dans la fenêtre
         var gameScene = new Scene(root);
         GameMenu2 gameMenu2 = new GameMenu2(root, k, button, btncase1, btncase2, btncase3, btncase4, son_effect);
@@ -129,6 +143,7 @@ public class App extends Application {
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
         maze.setLives(l);
+        System.out.println(correctScale(height, width));
         var gameView = new GameView(maze, root, correctScale(height, width));
         //on initialise le rendu du jeu
         Music.playBackgroundMusic();
