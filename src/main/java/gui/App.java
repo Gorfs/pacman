@@ -639,19 +639,6 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void playBackgroundMusic(float l) {
-        try {
-            File audioFile = new File("src/main/resources/bgm.wav"); 
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(a); 
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
     public void start(Stage primaryStage, int l, KeyCode[] k, float a) {
         var root = new Pane();
         var gameScene = new Scene(root);
@@ -663,7 +650,6 @@ public class App extends Application {
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
         maze.setLives(l);
         var gameView = new GameView(maze, root, 30.0);
-        playBackgroundMusic(a);
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();
