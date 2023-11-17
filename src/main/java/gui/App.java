@@ -58,8 +58,8 @@ public class App extends Application {
         primaryS=primaryStage;
         Pane root = new Pane();
         root.setPrefSize(860, 600);
-
-        InputStream is = Files.newInputStream(Paths.get("src/main/resources/pac.jpg"));
+        
+        InputStream is = getClass().getResourceAsStream("/pac.jpg");
         Image img = new Image(is);
         is.close();
         TextField te = new TextField();
@@ -578,7 +578,8 @@ public class App extends Application {
 
         public MenuButton1(String name) {
             text = new Text(name);
-            text.setFont(Font.loadFont("file:src/main/resources/slkscrb.ttf", 100));
+            InputStream is = getClass().getResourceAsStream("/fonts/slkscrb.ttf");
+            text.setFont(Font.loadFont(is, 100));
             text.setFill(Color.BROWN);
             text.setStroke(Color.BLUEVIOLET);
             text.setStrokeWidth(0.5);

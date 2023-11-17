@@ -23,14 +23,14 @@ public final class CritterGraphicsFactory {
 
     public GraphicsUpdater makeGraphics(Critter critter) throws Exception {
         var size = 1.0;
-        var url = (critter instanceof PacMan) ? "src/main/resources/pacman.png" :
+        var url = (critter instanceof PacMan) ? "/pacman.png" :
                 switch ((Ghost) critter) {
-                    case BLINKY -> "src/main/resources/ghosts/ghost_blinky.png";
-                    case CLYDE -> "src/main/resources/ghosts/ghost_clyde.png";
-                    case INKY -> "src/main/resources/ghosts/ghost_inky.png";
-                    case PINKY -> "src/main/resources/ghosts/ghost_pinky.png";
+                    case BLINKY -> "/ghosts/ghost_blinky.png";
+                    case CLYDE -> "/ghosts/ghost_clyde.png";
+                    case INKY -> "/ghosts/ghost_inky.png";
+                    case PINKY -> "/ghosts/ghost_pinky.png";
                 };
-        InputStream is = Files.newInputStream(Paths.get(url));
+        InputStream is = getClass().getResourceAsStream(url);
         Image fullImage = new Image(is);
         is.close();
         int y = 0, x = 0;
@@ -55,8 +55,8 @@ public final class CritterGraphicsFactory {
                     // Pacman doesn't have a scared version so i check if critter isn't pacman
                     if (!(critter instanceof PacMan)) {
                         Image fullImage;
-                        InputStream is = Files.newInputStream(Paths.get(url));
-                        InputStream isAlternative = Files.newInputStream(Paths.get("src/main/resources/ghosts/scared_ghost.png"));
+                        InputStream is = getClass().getResourceAsStream(url);
+                        InputStream isAlternative = getClass().getResourceAsStream("/ghosts/scared_ghost.png");
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
                         if (PacMan.isEnergized())
                             fullImage = new Image(isAlternative);

@@ -6,10 +6,13 @@ import misc.Debug;
 import static config.Cell.*;
 import static config.Cell.Content.*;
 
+import java.io.BufferedReader;
 // Import the File class
 import java.io.File;
 // Import this class to handle errors
 import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 // Import the Scanner class to read text files
 import java.util.Scanner;
 
@@ -72,40 +75,33 @@ public class MazeConfig {
     public static MazeConfig originalMaze(String file) {
         // New class Cell to store the map
         Cell[][] map = new Cell[21][21];
-
         // Open the file maze.txt
-        File maze = new File("src/main/resources/" + file + ".txt");
+        InputStream is = MazeConfig.class.getResourceAsStream("/" + file + ".txt");
         Scanner myReader;
-        // Try if the file exist
-        try {
-            // Read the file maze.txt
-            myReader = new Scanner(maze);
-            int n = 0;
-            // while there is something to read
-            while (myReader.hasNextLine()) {
-                // Get the curent line
-                String line = myReader.nextLine();
-                // Split everything into a String array
-                String[] data = line.split(",");
+        // Read the file maze.txt
+        myReader = new Scanner(is);
+        int n = 0;
+        // while there is something to read
+        while (myReader.hasNextLine()) {
+            // Get the curent line
+            String line = myReader.nextLine();
+            // Split everything into a String array
+            String[] data = line.split(",");
 
-                // For every 2 string
-                for (int i = 0; i < data.length; i ++) {
-                    // create a cell based on what there is inside(NOTHING, DOT, etc.)
-                    switch (data[i]) {
-                        case "ENERGIZER" -> map[n][i] = slot(ENERGIZER);
-                        case "WALL" -> map[n][i] = slot(WALL);
-                        case "DOT" -> map[n][i] = slot(DOT);
-                        default -> map[n][i] = slot(NOTHING);
-                    }
+            // For every 2 string
+            for (int i = 0; i < data.length; i ++) {
+                // create a cell based on what there is inside(NOTHING, DOT, etc.)
+                switch (data[i]) {
+                    case "ENERGIZER" -> map[n][i] = slot(ENERGIZER);
+                    case "WALL" -> map[n][i] = slot(WALL);
+                    case "DOT" -> map[n][i] = slot(DOT);
+                    default -> map[n][i] = slot(NOTHING);
                 }
-                n++;
             }
+            n++;
+        }
             // close file
             myReader.close();
-        } catch (FileNotFoundException e) {
-            // If it doesn't find the file
-            throw new RuntimeException(e);
-        }
         // Init the spawn of the entities
         IntCoordinates player = new IntCoordinates(10, 15),
                 blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),

@@ -1,6 +1,9 @@
 package gui;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.InputStream;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -70,8 +73,10 @@ public class Music {
      */
     public static void playBackgroundMusic() { 
         try {
-            File audioFile = new File("src/main/resources/music/bgm.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            InputStream audioSrc = Music.class.getResourceAsStream("/music/bgm.wav");
+            //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            InputStream bufferedIn = new BufferedInputStream(audioSrc);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             bgmClip = AudioSystem.getClip();
             bgmClip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) bgmClip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -88,8 +93,10 @@ public class Music {
      */
     public static void music_score(){
         try {
-            File audioFile = new File("src/main/resources/music/score.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            InputStream audioSrc = Music.class.getResourceAsStream("/music/score.wav");
+            //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            InputStream bufferedIn = new BufferedInputStream(audioSrc);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -105,8 +112,10 @@ public class Music {
      */
     public static void music_death(){
         try {
-            File audioFile = new File("src/main/resources/music/death2.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            InputStream audioSrc = Music.class.getResourceAsStream("/music/death2.wav");
+            //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            InputStream bufferedIn = new BufferedInputStream(audioSrc);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -122,8 +131,10 @@ public class Music {
      */
     public static void music_gameover(){
         try {
-            File audioFile = new File("src/main/resources/music/game_over.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            InputStream audioSrc = Music.class.getResourceAsStream("/music/game_over.wav");
+            //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            InputStream bufferedIn = new BufferedInputStream(audioSrc);
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);

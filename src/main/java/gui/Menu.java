@@ -35,9 +35,8 @@ public class Menu {
         menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
         Label scoreText = new Label("Score:" + String.valueOf(score) );
-        InputStream is = Files.newInputStream(Paths.get("src/main/resources/heart3.png"));
+        InputStream is = getClass().getResourceAsStream("/heart3.png");
         ImageView livesImage = new ImageView( new Image(is,scale*size , scale * size, true, true));
-        is.close();
         HBox scoreHb = new HBox();
         HBox livesHb = new HBox();
         // adding nodes to parent "menu"
@@ -67,17 +66,13 @@ public class Menu {
                 Label scoreText = new Label("Score : " + String.valueOf(MazeState.getScore()));
 
                 // la division de la taille reduit la taille de l'image progressivement pour que elle prend pas tous l'ecran.
-                InputStream is = Files.newInputStream(Paths.get("src/main/resources/heart" + String.valueOf(MazeState.getLives()) + ".png"));
-                ImageView livesImage = new ImageView( new Image(is,scale*(size)/(4 - MazeState.getLives()) , scale * size, true, true));
-                is.close();
+                InputStream isImage = getClass().getResourceAsStream("/heart" + String.valueOf(MazeState.getLives()) + ".png");
+                ImageView livesImage = new ImageView( new Image(isImage,scale*(size)/(4 - MazeState.getLives()) , scale * size, true, true));
                 // custom font settings.
                 scoreText.setStyle("-fx-text-fill: white;"); //To change the font size you need to change the value in load font below
-                try{
-                    Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 12); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now.
-                    scoreText.setFont(scoreFont);
-                } catch (FileNotFoundException e){
-                    e.printStackTrace();
-                }
+                InputStream isText = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
+                Font scoreFont = Font.loadFont(isText, 12); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now.
+                scoreText.setFont(scoreFont);
 
                 // the actual update of the item.
                 scoreHb.getChildren().add(scoreText);

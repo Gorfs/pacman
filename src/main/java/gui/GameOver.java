@@ -3,6 +3,7 @@ package gui;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import geometry.IntCoordinates;
 import javafx.geometry.Pos;
@@ -26,23 +27,17 @@ public class GameOver {
         vb.setVisible(false);
         Label titleText = new Label("Game Over"); //To change the font size you need to change the value in load font below
         titleText.setStyle("-fx-text-fill:white;");
-        try{
-            Font titleFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 50); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
-            titleText.setFont(titleFont);
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
+        InputStream is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
+        Font titleFont = Font.loadFont(is, 50); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+        titleText.setFont(titleFont);
         HBox hbox1 = new HBox();
         hbox1.getChildren().add(titleText);
         hbox1.setAlignment(Pos.BASELINE_CENTER);
         Label restartText = new Label("Press Enter to restart");
         restartText.setStyle("-fx-text-fill:red; -fx-border-color:red;"); //To change the font size you need to change the value in load font below
-        try{
-            Font restartFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 40); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
-            restartText.setFont(restartFont);
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
+        is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
+        Font restartFont = Font.loadFont(is, 40); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+        restartText.setFont(restartFont);
         HBox hbox2 = new HBox();
         hbox2.getChildren().add(restartText);
         hbox2.setAlignment(Pos.BASELINE_CENTER);
