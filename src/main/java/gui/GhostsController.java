@@ -9,13 +9,12 @@ import model.Direction;
 import model.Ghost;
 import model.PacMan;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public sealed abstract class GhostsController permits BlinkyController, ClydeController, PinkyController {
     public static final Random rd = new Random();
-
     public IntCoordinates previousPos = new IntCoordinates(0, 0);
-    public boolean tryTurn = false;
 
     /**
      * Method that start the ghost AI.
@@ -27,23 +26,20 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      * @param critter variable that represent a ghost
      */
     public void setDirection(Ghost critter, MazeConfig config) {
+        // Next cell the ghost should go
         IntCoordinates result = critter.getPos().round();
         if (!(critter.getPos().round().x() == previousPos.x() && critter.getPos().round().y() == previousPos.y())) {
-            tryTurn = false;
             previousPos = critter.getPos().round();
-            if (critter.isScatterMode()) result = scatterDirection(critter, config);
-            else if (critter.isScaredMode()) {
+            if (critter.isScaredMode()) {
                 if (canTurn(critter, config)) {
+                    System.out.println('a');
                     critter.setNextDirection(randomDirection(critter, critter.getDirection(), config));
                     return;
                 }
-            }
-            else do {
-                result = nextDirection(critter, config);
-            } while (critter.getPos().round().x() == 10 && critter.getPos().round().y() == 7 &&
-                    result.x() == 10 && result.y() == 8);
+            } else if (critter.isScatterMode()) result = scatterDirection(critter, config);
+            else result = nextDirection(critter, config);
         }
-
+        // get the direction from result
         if (result.x() > critter.getPos().round().x()) critter.setNextDirection(Direction.EAST);
         else if (result.x() < critter.getPos().round().x()) critter.setNextDirection(Direction.WEST);
         else if (result.y() > critter.getPos().round().y()) critter.setNextDirection(Direction.SOUTH);
@@ -71,13 +67,12 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      * @return Path from position pos to position goal, coordinates by coordinates
      */
     public IntCoordinates findPathing(Critter critter, IntCoordinates goal, MazeConfig config) {
-        tryTurn = true;
         if (goal == null) goal = PacMan.INSTANCE.getPos().round();
 
         IntCoordinates pos = critter.getPos().round();
 
         IntCoordinates[] voisins = new IntCoordinates[4];
-        double[] distances = new double[4]; int n = 0;
+        double[] distances = {-1.0,-1.0,-1.0,-1.0}; int n = 0;
         voisins[0] = pos.toRealCoordinates(1.0).plus(RealCoordinates.NORTH_UNIT).round();
         voisins[1] = pos.toRealCoordinates(1.0).plus(RealCoordinates.EAST_UNIT).round();
         voisins[2] = pos.toRealCoordinates(1.0).plus(RealCoordinates.SOUTH_UNIT).round();
@@ -91,13 +86,15 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
             n++;
         } n = 0;
         for (int i = 0; i < distances.length; i++) {
+            if (distances[n] == -1.0) n = i;
             if (isDirectionValid(critter.getDirection(), Direction.values()[i + 1], critter, config)) {
-                if (distances[n] == 0) n = i;
-                if (distances[i] != 0 && distances[n] > distances[i]) {
+                if (distances[i] != -1.0 && distances[n] > distances[i]) {
                     n = i;
                 }
             }
-        } return voisins[n];
+        }
+        System.out.println(n + " " + Arrays.toString(voisins) + " " + Arrays.toString(distances) + " " + critter.getPos().round());
+        return voisins[n];
     }
 
     /**
@@ -125,11 +122,12 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      * @param config current map
      * @return true if the ghost can turn dir2 way else false
      */
-    public boolean isDirectionValid(Direction dir1, Direction dir2, Critter critter, MazeConfig config){
+    public boolean isDirectionValid(Direction dir1, Direction dir2, Critter critter, MazeConfig config) {
+        IntCoordinates unavailable = critter.getPos().plus(RealCoordinates.SOUTH_UNIT).round();
+        if (unavailable.x() == 10 && unavailable.y() == 8) return false;
         // the point of this function is to make sure the ghost doesn't turn back on itself
-        if (dir1 == dir2){
-            return true;
-        }else{
+        if (dir1 == dir2) return true;
+        else{
             return switch(dir2){
                 case NORTH -> ((dir1 != Direction.SOUTH) && (config.getCell(critter.getPos().plus(RealCoordinates.NORTH_UNIT).round()).initialContent()) != Cell.Content.WALL);
                 case SOUTH -> ((dir1 != Direction.NORTH) && (config.getCell(critter.getPos().plus(RealCoordinates.SOUTH_UNIT).round()).initialContent()) != Cell.Content.WALL);

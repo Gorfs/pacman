@@ -704,13 +704,17 @@ public class App extends Application {
     public void start(Stage primaryStage, int l, KeyCode[] k) {
         var root = new Pane();
         var gameScene = new Scene(root);
+        // Controllers for Pacman and ghosts
         var pacmanController = new PacmanController(k);
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        var maze = new MazeState(MazeConfig.originalMaze(filename));
-        GhostsController[] ghostsController = {new ClydeController(), new PinkyController()};
+        GhostsController[] ghostsController = {new ClydeController(), new PinkyController(),
+                new BlinkyController()};
         for (var ghost: ghostsController) {ghost.startAI();}
+        // Generate map from file
+        var maze = new MazeState(ghostsController, MazeConfig.originalMaze(filename));
         maze.setLives(l);
+        // Set up game window
         var gameView = new GameView(maze, root, 30.0);
         playBackgroundMusic();
         primaryStage.setScene(gameScene);

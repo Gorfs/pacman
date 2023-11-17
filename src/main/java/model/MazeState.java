@@ -4,10 +4,8 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import gui.ClydeController;
 import gui.GhostsController;
 import gui.App;
-import gui.PinkyController;
 
 import java.util.List;
 import java.util.Map;
@@ -23,7 +21,7 @@ import javax.sound.sampled.FloatControl;
 import java.io.File;
 
 public final class MazeState {
-    private final GhostsController[] ghostsController = {new ClydeController(), new PinkyController()};
+    private final GhostsController[] ghostsController;
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -38,7 +36,8 @@ public final class MazeState {
     private static int livesC = 3;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
-    public MazeState(MazeConfig config) {
+    public MazeState(GhostsController[] ghostsController, MazeConfig config) {
+        this.ghostsController = ghostsController;
         MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
@@ -121,8 +120,11 @@ public final class MazeState {
 
             // Get the next direction of ghosts
             if (critter instanceof Ghost) {
-                if (Objects.equals(critter.toString(), "CLYDE")) ghostsController[0].setDirection((Ghost) critter, config);
-                else if (Objects.equals(critter.toString(), "PINKY")) ghostsController[1].setDirection((Ghost) critter, config);
+                if (Objects.equals(critter.toString(), "BLINKY")) ghostsController[2].setDirection((Ghost) critter, config);
+
+                if (critter.getDirection() == Direction.NONE && critter.getNextDirection() == Direction.NONE) {
+                    critter.setDirection(Direction.EAST);
+                }
             }
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?

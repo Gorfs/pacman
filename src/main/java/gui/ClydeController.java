@@ -24,7 +24,7 @@ public final class ClydeController extends GhostsController {
         RealCoordinates blinkyPos = Ghost.BLINKY.getPos().times(-1);
         RealCoordinates distance = PacMan.INSTANCE.getPos().plus(blinkyPos);
         IntCoordinates goal = Ghost.BLINKY.getPos().plus(distance.times(2)).round();
-        System.out.println(findPathing(critter, goal, config));
-        return findPathing(critter, goal, config);
+        // return findPathing(critter, goal, config);
+        return critter.getPos().round();
     }
 }

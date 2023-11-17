@@ -12,7 +12,7 @@ public final class PinkyController extends GhostsController {
 
     @Override
     public void startAI() {
-        Ghost.PINKY.setNextDirection(Direction.NORTH);
+        Ghost.PINKY.setNextDirection(Direction.EAST);
     }
 
     @Override
@@ -22,7 +22,7 @@ public final class PinkyController extends GhostsController {
 
     @Override
     public IntCoordinates nextDirection(Critter critter, MazeConfig config) {
-        IntCoordinates pos = PacMan.INSTANCE.getPos().plus(getDirection(PacMan.INSTANCE).times(-1)).round();
-        return findPathing(critter, pos, config);
+        IntCoordinates goal = PacMan.INSTANCE.getPos().plus(getDirection(PacMan.INSTANCE).times(2)).round();
+        return findPathing(critter, goal, config);
     }
 }
