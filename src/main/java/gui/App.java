@@ -103,6 +103,11 @@ public class App extends Application {
         primaryStage.show();//on affiche le menu
     }
 
+    public static double correctScale(double height, double widht){
+        double correct = (height+widht)/60;
+        return correct;
+    }
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -124,7 +129,7 @@ public class App extends Application {
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
         maze.setLives(l);
-        var gameView = new GameView(maze, root, 50);
+        var gameView = new GameView(maze, root, correctScale(height, width));
         //on initialise le rendu du jeu
         Music.playBackgroundMusic();
         primaryStage.setScene(gameScene);
