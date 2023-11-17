@@ -27,6 +27,7 @@ public class Music {
         if(volumeLevel < 0.0f) volume = 0.0f;
         else if(volumeLevel > 1.0f) volume = 1.0f;
         else volume = volumeLevel;
+        
     }
 
     /**
