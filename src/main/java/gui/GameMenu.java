@@ -1,22 +1,19 @@
 package gui;
 
 import javafx.animation.TranslateTransition;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.PacMan;
 
 public class GameMenu extends Parent {
-
-        public GameMenu(Pane root, Stage primaryS, KeyCode[] k, TextField text, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a) {
+//class qui gère les boutons dans le menu
+        public GameMenu(Pane root, Stage primaryS, KeyCode[] k, TextField text, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a, double widht, double height) {
             VBox menu0 = new VBox(10);
             VBox menu1 = new VBox(10);
             VBox menu2 = new VBox(10);
@@ -26,7 +23,7 @@ public class GameMenu extends Parent {
             VBox menu6 = new VBox(10);
             VBox menu7 = new VBox(10);
             VBox menu8 = new VBox(10);
-      
+            //initialisation des boutons
             menu0.setTranslateX(100);
             menu0.setTranslateY(200);
 
@@ -54,24 +51,27 @@ public class GameMenu extends Parent {
             menu8.setTranslateX(100);
             menu8.setTranslateY(200);
 
+            //on met les boutons au bon endroit
+
             final int offset = 400;
 
             menu1.setTranslateX(offset);
 
             MenuButton btnOptions = new MenuButton("OPTIONS");
-            btnOptions.setOnMouseClicked(event -> {
-                getChildren().add(menu1);
+            btnOptions.setOnMouseClicked(event -> {//quand on appuie sur le bouton OPTIONS :
+                getChildren().add(menu1);//on ajoute le menu1
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu0);
+                //on initialise un transition qui dure 0.25s depuis le menu0
                 tt.setToX(menu0.getTranslateX() - offset);
-
+                //le menu0 pendant la transition se deplacera
                 TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu1);
                 tt1.setToX(menu0.getTranslateX());
 
-                tt.play();
+                tt.play();//on joue les transitions
                 tt1.play();
 
                 tt.setOnFinished(evt -> {
-                    getChildren().remove(menu0);
+                    getChildren().remove(menu0);//on enleve le menu0
                 });
             });
 
@@ -253,7 +253,7 @@ public class GameMenu extends Parent {
                 });
                 });
 
-// Curseur de volume Bgm
+            //Curseur de volume Bgm
             Slider volumeSliderBgm = new Slider(0, 1, Music.getVolume());
             volumeSliderBgm.setMajorTickUnit(0.1);
             volumeSliderBgm.setBlockIncrement(0.05);
@@ -263,7 +263,7 @@ public class GameMenu extends Parent {
                 Music.setVolume(newValue.floatValue());
             });
 
-            // Curseur de volume Effet sonore
+            //Curseur de volume Effet sonore
             Slider volumeSliderEff = new Slider(0, 1, Music.getSFXVolume());
             volumeSliderEff.setMajorTickUnit(0.1);
             volumeSliderEff.setBlockIncrement(0.05);
@@ -275,21 +275,22 @@ public class GameMenu extends Parent {
 
             MenuButton btnName = new MenuButton("NAME");
                 btnName.setOnMouseClicked(event -> {
-                text.setTranslateX(735);
-                text.setTranslateY(400);
+                text.setTranslateX(120);//on met dans la bonne positions le champ de texte où le joueur inscrivera son pseudo
+                text.setTranslateY(250);
                 text.setText("Écrivez votre nom");
                 text.setVisible((true));
-                button.setVisible(true);
-                button.setTranslateX(867);
-                button.setTranslateY(402);
-                button.setOnMouseClicked(event1 -> {
-                    text.setVisible(false);
+                button.setVisible(true);//le bouton submit
+                button.setTranslateX(243);
+                button.setTranslateY(253);
+                button.setOnMouseClicked(event1 -> {//quand on appuie sur le bouton submit :
+                    text.setVisible(false);//on enlève les deux apparitions
                     button.setVisible(false);
                     String b="";
-                    b = text.getText();
+                    b = text.getText();//on recupère le pseudo rentrer, pour l'instant on ne l'utilise pas
                     System.out.println(b);
                     PacMan.INSTANCE = new PacMan();
                     PacMan.INSTANCE.getInstance(b);
+                    //on assigne le pseudo rentrer au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au desus du pacman
                     getChildren().add(menu7);
                     TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu8);
                     tt.setToX(menu8.getTranslateX() + offset);
@@ -360,74 +361,74 @@ public class GameMenu extends Parent {
                 App.start(primaryS,1,k,a);
             });
 
-            btnOptions.setTranslateX(628);
-            btnOptions.setTranslateY(200);
+            btnOptions.setTranslateX(0);
+            btnOptions.setTranslateY(40);
 
-            btnExit.setTranslateX(628);
-            btnExit.setTranslateY(200);
+            btnExit.setTranslateX(0);
+            btnExit.setTranslateY(60);
 
-            btnBack.setTranslateX(628);
-            btnBack.setTranslateY(100);
+            btnBack.setTranslateX(0);
+            btnBack.setTranslateY(0);
 
-            btnBack1.setTranslateX(628);
-            btnBack1.setTranslateY(100);
+            btnBack1.setTranslateX(0);
+            btnBack1.setTranslateY(0);
 
-            btnBack2.setTranslateX(628);
-            btnBack2.setTranslateY(100);
+            btnBack2.setTranslateX(0);
+            btnBack2.setTranslateY(0);
 
-            btnBack3.setTranslateX(628);
-            btnBack3.setTranslateY(100);
+            btnBack3.setTranslateX(0);
+            btnBack3.setTranslateY(0);
 
-            btnBack4.setTranslateX(628);
-            btnBack4.setTranslateY(100);
+            btnBack4.setTranslateX(0);
+            btnBack4.setTranslateY(0);
 
-            btnBack5.setTranslateX(628);
-            btnBack5.setTranslateY(100);
+            btnBack5.setTranslateX(0);
+            btnBack5.setTranslateY(0);
 
-            btnSound.setTranslateX(628);
-            btnSound.setTranslateY(150);
+            btnKey.setTranslateX(0);
+            btnKey.setTranslateY(20);
 
-            btnKey.setTranslateX(628);
-            btnKey.setTranslateY(200);
+            btnSound.setTranslateX(0);
+            btnSound.setTranslateY(10);
 
-            btncaseLeft.setTranslateX(628);
-            btncaseLeft.setTranslateY(150);
+            btncaseLeft.setTranslateX(0);
+            btncaseLeft.setTranslateY(10);
 
-            btncaseRight.setTranslateX(628);
-            btncaseRight.setTranslateY(200);
+            btncaseRight.setTranslateX(0);
+            btncaseRight.setTranslateY(20);
 
-            btncaseUp.setTranslateX(628);
-            btncaseUp.setTranslateY(250);
+            btncaseUp.setTranslateX(0);
+            btncaseUp.setTranslateY(30);
 
-            btncaseDown.setTranslateX(628);
-            btncaseDown.setTranslateY(300);
+            btncaseDown.setTranslateX(0);
+            btncaseDown.setTranslateY(40);
 
-            btns1.setTranslateX(628);
-            btns1.setTranslateY(150);
+            btns1.setTranslateX(0);
+            btns1.setTranslateY(10);
 
-            btns2.setTranslateX(628);
-            btns2.setTranslateY(200);
+            btns2.setTranslateX(0);
+            btns2.setTranslateY(20);
 
-            btnName.setTranslateX(628);
-            btnName.setTranslateY(100);
+            btnName.setTranslateX(0);
+            btnName.setTranslateY(0);
 
-            btnf.setTranslateX(628);
-            btnf.setTranslateY(150);
+            btnf.setTranslateX(0);
+            btnf.setTranslateY(20);
 
-            btnm.setTranslateX(628);
-            btnm.setTranslateY(200);
+            btnm.setTranslateX(0);
+            btnm.setTranslateY(40);
 
-            btnh.setTranslateX(628);
-            btnh.setTranslateY(250);
+            btnh.setTranslateX(0);
+            btnh.setTranslateY(60);
 
-            btne.setTranslateX(628);
-            btne.setTranslateY(300);
+            btne.setTranslateX(0);
+            btne.setTranslateY(80);
             
-            volumeSliderBgm.setTranslateX(628);
-            volumeSliderBgm.setTranslateY(150);
+            volumeSliderBgm.setTranslateX(0);
+            volumeSliderBgm.setTranslateY(20);
 
-            volumeSliderEff.setTranslateX(628);
-            volumeSliderEff.setTranslateY(150);
+            volumeSliderEff.setTranslateX(0);
+            volumeSliderEff.setTranslateY(20);
 
             menu2.getChildren().addAll(btnBack1, btncaseLeft, btncaseRight, btncaseUp, btncaseDown);
             menu3.getChildren().addAll(btnBack2, btns1, btns2);
@@ -437,7 +438,9 @@ public class GameMenu extends Parent {
             menu5.getChildren().addAll(btnBack4, volumeSliderEff);
             menu8.getChildren().addAll(btnName);
             menu7.getChildren().addAll(btnBack5,btnf,btnm,btnh,btne);
+            //on ajoute les boutons sur chaque menu
 
             getChildren().addAll(menu0);
+            //le menu racine/mère est menu0
         }
     }
