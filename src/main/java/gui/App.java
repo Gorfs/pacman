@@ -43,10 +43,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         Pane root = new Pane();//on initialise la fenêtre
-        Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();//on récupère les dimensions de l'écran du joueur
-        double height = d.getHeight();
-        double width = d.getWidth();
-        root.setPrefSize(width, height);//on incrémente les dimensions de l'écran dans la fenêtre
+        root.setPrefSize(800,600);//on incrémente les dimensions de l'écran dans la fenêtre
         InputStream is = Files.newInputStream(Paths.get("src/main/resources/pac.jpg"));//on prends une image situé dans ressources
         Image img = new Image(is);
         is.close();
@@ -58,10 +55,10 @@ public class App extends Application {
         text = new TextField("pseudo");
         text.setVisible(false);
         ImageView imgView = new ImageView(img);
-        imgView.setFitWidth(width);//image au dimensions de l'écran
-        imgView.setFitHeight(height);
+        imgView.setFitWidth(800);//image au dimensions de l'écran
+        imgView.setFitHeight(800);
 
-        gameMenu = new GameMenu(root, primaryStage,k,text,button,btncase1,btncase2,btncase3,btncase4,son_effect, width, height);
+        gameMenu = new GameMenu(root, primaryStage,k,text,button,btncase1,btncase2,btncase3,btncase4,son_effect, 800, 600);
         //on initialse les boutons dans le menu
         gameMenu.setVisible(true);
         root.getChildren().addAll(imgView, btncase1, btncase2, btncase3, btncase4, gameMenu, text, button);
@@ -103,34 +100,12 @@ public class App extends Application {
         primaryStage.show();//on affiche le menu
     }
 
-    public static double correctScale(double height, double widht){
-        int diagonale = (int)(Math.sqrt(height*height+widht*widht));
-        int correct = diagonale/45;
-        System.out.println(correct);
-        // if(correct==1){return correct;}
-        // else if(correct<1){
-        //     while(correct!=1){
-        //         correct+=1;
-        //     }
-        // }
-        // else{
-        //     while(correct!=1){
-        //         correct-=1;
-        //     }
-        // }
-        return correct;
-    }
-
     public static void main(String[] args) {
         launch(args);
     }
     public static void start(Stage primaryStage, int l, KeyCode[] k, float son_effect) {
         var root = new Pane();
-        Dimension d = java.awt.Toolkit.getDefaultToolkit().getScreenSize();//on récupère les dimensions de l'écran du joueur
-        double height = d.getHeight();
-        double width = d.getWidth();
-        System.out.println(width +" "+ height);
-        root.setPrefSize(width, height);//on incrémente les dimensions de l'écran dans la fenêtre
+        root.setPrefSize(800,800);//on incrémente les dimensions de l'écran dans la fenêtre
         var gameScene = new Scene(root);
         GameMenu2 gameMenu2 = new GameMenu2(root, k, button, btncase1, btncase2, btncase3, btncase4, son_effect);
         //on initialise les options in-game
@@ -143,8 +118,7 @@ public class App extends Application {
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
         maze.setLives(l);
-        System.out.println(correctScale(height, width));
-        var gameView = new GameView(maze, root, correctScale(height, width));
+        var gameView = new GameView(maze, root, 38);
         //on initialise le rendu du jeu
         Music.playBackgroundMusic();
         primaryStage.setScene(gameScene);
