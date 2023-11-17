@@ -29,7 +29,6 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
         // Next cell the ghost should go
         IntCoordinates result = critter.getPos().round();
         if (!(critter.getPos().round().x() == previousPos.x() && critter.getPos().round().y() == previousPos.y())) {
-            previousPos = critter.getPos().round();
             if (critter.isScaredMode()) {
                 if (canTurn(critter, config)) {
                     System.out.println('a');
@@ -38,12 +37,13 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
                 }
             } else if (critter.isScatterMode()) result = scatterDirection(critter, config);
             else result = nextDirection(critter, config);
+            previousPos = critter.getPos().round();
         }
         // get the direction from result
         if (result.x() > critter.getPos().round().x()) critter.setNextDirection(Direction.EAST);
         else if (result.x() < critter.getPos().round().x()) critter.setNextDirection(Direction.WEST);
         else if (result.y() > critter.getPos().round().y()) critter.setNextDirection(Direction.SOUTH);
-        else if (result.y() > critter.getPos().round().y()) critter.setNextDirection(Direction.NORTH);
+        else if (result.y() < critter.getPos().round().y()) critter.setNextDirection(Direction.NORTH);
     }
 
     /**
@@ -123,8 +123,16 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      * @return true if the ghost can turn dir2 way else false
      */
     public boolean isDirectionValid(Direction dir1, Direction dir2, Critter critter, MazeConfig config) {
+        // Can't go back
+        if (critter.getPos().plus(getDirection(dir2)).round().x() == previousPos.x() &&
+                critter.getPos().plus(getDirection(dir2)).round().y() == previousPos.y()) {
+            System.out.println(critter.getPos().plus(getDirection(dir2)).round());
+            return false;
+        }
+        // Can't return in spawn
         IntCoordinates unavailable = critter.getPos().plus(RealCoordinates.SOUTH_UNIT).round();
         if (unavailable.x() == 10 && unavailable.y() == 8) return false;
+
         // the point of this function is to make sure the ghost doesn't turn back on itself
         if (dir1 == dir2) return true;
         else{
@@ -159,11 +167,11 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
     }
 
     /**
-     * @param critter variable that represent a ghost
+     * @param direction variable that represent a direction
      * @return RealCoordinates unit for each direction to add to the ghost pos for the neighbouring cells
      */
-    public static RealCoordinates getDirection(Critter critter) {
-        return switch (critter.getDirection()) {
+    public static RealCoordinates getDirection(Direction direction) {
+        return switch (direction) {
             case NORTH -> RealCoordinates.NORTH_UNIT;
             case EAST -> RealCoordinates.EAST_UNIT;
             case SOUTH -> RealCoordinates.SOUTH_UNIT;

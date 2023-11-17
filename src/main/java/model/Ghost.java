@@ -8,7 +8,7 @@ public enum Ghost implements Critter {
     private RealCoordinates pos;
     private Direction direction = Direction.NONE;
     private Direction nextDirection = Direction.NONE;
-    private boolean scatterMode = false;
+    private boolean scatterMode = true;
     private boolean scaredMode = false;
 
     private float timerAni = 0;
