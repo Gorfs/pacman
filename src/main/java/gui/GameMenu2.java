@@ -310,9 +310,7 @@ public class GameMenu2 extends Parent {
             volumeSliderEff.setShowTickMarks(true);
             volumeSliderEff.setShowTickLabels(true);
             volumeSliderEff.valueProperty().addListener((observable, oldValue, newValue) -> {
-                Music.stopBackgroundMusic();
                 Music.setSFXVolume(newValue.floatValue());
-                Music.playBackgroundMusic();
             });
 
             btnOptions.setTranslateX(0);
@@ -377,19 +375,7 @@ public class GameMenu2 extends Parent {
             getChildren().addAll(menu0);
             //le menu racine/mère est le menu0
         }
-        public void playBackgroundMusic(float l) {//méthode qui met un une valeur de volume à la musique fond (in-game)
-        try {
-            File audioFile = new File("src/main/resources/bgm.wav"); 
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(son_effect); 
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+    
         public void base(){
             menua.getChildren().addAll(menua);
             getChildren().addAll(menua);
