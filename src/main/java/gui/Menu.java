@@ -27,7 +27,7 @@ public class Menu {
 
     private final double scale;
     private int score;
-    private double size = 0.5;
+    private double size = 0.7;
     
     public Menu(double scale){
         this.scale = scale;
@@ -49,7 +49,7 @@ public class Menu {
         // setting up the javaFX objects for the livres display.
         ImageView[] livesArray = new ImageView[initLives];
         for(int i = 0 ; i < initLives; i++){
-            livesArray[i] = new ImageView(new Image("heart.png", scale*size,scale*size, true, true));
+            livesArray[i] = new ImageView(new Image("pacmanSimple.png", scale*size,scale*size, true, true));
         }
         
         HBox scoreHb = new HBox();
@@ -92,12 +92,12 @@ public class Menu {
 
 
                 // resetting and updating the hearts counter.
-                String heartUrl = "heart.png";
+                String heartUrl = "pacmanSimple.png";
                 ImageView[] livesArray = new ImageView[initLives];
                 // Debug.out(MazeState.getLives() + "");
                 for(int i = 0 ; i < initLives; i++){
                     if ((MazeState.getLives() - 1) <= i){
-                        heartUrl = "heart_grey.png"; 
+                        heartUrl = "empty.png"; 
                     }
                     livesArray[i] = new ImageView(new Image(heartUrl, scale*size,scale*size, true, true));
                 }
