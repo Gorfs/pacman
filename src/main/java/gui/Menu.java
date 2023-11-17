@@ -61,7 +61,7 @@ public class Menu {
         }
         menu.getChildren().addAll(livesHb, scoreHb);
         
-        menu.setSpacing(40);
+        menu.setSpacing(20);
         // TODO once constants are added make translateX based on width instead of random constant
         menu.setTranslateX((20));
         menu.setTranslateY(670); // TODO set width and height to use root width and height instead of constants
@@ -97,7 +97,7 @@ public class Menu {
                 // Debug.out(MazeState.getLives() + "");
                 for(int i = 0 ; i < initLives; i++){
                     if ((MazeState.getLives() - 1) <= i){
-                        heartUrl = "empty.png"; 
+                        heartUrl = "empty1.png"; 
                     }
                     livesArray[i] = new ImageView(new Image(heartUrl, scale*size,scale*size, true, true));
                 }
