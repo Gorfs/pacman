@@ -166,10 +166,11 @@ public final class MazeState {
                 if (PacMan.isEnergized()) {
                     resetCritter(critter);
                 } else {
-                    if (!PacMan.INSTANCE.isStartedDeathAni())
+                    if (!PacMan.INSTANCE.isStartedDeathAni()){
                         PacMan.INSTANCE.setDying(true);
                         resetCritters();
                         gui.Music.music_death();
+                    }
                     playerLost();
                     
                     return;
