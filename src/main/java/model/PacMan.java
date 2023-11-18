@@ -15,7 +15,10 @@ public final class PacMan implements Critter {
     private Direction direction = Direction.NONE;
     private Direction nextDirection = Direction.NONE;
     private RealCoordinates pos;
-    private static boolean energized;
+    private static boolean energized = false;
+    private static boolean almostNormal = false;
+    private static final long ENERGIZED_DURATION = 10000; // the energized duration is 10 seconds (timer is in milliseconds)
+    private static final long ALMOST_NORMAL_DURATION = 2000; // the ghost flashing animation should last 2 seconds
     private static Timer timer = new Timer("timer", true);
 
     // movement animation related
@@ -121,6 +124,14 @@ public final class PacMan implements Critter {
         energized = e;
     }
 
+    public static boolean isAlmostNormal(){
+        return almostNormal;
+    }
+
+    public static void setAlmostNormal(boolean e){
+        almostNormal = e;
+    }
+
 
     public void update(long deltaT){ //I moved what is related directly to Pacman
         var pacPos = INSTANCE.getPos().round();
@@ -170,22 +181,23 @@ public final class PacMan implements Critter {
         //  but suppose that we always want to "energize" pacman rather than de-energize him
         if (!energized){
         setEnergized(true);
+        setAlmostNormal(false);
+        // this function set to true the boolean energized, and set to false 10 seconds after
         timer.schedule(new TimerTask() {
 
             @Override
             public void run() {
-                // Debug.out("started timer");
-                try{
-                    // not sure what the thread.sleep does, since the timing is done via the timer.schedule command, but it works.
-                    for (int i = 0; i < 10; i++){
-                        Thread.sleep(0);
-                    } setEnergized(false);
-                } catch (InterruptedException e) {
-                    // e.printStackTrace();
-                    System.out.println("oh no, anyway.... (the timer for the energizer went wrong , got an intrerruptedException error)");
-                }
+                setAlmostNormal(true);
+                timer.schedule(new TimerTask(){
+
+                    @Override
+                    public void run(){
+                        setEnergized(false);
+                        setAlmostNormal(false);
+                    }
+                }, ALMOST_NORMAL_DURATION);
             }
-        }, 10000);
+        }, ENERGIZED_DURATION);
         // timer's second argument is in milliseconds, s 1000 ms = 1s
         // setEnergized(false);
        } else System.out.println("already energized, chill out pls");
