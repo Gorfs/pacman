@@ -37,8 +37,8 @@ public class GameView {
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
-        var gameover = new GameOver(scale * 1.5); //On initialise le GameOver
-        var menu = new Menu(scale * 1.5); //On initialise le Menu
+        var gameover = new GameOver(scale * 1); //On initialise le GameOver
+        var menu = new Menu(scale * 1); //On initialise le Menu
         graphicsUpdaters = new ArrayList<>();
 
         for (var critter : MazeState.getCritters()) addGraphics(critterFactory.makeGraphics(critter));

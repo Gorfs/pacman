@@ -84,7 +84,7 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
-        if(!gameMenu1.isVisible()){
+        if(!gameMenu1.isVisible()){//si on est dans les options, alors on pause le jeu
             
         ClydeController.setDirection(config);
         for  (var critter: critters) {

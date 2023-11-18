@@ -19,17 +19,18 @@ public final class PacMan implements Critter {
     private Direction nextDirection = Direction.NONE;
     private RealCoordinates pos;
     private static boolean energized;
-    private static long compteur = 11000L;
+
+    private static long compteur = 11000L;//compteur pour le temps d'energie
     
     public static void setCompteur(long compteur) {PacMan.compteur = compteur;}
     public static long getCompteur() {return compteur;}
 
-    private static boolean timerMarche = true;
+    private static boolean timerMarche = false;//pour gerer le timer de setEnergized
 
     public static boolean getTimerMarche(){return timerMarche;}
     public static void setTimerMarche(boolean t){timerMarche = t;}
 
-    private static boolean timer2Marche = true;
+    private static boolean timer2Marche = false;//pour gerer le timer de chrono
 
     public static void setTimer2Marche(boolean t) {timer2Marche = t;}
     public static boolean getTimer2Marche() {return timer2Marche;}
@@ -148,11 +149,11 @@ public final class PacMan implements Critter {
             }else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
                 MazeState.addScore(15);
+                timer2Marche=false;
+                timerMarche=false;
                 PacMan.setEnergized(10000L);
                 compteur=11000L;
                 PacMan.chrono();
-                timer2Marche=false;
-                timerMarche=false;
             }
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
@@ -204,29 +205,22 @@ public final class PacMan implements Critter {
         // function will now no longer take a boolean,
         //  but suppose that we always want to "energize" pacman rather than de-energize him
         if (!energized){
-            timerMarche=false;
         setEnergized(true);
         TimerTask task = new TimerTask() {
 
             @Override
             public void run() {
-                // Debug.out("started timer");
-                try{
-                    // not sure what the thread.sleep does, since the timing is done via the timer.schedule command, but it works.
-                    for (int i = 0; i < 10; i++){
-                        Thread.sleep(0);
-                    } if (timer2Marche==false){setEnergized(false);} timerMarche=true;
-                } catch (InterruptedException e) {
-                    // e.printStackTrace();
-                    System.out.println("oh no, anyway.... (the timer for the energizer went wrong , got an intrerruptedException error)");
-                }
-            }
+                if (timerMarche==false){setEnergized(false);}
+                //si on est dans les options, alors pacman reste energisé, 
+                //le timer sera reimplémenter une fois les options quittées
+            
+            };
         };
         Timer timer = new Timer();
-        timer.schedule(task, temps);
+        timer.schedule(task, temps);//on lance le chronomètre qui dure 'temps';
+        if(timerMarche==true){timer.cancel();System.out.println("cancel");}
         
         // timer's second argument is in milliseconds, s 1000 ms = 1s
-        // setEnergized(false);
        } else System.out.println("already energized, chill out pls");
     }
 

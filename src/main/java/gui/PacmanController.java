@@ -31,11 +31,10 @@ public class PacmanController {
         
         if (!MazeState.getGameEnded()){
             if(event.getCode()==KeyCode.ESCAPE){
-                if(gameMenu1.isVisible()){
-                    if(PacMan.getTimer2Marche()){
-                        if(PacMan.isEnergized() && PacMan.getCompteur()>0){
-                            System.out.println("siuuuuu"); 
-                            PacMan.setTimer2Marche(false);
+                if(gameMenu1.isVisible()){//si quand on appuie sur options on est dans le menu
+                    if(PacMan.getTimer2Marche()){//si le timer2 n'est en 'pause'
+                        if(PacMan.isEnergized() && PacMan.getCompteur()>0){//si le pacman est energized et le compteur>0
+                            PacMan.setTimer2Marche(false);//on remet le compteur de chrono en route
                             TimerTask t = new TimerTask() {
                                 @Override
                                 public void run() {
@@ -44,9 +43,7 @@ public class PacmanController {
                             };
                             Timer tt = new Timer();
                             tt.schedule(t,PacMan.getCompteur());
-                            try{PacMan.chrono();}
-                            catch(Exception e){}
-                            System.out.println("ok");
+                            //on lance un nouveau compteur, le dernier setEnergized etant fini
                         }
                     } 
                 }
