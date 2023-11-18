@@ -168,11 +168,13 @@ public final class MazeState {
                 if (PacMan.isEnergized()) {
                     resetCritter(critter);
                 } else {
-                    if (!PacMan.INSTANCE.isStartedDeathAni())
+                    if (!PacMan.INSTANCE.isStartedDeathAni()){
                         PacMan.INSTANCE.setDying(true);
                         resetCritters();
                         gui.Music.music_death();
+                    }
                     playerLost();
+
                     
                     return;
                 }
@@ -212,7 +214,7 @@ public final class MazeState {
 
 
     private void playerLost() {
-        if (!PacMan.INSTANCE.getIsDying()) {
+        if (PacMan.INSTANCE.getIsDying()) {
             lives--;
             if (lives == 0) {
                 gui.Music.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
