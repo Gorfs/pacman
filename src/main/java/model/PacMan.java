@@ -5,8 +5,11 @@ import geometry.IntCoordinates;
 import java.util.Timer;
 import geometry.RealCoordinates;
 // import misc.Debug;
+import gui.GameMenu2;
 
 import java.util.TimerTask;
+
+import javax.swing.plaf.synth.SynthScrollBarUI;
 
 /**
  * Implements Pac-Man character using singleton pattern. FIXME: check whether singleton is really a good idea.
@@ -15,6 +18,21 @@ public final class PacMan implements Critter {
     private Direction direction = Direction.NONE;
     private Direction nextDirection = Direction.NONE;
     private RealCoordinates pos;
+
+    private static long compteur = 11000L;//compteur pour le temps d'energie
+    
+    public static void setCompteur(long compteur) {PacMan.compteur = compteur;}
+    public static long getCompteur() {return compteur;}
+
+    private static boolean timerMarche = false;//pour gerer le timer de setEnergized
+
+    public static boolean getTimerMarche(){return timerMarche;}
+    public static void setTimerMarche(boolean t){timerMarche = t;}
+
+    private static boolean timer2Marche = false;//pour gerer le timer de chrono
+
+    public static void setTimer2Marche(boolean t) {timer2Marche = t;}
+    public static boolean getTimer2Marche() {return timer2Marche;}
     private static boolean energized = false;
     private static boolean almostNormal = false;
     private static final long ENERGIZED_DURATION = 10000; // the energized duration is 10 seconds (timer is in milliseconds)
@@ -35,20 +53,21 @@ public final class PacMan implements Critter {
     // So we don't have death animation instantly when death animation is finish and then create a loop.
     private boolean startedDeathAni = false;
 
-    public PacMan() {
+    public static GameMenu2 gameMenu;
+    public static String name;
+    public static PacMan INSTANCE = new PacMan(gameMenu, name);
+
+    public PacMan(GameMenu2 gameMenu2, String name) {
+        gameMenu=gameMenu2;
+        PacMan.name=name;
     }
 
-    public static PacMan INSTANCE = new PacMan();
-    public String name;
-    private PacMan(String name){
-        this.name=name;
-    }
     public PacMan getInstance(String name){
-        INSTANCE=new PacMan(name);
+        INSTANCE=new PacMan(gameMenu, name);
         return INSTANCE;
     }
     
-    public String getName(){return INSTANCE.name;}
+    public String getName(){return PacMan.name;}
 
 
     @Override
@@ -142,7 +161,11 @@ public final class PacMan implements Critter {
             }else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
                 MazeState.addScore(15);
-                PacMan.setEnergized();
+                timer2Marche=false;
+                timerMarche=false;
+                PacMan.setEnergized(10000L);
+                compteur=11000L;
+                PacMan.chrono();
             }
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
@@ -175,12 +198,40 @@ public final class PacMan implements Critter {
         this.startedDeathAni = deathAni;
     }
 
-    public static void setEnergized() {
+    public static void chrono(){
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                if(timer2Marche==false){compteur-=1000L;}
+                if(compteur>1000){chrono();}
+                System.out.println(compteur);
+            }
+        };
+        Timer timer = new Timer();
+        timer.schedule(task, 1000);
+        
+    }
 
+    public static void setEnergized(long temps) {
+        gameMenu.setVisible(false);
         // function will now no longer take a boolean,
         //  but suppose that we always want to "energize" pacman rather than de-energize him
         if (!energized){
         setEnergized(true);
+        TimerTask task = new TimerTask() {
+
+            @Override
+            public void run() {
+                if (timerMarche==false){setEnergized(false);}
+                //si on est dans les options, alors pacman reste energisé, 
+                //le timer sera reimplémenter une fois les options quittées
+            
+            };
+        };
+        Timer timer = new Timer();
+        timer.schedule(task, temps);//on lance le chronomètre qui dure 'temps';
+        if(timerMarche==true){timer.cancel();System.out.println("cancel");}
+        
         setAlmostNormal(false);
         // this function set to true the boolean energized, and set to false 10 seconds after
         timer.schedule(new TimerTask() {
@@ -199,8 +250,8 @@ public final class PacMan implements Critter {
             }
         }, ENERGIZED_DURATION);
         // timer's second argument is in milliseconds, s 1000 ms = 1s
-        // setEnergized(false);
        } else System.out.println("already energized, chill out pls");
     }
+
 
 }
