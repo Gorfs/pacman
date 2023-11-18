@@ -12,7 +12,7 @@ import java.util.List;
 public class GameView {
     // class parameters
     private final MazeState maze;
-    private final Pane gameRoot; // main node of the game
+    private static Pane gameRoot; // main node of the game
 
     private final List<GraphicsUpdater> graphicsUpdaters;
 
@@ -28,15 +28,17 @@ public class GameView {
      */
     public GameView(MazeState maze, Pane root, double scale) {
         this.maze = maze;
-        this.gameRoot = root;
+        gameRoot = root;
         // pixels per cell
-        root.setMinWidth(maze.getWidth() * scale);
-        root.setMinHeight(maze.getHeight() * scale);
+        // double w = maze.getWidth() * 1.5;
+        // double h = maze.getHeight() * 1.5;
+        root.setMinWidth(maze.getWidth()*scale);
+        root.setMinHeight(maze.getHeight()*scale);    
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
-        var gameover = new GameOver(scale * 1.50); //On initialise le GameOver
-        var menu = new Menu(scale * 1.50); //On initialise le Menu
+        var gameover = new GameOver(scale * 1); //On initialise le GameOver
+        var menu = new Menu(scale * 1); //On initialise le Menu
         graphicsUpdaters = new ArrayList<>();
 
         for (var critter : MazeState.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
@@ -57,7 +59,7 @@ public class GameView {
                     last = now;
                     return;
                 }
-                
+
                 var deltaT = now - last;
                 if (!PacMan.INSTANCE.getIsDying())
                     maze.update(deltaT);
