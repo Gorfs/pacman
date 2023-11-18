@@ -657,19 +657,23 @@ public class App extends Application {
         launch(args);
     }
     public void start(Stage primaryStage, int l, KeyCode[] k, float a) {
-        var root = new Pane();
-        var gameScene = new Scene(root);
-        var pacmanController = new PacmanController(k);
-        var clydeController = new ClydeController();
-        clydeController.startAI();
-        gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
-        gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        var maze = new MazeState(MazeConfig.originalMaze("maze2"));
-        maze.setLives(l);
-        var gameView = new GameView(maze, root, 30.0);
-        Music.playBackgroundMusic();
-        primaryStage.setScene(gameScene);
-        primaryStage.show();
-        gameView.animate();
+        try {
+            var root = new Pane();
+            var gameScene = new Scene(root);
+            var pacmanController = new PacmanController(k);
+            var clydeController = new ClydeController();
+            clydeController.startAI();
+            gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
+            gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
+            var maze = new MazeState(MazeConfig.originalMaze("maze2"));
+            maze.setLives(l);
+            var gameView = new GameView(maze, root, 30.0);
+            Music.playBackgroundMusic();
+            primaryStage.setScene(gameScene);
+            primaryStage.show();
+            gameView.animate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

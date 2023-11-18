@@ -11,7 +11,6 @@ public class PacmanController {
     public PacmanController(KeyCode[] k){this.k=k;}
 
     public void keyPressedHandler(KeyEvent event) {
-
         
         if (!MazeState.getGameEnded()){
             if(event.getCode()==k[0]){PacMan.INSTANCE.setNextDirection(Direction.WEST);}

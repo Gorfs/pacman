@@ -21,7 +21,7 @@ public final class MazeState {
     private  static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
-    private final Map<Critter, RealCoordinates> initialPos;
+    private static Map<Critter, RealCoordinates> initialPos;
     private static int lives = 3;
     private static int livesC = 3;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
@@ -69,6 +69,8 @@ public final class MazeState {
         gameEnded = false;
         lives = livesC;
         score = 0;
+        resetGrid();
+        resetCritters();
     }
 
     public static boolean[][] getGridState(){ //Need it for the Pacman Class
@@ -195,7 +197,7 @@ public final class MazeState {
         return true;
     }
 
-    private void resetGrid() {
+    public static void resetGrid() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 gridState[i][j] = false;
@@ -222,7 +224,7 @@ public final class MazeState {
         }
     }
 
-    private void resetCritter(Critter critter) {
+    public static void resetCritter(Critter critter) {
         critter.setDirection(Direction.NONE);
         // Forgot to add this in the issue #26
         if (critter instanceof PacMan)
@@ -230,7 +232,7 @@ public final class MazeState {
         critter.setPos(initialPos.get(critter));
     }
 
-    private void resetCritters() {
+    public static void resetCritters() {
         for (var critter: critters) resetCritter(critter);
     }
 

@@ -19,6 +19,12 @@ public class ClydeController {
         Ghost.CLYDE.setDirection(Direction.EAST);
     }
     public static void setDirection(MazeConfig config){
+
+        //If the game is finished, the ghost can't move
+        if (MazeState.getGameEnded()){
+            return;
+        }
+
         // should set the next direction of the ghost
         
         // We get the list from mazestate to get the critter object.
