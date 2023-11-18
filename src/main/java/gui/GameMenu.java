@@ -342,22 +342,38 @@ private static GameMenu2 gameMenu;
 
             MenuButton btnf = new MenuButton("FACILE");
             btnf.setOnMouseClicked(event -> {
-                App.start(primaryS,4,k,a);
+                try {
+                    App.start(primaryS,4,k,a);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             MenuButton btnm = new MenuButton("MEDIUM");
             btnm.setOnMouseClicked(event -> {
-                App.start(primaryS,3,k,a);
+                try {
+                    App.start(primaryS,3,k,a);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             MenuButton btnh = new MenuButton("HARD");
             btnh.setOnMouseClicked(event -> {
-                App.start(primaryS,2,k,a);
+                try {
+                    App.start(primaryS, 2, k, a);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             MenuButton btne = new MenuButton("EXPERT");
             btne.setOnMouseClicked(event -> {
-                App.start(primaryS,1,k,a);
+                try {
+                    App.start(primaryS, 1, k, a);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             });
 
             btnOptions.setTranslateX(0);

@@ -98,7 +98,7 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public static void start(Stage primaryStage, int l, KeyCode[] k, float son_effect) {
+    public static void start(Stage primaryStage, int l, KeyCode[] k, float son_effect) throws Exception {
         var root = new Pane();
         root.setPrefSize(630,630);//on incrémente les dimensions de l'écran dans la fenêtre
         var gameScene = new Scene(root);
