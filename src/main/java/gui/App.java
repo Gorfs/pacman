@@ -1,5 +1,13 @@
 package gui;
 
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
+
+import java.io.File;
+
 //inspiré grandement par 
 //https://github.com/AlmasB/FXTutorials/blob/
 //master/src/main/java/com/almasb/tutorial4/GameMenuDemo.java
@@ -31,10 +39,27 @@ import javafx.util.Duration;
 import javafx.scene.input.KeyCode;
 import javafx.scene.text.Font;
 import javafx.scene.control.*;
+import model.ClydeController;
+import model.MazeState;
 
 
 public class App extends Application {
 
+
+    public void playBackgroundMusic() {
+        try {
+            File audioFile = new File("src/main/resources/bgm.wav");
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(0.2f);
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+        
 
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     private GameMenu gameMenu;
@@ -42,6 +67,7 @@ public class App extends Application {
     private Stage primaryS;
     private TextField text;
     private TextField t;
+    private float a=1;
     private MenuButton2 button = new MenuButton2("Submit");
     private MenuButton2 button1 = new MenuButton2("Submit");
     private MenuButton btncase1 = new MenuButton("Press a Key");
@@ -255,8 +281,6 @@ public class App extends Application {
                 });
             });
 
-            
-
             MenuButton btnSound = new MenuButton("SOUND");
             btnSound.setOnMouseClicked(event -> {
                 getChildren().add(menu3);
@@ -309,7 +333,6 @@ public class App extends Application {
             btncaseDown.setOnMouseClicked(event1 -> {
                 btncase4.setVisible(true);
             });
-
 
             MenuButton btnBack3 = new MenuButton("BACK");
             btnBack3.setOnMouseClicked(event -> {
@@ -379,35 +402,17 @@ public class App extends Application {
                 });
                 });
 
-            // Curseur de volume Bgm
-            Slider volumeSliderBgm = new Slider(0, 1, Music.getVolume());
-            volumeSliderBgm.setMajorTickUnit(0.1);
-            volumeSliderBgm.setBlockIncrement(0.05);
-            volumeSliderBgm.setShowTickMarks(true);
-            volumeSliderBgm.setShowTickLabels(true);
-            volumeSliderBgm.valueProperty().addListener((observable, oldValue, newValue) -> {
-                Music.setVolume(newValue.floatValue());
-            });
-
-            // Curseur de volume Effet sonore
-            Slider volumeSliderEff = new Slider(0, 1, Music.getSFXVolume());
-            volumeSliderEff.setMajorTickUnit(0.1);
-            volumeSliderEff.setBlockIncrement(0.05);
-            volumeSliderEff.setShowTickMarks(true);
-            volumeSliderEff.setShowTickLabels(true);
-            volumeSliderEff.valueProperty().addListener((observable, oldValue, newValue) -> {
-                Music.setSFXVolume(newValue.floatValue());
-            });
-            
+            MenuButton btnBS = new MenuButton("à toi de le faire");
+            MenuButton btnSE = new MenuButton("la même");
 
             menu2.getChildren().addAll(btnBack1, btncaseLeft, btncaseRight, btncaseUp, btncaseDown);
             menu3.getChildren().addAll(btnBack2, btns1, btns2);
             menu0.getChildren().addAll(btnOptions, btnExit);
             menu1.getChildren().addAll(btnBack, btnSound, btnKey);
+            menu4.getChildren().addAll(btnBack3, btnBS); 
             //creation des menu qui suivent apres avoir cliqué 
-            //sur btns1 et respectivement btns2 
-            menu4.getChildren().addAll(btnBack3, volumeSliderBgm);
-            menu5.getChildren().addAll(btnBack4, volumeSliderEff);
+            //sur btns1 et respectivement btns2
+            menu5.getChildren().addAll(btnBack4, btnSE);
             getChildren().addAll(bg,menu0);
         }
     }
@@ -503,36 +508,36 @@ public class App extends Application {
             MenuButton btnf = new MenuButton("FACILE");
             btnf.setOnMouseClicked(event -> {
                 try {
-                    start(primaryS,4,k);
+                    start(primaryS,4,k, a);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             });
 
             MenuButton btnm = new MenuButton("MEDIUM");
             btnm.setOnMouseClicked(event -> {
                 try {
-                    start(primaryS,3,k);
+                    start(primaryS,3,k,a);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             });
 
             MenuButton btnh = new MenuButton("HARD");
             btnh.setOnMouseClicked(event -> {
                 try {
-                    start(primaryS,2,k);
+                    start(primaryS,2,k,a);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             });
 
             MenuButton btne = new MenuButton("EXPERT");
             btne.setOnMouseClicked(event -> {
                 try {
-                    start(primaryS,1,k);
+                    start(primaryS,1,k,a);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             });
             menu4.getChildren().addAll(btnName);
@@ -655,7 +660,20 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public void start(Stage primaryStage, int l, KeyCode[] k) throws Exception {
+    public void playBackgroundMusic(float l) {
+        try {
+            File audioFile = new File("src/main/resources/bgm.wav"); 
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue(a); 
+            clip.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void start(Stage primaryStage, int l, KeyCode[] k, float a) throws Exception {
         var root = new Pane();
         var gameScene = new Scene(root);
         var pacmanController = new PacmanController(k);
@@ -666,9 +684,12 @@ public class App extends Application {
         var maze = new MazeState(MazeConfig.originalMaze("maze2"));
         maze.setLives(l);
         var gameView = new GameView(maze, root, 30.0);
-        Music.playBackgroundMusic();
+        playBackgroundMusic(a);
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();
     }
 }
+      
+
+

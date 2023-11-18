@@ -126,7 +126,7 @@ public final class PacMan implements Critter {
         var pacPos = INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
         if (!MazeState.getGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()) {
-            if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.DOT) {
+            if (MazeState.getConfig().getCell(new IntCoordinates(pacPos.y(), pacPos.x())).initialContent() == Cell.Content.DOT) {
                 MazeState.addScore(1);
             }else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
