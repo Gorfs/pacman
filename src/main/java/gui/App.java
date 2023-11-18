@@ -13,7 +13,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import model.MazeState;
 
-
+/**
+ * La classe 'App' sert de point d'entrée principal pour l'application GUI JavaFX.
+ * Cette classe étend 'Application' et configure le stage initial et la scène pour l'application.
+ */
 public class App extends Application {
 
     private static KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};//tableau qui permet de modifier les touches
@@ -29,10 +32,23 @@ public class App extends Application {
     private static MenuButton btncase4 = new MenuButton("Down : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton dans DOWN options
 
+    /**
+     * Fonction pour intégrer un KeyCode dans le tableau k.
+     * 
+     * @param k Le tableau des KeyCode.
+     * @param n L'index où insérer le KeyCode.
+     * @param key Le KeyCode à insérer.
+     */
     public static void tab(KeyCode [] k, int n, KeyCode key){//fonction qui permet d'intégrer un KeyCode dans le tableau k
             k[n]=key;
     }
 
+    /**
+     * Initialise et affiche la fenêtre principale de l'application.
+     * 
+     * @param stage Le stage principal fourni par JavaFX.
+     * @throws Exception si une erreur se produit lors de la création de l'interface utilisateur.
+     */
     @Override
     public void start(Stage primaryStage) throws Exception {
         Pane root = new Pane();//on initialise la fenêtre
@@ -93,6 +109,11 @@ public class App extends Application {
         primaryStage.show();//on affiche le menu
     }
 
+    /**
+     * Point d'entrée principal de l'application JavaFX.
+     * 
+     * @param args Arguments de ligne de commande.
+     */
     public static void main(String[] args) {
         launch(args);
     }
