@@ -26,6 +26,7 @@ public class GameOver {
         VBox vb = new VBox();
         vb.setVisible(false);
         Label titleText = new Label("Game Over"); //To change the font size you need to change the value in load font below
+        titleText.setTranslateX(-7);
         titleText.setStyle("-fx-text-fill:white;");
         InputStream is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
         Font titleFont = Font.loadFont(is, 50); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
@@ -34,6 +35,7 @@ public class GameOver {
         hbox1.getChildren().add(titleText);
         hbox1.setAlignment(Pos.BASELINE_CENTER);
         Label restartText = new Label("Press Enter to restart");
+        restartText.setTranslateX(-13);
         restartText.setStyle("-fx-text-fill:red; -fx-border-color:red;"); //To change the font size you need to change the value in load font below
         is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
         Font restartFont = Font.loadFont(is, 40); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 

@@ -49,6 +49,8 @@ public final class CritterGraphicsFactory {
         image.setSmooth(true);
 
         return new GraphicsUpdater() {
+            private boolean isWhite = false;
+            private long lastToggleTime = 0;
             @Override
             public void update(long deltaT) throws IOException {
                 if (!MazeState.getGameEnded()){
@@ -56,13 +58,21 @@ public final class CritterGraphicsFactory {
                     if (!(critter instanceof PacMan)) {
                         Image fullImage;
                         InputStream is = getClass().getResourceAsStream(url);
-                        InputStream isAlternative = getClass().getResourceAsStream("/ghosts/scared_ghost.png");
+                        InputStream is2 = getClass().getResourceAsStream("/ghosts/scared_ghost.png");
+                        InputStream is3 = getClass().getResourceAsStream("/ghosts/ghost_white.png");
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
-                        if (PacMan.isEnergized())
-                            fullImage = new Image(isAlternative);
+                        if (PacMan.isEnergized() && !PacMan.isAlmostNormal())
+                            fullImage = new Image(is2);
+                        // If pacman is energized AND is almost normal, switch the sprite of ghosts every 0,1 second (the white one and the scared one)
+                        else if (PacMan.isAlmostNormal()){
+                            long currentTime = System.currentTimeMillis();
+                            if(currentTime - lastToggleTime > 100){
+                                isWhite = !isWhite;
+                                lastToggleTime = currentTime;
+                            }
+                            fullImage = isWhite ? new Image(is3) : new Image(is2);
+                        }
                         else fullImage = new Image(is);
-                        is.close();
-                        isAlternative.close();
                         image.setImage(fullImage);
                         // Crop the image to get the right sprite.
                         image.setViewport(croppedPortion);

@@ -4,10 +4,15 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import gui.GameMenu2;
+import gui.PacmanController;
+import javafx.scene.input.KeyCode;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static model.Ghost.*;
 
@@ -18,6 +23,8 @@ public final class MazeState {
 
     private static boolean[][] gridState;
 
+    private static GameMenu2 gameMenu1;
+
     private  static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
@@ -26,7 +33,8 @@ public final class MazeState {
     private static int livesC = 3;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
-    public MazeState(MazeConfig config) {
+    public MazeState(MazeConfig config, GameMenu2 gameMenu) {
+        gameMenu1=gameMenu;
         MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
@@ -78,6 +86,8 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
+        if(!gameMenu1.isVisible()){//si on est dans les options, alors on pause le jeu
+            
         ClydeController.setDirection(config);
         for  (var critter: critters) {
 
@@ -185,6 +195,7 @@ public final class MazeState {
             resetGrid();
             return;
         }
+    }
     }
 }
 
