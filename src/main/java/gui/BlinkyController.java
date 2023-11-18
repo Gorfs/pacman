@@ -9,7 +9,9 @@ import model.Ghost;
 public final class BlinkyController extends GhostsController{
     @Override
     public void startAI() {
-        Ghost.BLINKY.setDirection(Direction.EAST);
+        Ghost.BLINKY.setDirection(Direction.NORTH);
+        started = true;
+        timer = 0;
     }
 
     @Override
@@ -20,5 +22,10 @@ public final class BlinkyController extends GhostsController{
     @Override
     public IntCoordinates nextDirection(Critter critter, MazeConfig config) {
         return findPathing(critter, null, config);
+    }
+
+    @Override
+    public boolean conditionOut() {
+        return true;
     }
 }

@@ -5,17 +5,18 @@ import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import model.*;
 
-public final class ClydeController extends GhostsController {
+public final class InkyController extends GhostsController{
     @Override
-    public void startAI(){
-        Ghost.CLYDE.setNextDirection(Direction.EAST);
+    public void startAI() {
+
+        Ghost.BLINKY.setDirection(Direction.NORTH);
         started = false;
         timer = 0;
     }
 
     @Override
     public IntCoordinates scatterDirection(Critter critter, MazeConfig config) {
-        return findPathing(critter, new IntCoordinates(0, config.getHeight()-1), config);
+        return findPathing(critter, new IntCoordinates(config.getWidth()-1, config.getHeight()-1), config);
     }
 
     @Override
@@ -28,6 +29,6 @@ public final class ClydeController extends GhostsController {
 
     @Override
     public boolean conditionOut() {
-        return (MazeState.getScore() >= 146/3);
+        return (MazeState.getScore() >= 30);
     }
 }

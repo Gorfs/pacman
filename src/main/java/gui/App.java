@@ -709,7 +709,7 @@ public class App extends Application {
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         GhostsController[] ghostsController = {new ClydeController(), new PinkyController(),
-                new BlinkyController()};
+                new BlinkyController(), new InkyController()};
         for (var ghost: ghostsController) {ghost.startAI();}
         // Generate map from file
         var maze = new MazeState(ghostsController, MazeConfig.originalMaze(filename));

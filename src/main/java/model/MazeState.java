@@ -102,6 +102,7 @@ public final class MazeState {
 
     public void update(long deltaTns) {
         for  (var critter: critters) {
+
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
             // Get possible next pos for critter
@@ -120,8 +121,18 @@ public final class MazeState {
 
             // Get the next direction of ghosts
             if (critter instanceof Ghost) {
-                if (Objects.equals(critter.toString(), "BLINKY")) ghostsController[2].setDirection((Ghost) critter, config);
-
+                // Update scared mode for ghosts
+                if (!PacMan.INSTANCE.isEnergized()) ((Ghost) critter).setScaredMode(false);
+                // Get new direction for each ghosts
+                if (Objects.equals(critter.toString(), "INKY"))
+                    ghostsController[3].setDirection((Ghost) critter, config, deltaTns);
+                else if (Objects.equals(critter.toString(), "BLINKY"))
+                    ghostsController[2].setDirection((Ghost) critter, config, deltaTns);
+                else if (Objects.equals(critter.toString(), "PINKY"))
+                    ghostsController[1].setDirection((Ghost) critter, config, deltaTns);
+                else if (Objects.equals(critter.toString(), "CLYDE"))
+                    ghostsController[0].setDirection((Ghost) critter, config, deltaTns);
+                // Update direction to EAST if the ghost just respawned and do not move
                 if (critter.getDirection() == Direction.NONE && critter.getNextDirection() == Direction.NONE) {
                     critter.setDirection(Direction.EAST);
                 }
@@ -194,9 +205,7 @@ public final class MazeState {
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
                 if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
-                    critter.setDirection(Direction.NONE);
-                    critter.setPos(initialPos.get(critter));
-                    ((Ghost) critter).setScaredMode(false);
+                    resetCritter(critter);
                 } else {
                     if (!PacMan.INSTANCE.isStartedDeathAni()) {
                         PacMan.INSTANCE.setDying(true);
@@ -252,14 +261,23 @@ public final class MazeState {
     }
 
     private void resetCritter(Critter critter) {
+        if (critter instanceof Ghost) {
+            ((Ghost) critter).setScaredMode(false);
+            if (!((Ghost) critter).isScatterMode()) ((Ghost) critter).changeScatterMode();
+        }
+        if (critter instanceof PacMan && PacMan.INSTANCE.isEnergized()) PacMan.INSTANCE.setEnergized();
         critter.setDirection(Direction.NONE);
         critter.setNextDirection(Direction.NONE);
         critter.setPos(initialPos.get(critter));
-
     }
 
     private void resetCritters() {
         for (var critter: critters) resetCritter(critter);
+        // Restart ghosts controller
+        for (var controller: ghostsController) {
+            controller.setStarted(false);
+            controller.startAI();
+        }
     }
 
     public static MazeConfig getConfig() {
