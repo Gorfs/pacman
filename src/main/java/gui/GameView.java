@@ -12,7 +12,7 @@ import java.util.List;
 public class GameView {
     // class parameters
     private final MazeState maze;
-    private final Pane gameRoot; // main node of the game
+    private static Pane gameRoot; // main node of the game
 
     private final List<GraphicsUpdater> graphicsUpdaters;
 
@@ -28,13 +28,12 @@ public class GameView {
      */
     public GameView(MazeState maze, Pane root, double scale) {
         this.maze = maze;
-        this.gameRoot = root;
+        gameRoot = root;
         // pixels per cell
         // double w = maze.getWidth() * 1.5;
         // double h = maze.getHeight() * 1.5;
-        root.setMinWidth(800);
-        root.setMinHeight(800);
-        
+        root.setMinWidth(maze.getWidth()*scale);
+        root.setMinHeight(maze.getHeight()*scale);    
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
@@ -60,7 +59,7 @@ public class GameView {
                     last = now;
                     return;
                 }
-                
+
                 var deltaT = now - last;
                 if (!PacMan.INSTANCE.getIsDying())
                     maze.update(deltaT);

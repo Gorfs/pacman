@@ -1,12 +1,5 @@
 package gui;
 
-import java.io.File;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
 import javafx.scene.control.Slider;
@@ -376,13 +369,9 @@ public class GameMenu2 extends Parent {
             //le menu racine/mère est le menu0
         }
     
-        public void base(){
-            menua.getChildren().addAll(menua);
-            getChildren().addAll(menua);
-            if(menub==actuelle){getChildren().remove(menub);}
-            else if(menuc==actuelle){getChildren().remove(menuc);}
-            else if(menud==actuelle){getChildren().remove(menud);}
-            else if(menue==actuelle){getChildren().remove(menue);}
-        }
+        // public void base(){
+        //     menua.getChildren().addAll(menua);
+        //     getChildren().addAll(menua);
+        // } ne marche pas encore
 
     }

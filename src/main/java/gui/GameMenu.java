@@ -13,7 +13,11 @@ import model.PacMan;
 
 public class GameMenu extends Parent {
 //class qui gère les boutons dans le menu
-        public GameMenu(Pane root, Stage primaryS, KeyCode[] k, TextField text, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a, double widht, double height) {
+private static GameMenu2 gameMenu;
+        public GameMenu(GameMenu2 gameMenu1, Pane root, Stage primaryS, KeyCode[] k, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a, double widht, double height) {
+            
+            gameMenu=gameMenu1;
+
             VBox menu0 = new VBox(10);
             VBox menu1 = new VBox(10);
             VBox menu2 = new VBox(10);
@@ -273,22 +277,17 @@ public class GameMenu extends Parent {
                 Music.setSFXVolume(newValue.floatValue());
             });
 
-            MenuButton btnName = new MenuButton("NAME");
-                btnName.setOnMouseClicked(event -> {
-                text.setTranslateX(120);//on met dans la bonne positions le champ de texte où le joueur inscrivera son pseudo
-                text.setTranslateY(250);
-                text.setText("Écrivez votre nom");
-                text.setVisible((true));
+            TextField btnName = new TextField("Name");
+                btnName.setOnKeyTyped(event -> {
                 button.setVisible(true);//le bouton submit
-                button.setTranslateX(243);
-                button.setTranslateY(253);
+                button.setTranslateX(225);
+                button.setTranslateY(203);
                 button.setOnMouseClicked(event1 -> {//quand on appuie sur le bouton submit :
-                    text.setVisible(false);//on enlève les deux apparitions
                     button.setVisible(false);
                     String b="";
-                    b = text.getText();//on recupère le pseudo rentrer, pour l'instant on ne l'utilise pas
+                    b = btnName.getText();//on recupère le pseudo rentrer, pour l'instant on ne l'utilise pas
                     System.out.println(b);
-                    PacMan.INSTANCE = new PacMan();
+                    PacMan.INSTANCE = new PacMan(gameMenu,b);
                     PacMan.INSTANCE.getInstance(b);
                     //on assigne le pseudo rentrer au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au desus du pacman
                     getChildren().add(menu7);
@@ -328,10 +327,10 @@ public class GameMenu extends Parent {
             btnPlay.setOnMouseClicked(event -> {
                 getChildren().add(menu8);
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.50), menu0);
-                tt.setToX(menu8.getTranslateX()+offset);
+                tt.setToX(menu0.getTranslateX()+offset);
 
                 TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu8);
-                tt1.setToX(menu8.getTranslateX());
+                tt1.setToX(menu0.getTranslateX());
 
                 tt.play();
                 tt1.play();

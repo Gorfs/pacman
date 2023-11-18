@@ -3,6 +3,10 @@ package gui;
 import model.Direction;
 import model.MazeState;
 import model.PacMan;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -27,6 +31,25 @@ public class PacmanController {
         
         if (!MazeState.getGameEnded()){
             if(event.getCode()==KeyCode.ESCAPE){
+                if(gameMenu1.isVisible()){
+                    if(PacMan.getTimer2Marche()){
+                        if(PacMan.isEnergized() && PacMan.getCompteur()>0){
+                            System.out.println("siuuuuu"); 
+                            PacMan.setTimer2Marche(false);
+                            TimerTask t = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    PacMan.setEnergized(false);
+                                }
+                            };
+                            Timer tt = new Timer();
+                            tt.schedule(t,PacMan.getCompteur());
+                            try{PacMan.chrono();}
+                            catch(Exception e){}
+                            System.out.println("ok");
+                        }
+                    } 
+                }
                 //si le bouton echap est préssée, alors le menu options se lance
                 System.out.println("ouvrir option");
                     if(!gameMenu1.isVisible()){
@@ -64,7 +87,16 @@ public class PacmanController {
                     btncase4a.setVisible(false);
                 }
             }
-        if(gameMenu1.isVisible()){/*methode pause a ajouter pour que le jeu se mette en pause*/}
+        if(gameMenu1.isVisible()){
+            if(event.getCode()==KeyCode.ESCAPE && !PacMan.getTimer2Marche()){
+                if(PacMan.isEnergized() && PacMan.getCompteur()>0){
+                    PacMan.setTimer2Marche(true);
+                    PacMan.setTimerMarche(true);
+                    System.out.println("siu");
+                    System.out.println("ok"); 
+                }
+            } 
+        }
             //grace à cette condition, si option est visible/activé, alors on ne peut pas déplacer pacman
             else if(event.getCode()==k[0]){PacMan.INSTANCE.setNextDirection(Direction.WEST);}
             else if(event.getCode()==k[1]){PacMan.INSTANCE.setNextDirection(Direction.EAST);}
