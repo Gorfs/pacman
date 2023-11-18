@@ -5,6 +5,7 @@ import model.MazeState;
 import model.PacMan;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
 public class PacmanController {
     private KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     public PacmanController(KeyCode[] k){this.k=k;}
