@@ -114,8 +114,7 @@ public class App extends Application {
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
         var maze = new MazeState(MazeConfig.originalMaze("maze2"), gameMenu2);
         maze.setLives(l);
-        var gameView = new GameView(maze, root, 30);
-        //on initialise le rendu du jeu
+        var gameView = new GameView(maze, root, 30.0);
         Music.playBackgroundMusic();
         primaryStage.setScene(gameScene);
         primaryStage.show();

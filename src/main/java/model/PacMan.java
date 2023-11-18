@@ -18,7 +18,6 @@ public final class PacMan implements Critter {
     private Direction direction = Direction.NONE;
     private Direction nextDirection = Direction.NONE;
     private RealCoordinates pos;
-    private static boolean energized;
 
     private static long compteur = 11000L;//compteur pour le temps d'energie
     
@@ -34,6 +33,11 @@ public final class PacMan implements Critter {
 
     public static void setTimer2Marche(boolean t) {timer2Marche = t;}
     public static boolean getTimer2Marche() {return timer2Marche;}
+    private static boolean energized = false;
+    private static boolean almostNormal = false;
+    private static final long ENERGIZED_DURATION = 10000; // the energized duration is 10 seconds (timer is in milliseconds)
+    private static final long ALMOST_NORMAL_DURATION = 2000; // the ghost flashing animation should last 2 seconds
+    private static Timer timer = new Timer("timer", true);
 
     // movement animation related
     private float timerAni = 0;
@@ -139,6 +143,14 @@ public final class PacMan implements Critter {
         energized = e;
     }
 
+    public static boolean isAlmostNormal(){
+        return almostNormal;
+    }
+
+    public static void setAlmostNormal(boolean e){
+        almostNormal = e;
+    }
+
 
     public void update(long deltaT){ //I moved what is related directly to Pacman
         var pacPos = INSTANCE.getPos().round();
@@ -220,6 +232,23 @@ public final class PacMan implements Critter {
         timer.schedule(task, temps);//on lance le chronomètre qui dure 'temps';
         if(timerMarche==true){timer.cancel();System.out.println("cancel");}
         
+        setAlmostNormal(false);
+        // this function set to true the boolean energized, and set to false 10 seconds after
+        timer.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+                setAlmostNormal(true);
+                timer.schedule(new TimerTask(){
+
+                    @Override
+                    public void run(){
+                        setEnergized(false);
+                        setAlmostNormal(false);
+                    }
+                }, ALMOST_NORMAL_DURATION);
+            }
+        }, ENERGIZED_DURATION);
         // timer's second argument is in milliseconds, s 1000 ms = 1s
        } else System.out.println("already energized, chill out pls");
     }
