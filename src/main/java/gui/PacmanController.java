@@ -38,7 +38,15 @@ public class PacmanController {
                             TimerTask t = new TimerTask() {
                                 @Override
                                 public void run() {
-                                    PacMan.setEnergized(false);
+                                    PacMan.setAlmostNormal(true);
+                                    Timer timer = new Timer();
+                                     timer.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            PacMan.setEnergized(false);
+                                            PacMan.setAlmostNormal(false);
+                                        }
+                                    }, 1000);
                                 }
                             };
                             Timer tt = new Timer();
@@ -89,8 +97,6 @@ public class PacmanController {
                 if(PacMan.isEnergized() && PacMan.getCompteur()>0){
                     PacMan.setTimer2Marche(true);
                     PacMan.setTimerMarche(true);
-                    System.out.println("siu");
-                    System.out.println("ok"); 
                 }
             } 
         }
@@ -103,8 +109,6 @@ public class PacmanController {
         else{
             if (event.getCode() == KeyCode.ENTER){ //Si la partie est terminée mais que le joueur appuie sur ENTER alors on restart
                 MazeState.restart();
-                Music.playBackgroundMusic();
-
             }
         }
 
