@@ -30,10 +30,8 @@ public class GameView {
         this.maze = maze;
         gameRoot = root;
         // pixels per cell
-        // double w = maze.getWidth() * 1.5;
-        // double h = maze.getHeight() * 1.5;
-        root.setMinWidth(maze.getWidth()*scale);
-        root.setMinHeight(maze.getHeight()*scale);    
+        root.setMinWidth(maze.getWidth() * scale);
+        root.setMinHeight(maze.getHeight() * scale + 80); // le +80 c'est pour ajouter le menu en bas plutot que en haut
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
@@ -49,6 +47,13 @@ public class GameView {
         addGraphics(menu.makeGraphics(maze, new IntCoordinates(0, 0))); //Pour pouvoir afficher le Menu
     }
 
+    public double getRootWidth(){
+        return gameRoot.getWidth(); 
+    }
+    // I don't know why the height is an int and the width is a double, they should both be ints 
+    public double getRootHeight(){
+        return gameRoot.getHeight();
+    }
     public void animate() {
         new AnimationTimer() {
             long last = 0;
