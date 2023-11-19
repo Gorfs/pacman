@@ -201,7 +201,6 @@ public final class PacMan implements Critter {
     }
 
     public static void setEnergized(long temps) {
-        gameMenu.setVisible(false);
         // function will now no longer take a boolean,
         //  but suppose that we always want to "energize" pacman rather than de-energize him
         if (!energized){
