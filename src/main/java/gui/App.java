@@ -12,7 +12,6 @@ import java.nio.file.Paths;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import model.ClydeController;
 import model.MazeState;
 
 
@@ -110,10 +109,10 @@ public class App extends Application {
         var pacmanController = new PacmanController(k, gameMenu2, root, button, btncase1, btncase2, btncase3, btncase4);
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        var maze = new MazeState(MazeConfig.originalMaze("maze2"), gameMenu2);
         GhostsController[] ghostsController = {new ClydeController(), new PinkyController(),
                 new BlinkyController(), new InkyController()};
         for (var ghost: ghostsController) {ghost.startAI();}
+        var maze = new MazeState(ghostsController, MazeConfig.originalMaze("maze2"), gameMenu2);
         // Generate map from file
         maze.setLives(l);
         // Set up game window

@@ -33,12 +33,12 @@ public class PacmanController {
             if(event.getCode()==KeyCode.ESCAPE){
                 if(gameMenu1.isVisible()){//si quand on appuie sur options on est dans le menu
                     if(PacMan.getTimer2Marche()){//si le timer2 n'est en 'pause'
-                        if(PacMan.isEnergized() && PacMan.getCompteur()>0){//si le pacman est energized et le compteur>0
+                        if(PacMan.INSTANCE.isEnergized() && PacMan.getCompteur()>0){//si le pacman est energized et le compteur>0
                             PacMan.setTimer2Marche(false);//on remet le compteur de chrono en route
                             TimerTask t = new TimerTask() {
                                 @Override
                                 public void run() {
-                                    PacMan.setEnergized(false);
+                                    PacMan.INSTANCE.setEnergized(false);
                                 }
                             };
                             Timer tt = new Timer();
@@ -86,7 +86,7 @@ public class PacmanController {
             }
         if(gameMenu1.isVisible()){
             if(event.getCode()==KeyCode.ESCAPE && !PacMan.getTimer2Marche()){
-                if(PacMan.isEnergized() && PacMan.getCompteur()>0){
+                if(PacMan.INSTANCE.isEnergized() && PacMan.getCompteur()>0){
                     PacMan.setTimer2Marche(true);
                     PacMan.setTimerMarche(true);
                     System.out.println("siu");

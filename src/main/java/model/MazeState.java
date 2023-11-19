@@ -96,9 +96,7 @@ public final class MazeState {
 
     public void update(long deltaTns) {
         if(!gameMenu1.isVisible()){//si on est dans les options, alors on pause le jeu
-
-        ClydeController.setDirection(config);
-        for  (var critter: critters) {
+            for  (var critter: critters) {
 
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
@@ -266,7 +264,7 @@ public final class MazeState {
             ((Ghost) critter).setScaredMode(false);
             if (!((Ghost) critter).isScatterMode()) ((Ghost) critter).changeScatterMode();
         }
-        if (critter instanceof PacMan && PacMan.INSTANCE.isEnergized()) PacMan.INSTANCE.setEnergized();
+        if (critter instanceof PacMan && PacMan.INSTANCE.isEnergized()) PacMan.INSTANCE.setEnergized(false);
         critter.setDirection(Direction.NONE);
         critter.setNextDirection(Direction.NONE);
         critter.setPos(initialPos.get(critter));
