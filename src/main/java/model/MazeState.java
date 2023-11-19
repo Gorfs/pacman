@@ -186,10 +186,7 @@ public final class MazeState {
                         PacMan.INSTANCE.setDying(true);
                         resetCritters();
                         playerLost();
-<<<<<<< HEAD
                         gui.Music.music_death();
-=======
->>>>>>> d2f78a35f1aab8f55e586d548df023f2c75992bf
                     }
                 
                     
