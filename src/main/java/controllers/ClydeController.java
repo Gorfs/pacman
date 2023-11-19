@@ -20,10 +20,10 @@ public final class ClydeController extends GhostsController {
 
     @Override
     public IntCoordinates nextDirection(Critter critter, MazeConfig config){
-        RealCoordinates blinkyPos = Ghost.BLINKY.getPos().times(-1);
-        RealCoordinates distance = PacMan.INSTANCE.getPos().plus(blinkyPos);
-        IntCoordinates goal = Ghost.BLINKY.getPos().plus(distance.times(2)).round();
-        return findPathing(critter, goal, config);
+        RealCoordinates clydePos = Ghost.CLYDE.getPos().times(-1);
+        IntCoordinates distance = PacMan.INSTANCE.getPos().plus(clydePos).round();
+        if (Math.abs(distance.x()) + Math.abs(distance.y()) <= 8) return findPathing(critter, null, config);
+        return scatterDirection(critter, config);
     }
 
     @Override
