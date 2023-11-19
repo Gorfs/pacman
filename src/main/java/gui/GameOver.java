@@ -13,8 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import model.MazeState;
 
-import gui.App;
-
 public class GameOver {
 
     private final double scale;
@@ -27,9 +25,10 @@ public class GameOver {
         VBox vb = new VBox();
         vb.setVisible(false);
         Label titleText = new Label("Game Over"); //To change the font size you need to change the value in load font below
+        titleText.setTranslateX(-7);
         titleText.setStyle("-fx-text-fill:white;");
         try{
-            Font titleFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 50); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+            Font titleFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), scale*2.5); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
             titleText.setFont(titleFont);
         } catch (FileNotFoundException e){
             e.printStackTrace();
@@ -38,6 +37,7 @@ public class GameOver {
         hbox1.getChildren().add(titleText);
         hbox1.setAlignment(Pos.BASELINE_CENTER);
         Label restartText = new Label("Press Enter to restart");
+        restartText.setTranslateX(-13);
         restartText.setStyle("-fx-text-fill:red; -fx-border-color:red;"); //To change the font size you need to change the value in load font below
         try{
             Font restartFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 40); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 

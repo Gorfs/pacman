@@ -4,21 +4,20 @@ import config.Cell;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
+import gui.GameMenu2;
+import gui.PacmanController;
+import javafx.scene.input.KeyCode;
+import misc.Debug;
 import gui.GhostsController;
 import gui.App;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static model.Ghost.*;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-
-import java.io.File;
 
 public final class MazeState {
     private final GhostsController[] ghostsController;
@@ -28,15 +27,20 @@ public final class MazeState {
 
     private static boolean[][] gridState;
 
+    private static GameMenu2 gameMenu1;
+
     private static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
+
+    // TODO: these should be changed to constants determined by player or in seperate file.
     private static int lives = 3;
-    private static int livesC = 3;
+    private static int livesC = lives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
-    public MazeState(GhostsController[] ghostsController, MazeConfig config) {
+    public MazeState(GhostsController[] ghostsController, MazeConfig config, GameMenu2 gameMenu) {
+        gameMenu1=gameMenu;
         this.ghostsController = ghostsController;
         MazeState.config = config;
         height = config.getHeight();
@@ -53,20 +57,6 @@ public final class MazeState {
         resetCritters();
     }
 
-    public class EffetSonoreManager {
-        private static float volume = 0.6f;
-
-        public static void setVolume(float volumeLevel) {
-            if(volumeLevel < 0.0f) volume = 0.0f;
-            else if(volumeLevel > 1.0f) volume = 1.0f;
-            else volume = volumeLevel;
-        }
-
-        public static float getVolume() {
-            return volume;
-        }
-    }
-
     public static List<Critter> getCritters() {
         return critters;
     }
@@ -77,6 +67,10 @@ public final class MazeState {
 
     public int getHeight() {
         return height;
+    }
+
+    public static int getInitLives(){
+        return livesC;
     }
 
     public static int getLives(){
@@ -101,6 +95,9 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
+        if(!gameMenu1.isVisible()){//si on est dans les options, alors on pause le jeu
+
+        ClydeController.setDirection(config);
         for  (var critter: critters) {
 
             var curPos = critter.getPos();
@@ -207,11 +204,15 @@ public final class MazeState {
                 if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
                     resetCritter(critter);
                 } else {
-                    if (!PacMan.INSTANCE.isStartedDeathAni()) {
+                    playerLost();
+                    if (!PacMan.INSTANCE.isStartedDeathAni()){
                         PacMan.INSTANCE.setDying(true);
                         resetCritters();
-                        music_death();
-                    } playerLost();
+                        playerLost();
+                        gui.Music.music_death();
+                    }
+
+                    
                     return;
                 }
             }
@@ -221,6 +222,7 @@ public final class MazeState {
             resetGrid();
         }
     }
+}
 
     public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
@@ -243,7 +245,7 @@ public final class MazeState {
 
     public static void addScore(int increment) {
         score += increment;
-        music_score(); //lorsque le score++ lance le music score
+        gui.Music.music_score(); //lorsque le score++ lance le music score
     }
 
 
@@ -251,12 +253,11 @@ public final class MazeState {
         if (!PacMan.INSTANCE.getIsDying()) {
             lives--;
             if (lives == 0) {
-                App.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
-                music_gameover(); // Et on lance le music de game over
+                gui.Music.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
+                gui.Music.music_gameover(); // Et on lance le music de game over
                 gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
             }
             PacMan.INSTANCE.setStartedDeathAni(false);
-
         }
     }
 
@@ -290,51 +291,5 @@ public final class MazeState {
 
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
-    }
-
-    // ...
-
-
-    //les 3 fonctions pour lancer les effets sonores de score, death et game over
-    public static void music_score(){
-        try {
-            File audioFile = new File("src/main/resources/music/score.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void music_death(){
-        try {
-            File audioFile = new File("src/main/resources/music/death2.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void music_gameover(){
-        try {
-            File audioFile = new File("src/main/resources/music/game_over.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(EffetSonoreManager.getVolume()));
-            clip.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
