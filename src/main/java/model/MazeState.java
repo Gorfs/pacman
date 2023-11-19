@@ -252,7 +252,7 @@ public final class MazeState {
     }
 
     private void resetCritter(Critter critter) {
-        if (critter instanceof Ghost) {
+        if (critter instanceof Ghost ) {
             if (Objects.equals(critter.toString(), "INKY"))
                 ghostsController[3].startAI();
             else if (Objects.equals(critter.toString(), "BLINKY"))
@@ -272,11 +272,6 @@ public final class MazeState {
 
     private void resetCritters() {
         for (var critter: critters) resetCritter(critter);
-        // Restart ghosts controller
-        for (var controller: ghostsController) {
-            controller.setStarted(false);
-            controller.startAI();
-        }
     }
 
     public static MazeConfig getConfig() {
