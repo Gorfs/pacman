@@ -1,4 +1,4 @@
-package gui;
+package controllers;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;

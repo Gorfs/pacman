@@ -231,11 +231,9 @@ public final class PacMan implements Critter {
         Timer timer = new Timer();
         timer.schedule(task, temps);//on lance le chronomètre qui dure 'temps';
         if(timerMarche){timer.cancel();System.out.println("cancel");}
-
         setAlmostNormal(false);
         // this function set to true the boolean energized, and set to false 10 seconds after
         timer.schedule(new TimerTask() {
-
             @Override
             public void run() {
                 setAlmostNormal(true);
@@ -249,6 +247,6 @@ public final class PacMan implements Critter {
             }
         }, ENERGIZED_DURATION);
         // timer's second argument is in milliseconds, s 1000 ms = 1s
-       } else System.out.println("already energized, chill out pls");
+       }
     }
 }

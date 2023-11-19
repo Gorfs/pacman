@@ -5,17 +5,11 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.GameMenu2;
-import gui.PacmanController;
-import javafx.scene.input.KeyCode;
-import misc.Debug;
-import gui.GhostsController;
-import gui.App;
+import controllers.GhostsController;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static model.Ghost.*;
 
@@ -34,7 +28,7 @@ public final class MazeState {
 
     private final Map<Critter, RealCoordinates> initialPos;
 
-    // TODO: these should be changed to constants determined by player or in seperate file.
+    // TODO: these should be changed to constants determined by player or in separate file.
     private static int lives = 3;
     private static int livesC = lives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
@@ -95,7 +89,7 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
-        if(!gameMenu1.isVisible()){//si on est dans les options, alors on pause le jeu
+        if(!gameMenu1.isVisible()){//si on est dans les options, alors on met en pause le jeu
             for  (var critter: critters) {
 
             var curPos = critter.getPos();
@@ -209,8 +203,6 @@ public final class MazeState {
                         playerLost();
                         gui.Music.music_death();
                     }
-
-                    
                     return;
                 }
             }
@@ -261,6 +253,14 @@ public final class MazeState {
 
     private void resetCritter(Critter critter) {
         if (critter instanceof Ghost) {
+            if (Objects.equals(critter.toString(), "INKY"))
+                ghostsController[3].startAI();
+            else if (Objects.equals(critter.toString(), "BLINKY"))
+                ghostsController[2].startAI();
+            else if (Objects.equals(critter.toString(), "PINKY"))
+                ghostsController[1].startAI();
+            else if (Objects.equals(critter.toString(), "CLYDE"))
+                ghostsController[0].startAI();
             ((Ghost) critter).setScaredMode(false);
             if (!((Ghost) critter).isScatterMode()) ((Ghost) critter).changeScatterMode();
         }

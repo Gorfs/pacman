@@ -1,22 +1,21 @@
-package gui;
+package controllers;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import model.*;
 
-public final class InkyController extends GhostsController{
+public final class ClydeController extends GhostsController {
     @Override
-    public void startAI() {
-
-        Ghost.BLINKY.setDirection(Direction.NORTH);
+    public void startAI(){
+        Ghost.CLYDE.setNextDirection(Direction.EAST);
         started = false;
         timer = 0;
     }
 
     @Override
     public IntCoordinates scatterDirection(Critter critter, MazeConfig config) {
-        return findPathing(critter, new IntCoordinates(config.getWidth()-1, config.getHeight()-1), config);
+        return findPathing(critter, new IntCoordinates(0, config.getHeight()-1), config);
     }
 
     @Override
@@ -29,6 +28,6 @@ public final class InkyController extends GhostsController{
 
     @Override
     public boolean conditionOut() {
-        return (MazeState.getScore() >= 30);
+        return (MazeState.getScore() >= 146/3);
     }
 }

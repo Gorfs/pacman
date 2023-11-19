@@ -1,5 +1,8 @@
-package gui;
+package controllers;
 
+import gui.GameMenu2;
+import gui.MenuButton;
+import gui.MenuButton2;
 import model.Direction;
 import model.MazeState;
 import model.PacMan;
@@ -20,7 +23,7 @@ public class PacmanController {
     private MenuButton btncase4a;
     private GameMenu2 gameMenu1;
     private Pane root1;
-    public PacmanController(KeyCode[] k, GameMenu2 gameMenu2, Pane root, MenuButton2 button, 
+    public PacmanController(KeyCode[] k, GameMenu2 gameMenu2, Pane root, MenuButton2 button,
     MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4){
         this.k=k; gameMenu1 = gameMenu2; root1 = root; btncase1a = btncase1;
         btncase2a = btncase2; btncase3a = btncase3; btncase4a = btncase4;

@@ -1,4 +1,4 @@
-package gui;
+package controllers;
 
 import config.MazeConfig;
 import geometry.IntCoordinates;
@@ -6,7 +6,7 @@ import model.Critter;
 import model.Direction;
 import model.Ghost;
 
-public final class BlinkyController extends GhostsController{
+public final class BlinkyController extends GhostsController {
     @Override
     public void startAI() {
         Ghost.BLINKY.setDirection(Direction.NORTH);

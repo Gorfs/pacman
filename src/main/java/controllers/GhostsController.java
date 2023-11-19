@@ -1,4 +1,4 @@
-package gui;
+package controllers;
 
 import config.Cell;
 import config.MazeConfig;
@@ -150,8 +150,10 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      */
     public Direction waiting(Critter critter) {
         IntCoordinates pos = critter.getPos().round();
-        if (conditionOut()) if (pos.x() == 10 && pos.y() == 9) {started = true;return Direction.NORTH;}
-        if (pos.x() == 9 && pos.y() == 9) return Direction.EAST;
+        System.out.println(critter);
+        if (conditionOut() && pos.x() == 10 && pos.y() == 9) {
+            started = true;return Direction.NORTH;
+        } else if (pos.x() == 9 && pos.y() == 9) return Direction.EAST;
         else if (pos.x() == 11 && pos.y() == 9) return Direction.WEST;
         return critter.getDirection();
     }
