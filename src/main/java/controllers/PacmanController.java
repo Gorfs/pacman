@@ -30,18 +30,24 @@ public class PacmanController {
     }
 
     public void keyPressedHandler(KeyEvent event) {
-
-        
         if (!MazeState.getGameEnded()){
             if(event.getCode()==KeyCode.ESCAPE){
-                if(gameMenu1.isVisible()){//si quand on appuie sur options on est dans le menu
+                if(gameMenu1.isVisible()){//si quand on appuie sur options, on est dans le menu
                     if(PacMan.getTimer2Marche()){//si le timer2 n'est en 'pause'
                         if(PacMan.INSTANCE.isEnergized() && PacMan.getCompteur()>0){//si le pacman est energized et le compteur>0
                             PacMan.setTimer2Marche(false);//on remet le compteur de chrono en route
                             TimerTask t = new TimerTask() {
                                 @Override
                                 public void run() {
-                                    PacMan.INSTANCE.setEnergized(false);
+                                    PacMan.setAlmostNormal(true);
+                                    Timer timer = new Timer();
+                                     timer.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            PacMan.INSTANCE.setEnergized(false);
+                                            PacMan.setAlmostNormal(false);
+                                        }
+                                    }, 1000);
                                 }
                             };
                             Timer tt = new Timer();
@@ -92,8 +98,6 @@ public class PacmanController {
                 if(PacMan.INSTANCE.isEnergized() && PacMan.getCompteur()>0){
                     PacMan.setTimer2Marche(true);
                     PacMan.setTimerMarche(true);
-                    System.out.println("siu");
-                    System.out.println("ok"); 
                 }
             } 
         }

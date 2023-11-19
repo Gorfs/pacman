@@ -207,11 +207,9 @@ public final class PacMan implements Critter {
         };
         Timer timer = new Timer();
         timer.schedule(task, 1000);
-
     }
 
     public void setEnergized(long temps) {
-        gameMenu.setVisible(false);
         // function will now no longer take a boolean,
         //  but suppose that we always want to "energize" pacman rather than de-energize him
         if (!energized){
@@ -223,7 +221,6 @@ public final class PacMan implements Critter {
                 if (!timerMarche){setEnergized(false);}
                 //si on est dans les options, alors pacman reste energisé,
                 //le timer sera reimplémenter une fois les options quittées
-
             }
         };
         Timer timer = new Timer();
@@ -231,15 +228,19 @@ public final class PacMan implements Critter {
         if(timerMarche){timer.cancel();System.out.println("cancel");}
         setAlmostNormal(false);
         // this function set to true the boolean energized, and set to false 10 seconds after
-        timer.schedule(new TimerTask() {
+        Timer timer1 = new Timer();
+        timer1.schedule(new TimerTask() {
+
             @Override
             public void run() {
-                setAlmostNormal(true);
+                if(!timerMarche)setAlmostNormal(true);
                 timer.schedule(new TimerTask(){
                     @Override
                     public void run(){
-                        setEnergized(false);
-                        setAlmostNormal(false);
+                        if(!timerMarche){
+                            setEnergized(false);
+                            setAlmostNormal(false);
+                        }
                     }
                 }, ALMOST_NORMAL_DURATION);
             }
