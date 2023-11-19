@@ -9,8 +9,6 @@ import java.util.TimerTask;
 
 import static model.MazeState.getCritters;
 
-import javax.swing.plaf.synth.SynthScrollBarUI;
-
 /**
  * Implements Pac-Man character using singleton pattern. FIXME: check whether singleton is really a good idea.
  */
@@ -226,7 +224,7 @@ public final class PacMan implements Critter {
                 //si on est dans les options, alors pacman reste energisé,
                 //le timer sera reimplémenter une fois les options quittées
 
-            };
+            }
         };
         Timer timer = new Timer();
         timer.schedule(task, temps);//on lance le chronomètre qui dure 'temps';
@@ -245,7 +243,7 @@ public final class PacMan implements Critter {
                     }
                 }, ALMOST_NORMAL_DURATION);
             }
-        }, ENERGIZED_DURATION);
+        }, ENERGIZED_DURATION - ALMOST_NORMAL_DURATION);
         // timer's second argument is in milliseconds, s 1000 ms = 1s
        }
     }
