@@ -31,8 +31,8 @@ public class MazeConfig {
     }
 
     private final Cell[][] grid;
-    
-    
+
+
     private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
 
 
@@ -104,10 +104,10 @@ public class MazeConfig {
             myReader.close();
         // Init the spawn of the entities
         IntCoordinates player = new IntCoordinates(10, 15),
-                blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
-                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 11);
+                blinky = new IntCoordinates(10, 8), inky = new IntCoordinates(11, 9),
+                pinky = new IntCoordinates(10, 9), clyde = new IntCoordinates(9, 9);
         // return everything
-        return new MazeConfig(map, player, blinky, inky, pinky, clyde);
+        return new MazeConfig(map, player, blinky, pinky, inky, clyde);
     }
 
 }

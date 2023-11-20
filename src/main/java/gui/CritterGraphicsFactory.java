@@ -54,25 +54,23 @@ public final class CritterGraphicsFactory {
             @Override
             public void update(long deltaT) throws IOException {
                 if (!MazeState.getGameEnded()){
-                    // Pacman doesn't have a scared version so i check if critter isn't pacman
-                    if (!(critter instanceof PacMan)) {
+                    // Only ghosts have a scared version, so I check if critter is a ghost
+                    if (critter instanceof Ghost) {
                         Image fullImage;
                         InputStream is = getClass().getResourceAsStream(url);
                         InputStream is2 = getClass().getResourceAsStream("/ghosts/scared_ghost.png");
                         InputStream is3 = getClass().getResourceAsStream("/ghosts/ghost_white.png");
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
-                        if (PacMan.isEnergized() && !PacMan.isAlmostNormal())
-                            fullImage = new Image(is2);
-                        // If pacman is energized AND is almost normal, switch the sprite of ghosts every 0,1 second (the white one and the scared one)
-                        else if (PacMan.isAlmostNormal()){
-                            long currentTime = System.currentTimeMillis();
-                            if(currentTime - lastToggleTime > 100){
-                                isWhite = !isWhite;
-                                lastToggleTime = currentTime;
-                            }
-                            fullImage = isWhite ? new Image(is3) : new Image(is2);
-                        }
-                        else fullImage = new Image(is);
+                        if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
+                            // If pacman is energized AND is almost normal, switch the sprite of ghosts every 0,1 second (the white one and the scared one)
+                            if (PacMan.isAlmostNormal()) {
+                                long currentTime = System.currentTimeMillis();
+                                if(currentTime - lastToggleTime > 100){
+                                    isWhite = !isWhite;
+                                    lastToggleTime = currentTime;
+                                } fullImage = isWhite ? new Image(is3) : new Image(is2);
+                            } else fullImage = new Image(is2);
+                        } else fullImage = new Image(is);
                         image.setImage(fullImage);
                         // Crop the image to get the right sprite.
                         image.setViewport(croppedPortion);

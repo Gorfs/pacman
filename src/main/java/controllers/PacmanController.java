@@ -1,5 +1,8 @@
-package gui;
+package controllers;
 
+import gui.GameMenu2;
+import gui.MenuButton;
+import gui.MenuButton2;
 import model.Direction;
 import model.MazeState;
 import model.PacMan;
@@ -20,24 +23,31 @@ public class PacmanController {
     private MenuButton btncase4a;
     private GameMenu2 gameMenu1;
     private Pane root1;
-    public PacmanController(KeyCode[] k, GameMenu2 gameMenu2, Pane root, MenuButton2 button, 
+    public PacmanController(KeyCode[] k, GameMenu2 gameMenu2, Pane root, MenuButton2 button,
     MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4){
         this.k=k; gameMenu1 = gameMenu2; root1 = root; btncase1a = btncase1;
         btncase2a = btncase2; btncase3a = btncase3; btncase4a = btncase4;
     }
 
     public void keyPressedHandler(KeyEvent event) {
-        
         if (!MazeState.getGameEnded()){
             if(event.getCode()==KeyCode.ESCAPE){
-                if(gameMenu1.isVisible()){//si quand on appuie sur options on est dans le menu
+                if(gameMenu1.isVisible()){//si quand on appuie sur options, on est dans le menu
                     if(PacMan.getTimer2Marche()){//si le timer2 n'est en 'pause'
-                        if(PacMan.isEnergized() && PacMan.getCompteur()>0){//si le pacman est energized et le compteur>0
+                        if(PacMan.INSTANCE.isEnergized() && PacMan.getCompteur()>0){//si le pacman est energized et le compteur>0
                             PacMan.setTimer2Marche(false);//on remet le compteur de chrono en route
                             TimerTask t = new TimerTask() {
                                 @Override
                                 public void run() {
-                                    PacMan.setEnergized(false);
+                                    PacMan.setAlmostNormal(true);
+                                    Timer timer = new Timer();
+                                     timer.schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            PacMan.INSTANCE.setEnergized(false);
+                                            PacMan.setAlmostNormal(false);
+                                        }
+                                    }, 1000);
                                 }
                             };
                             Timer tt = new Timer();
@@ -85,11 +95,9 @@ public class PacmanController {
             }
         if(gameMenu1.isVisible()){
             if(event.getCode()==KeyCode.ESCAPE && !PacMan.getTimer2Marche()){
-                if(PacMan.isEnergized() && PacMan.getCompteur()>0){
+                if(PacMan.INSTANCE.isEnergized() && PacMan.getCompteur()>0){
                     PacMan.setTimer2Marche(true);
                     PacMan.setTimerMarche(true);
-                    System.out.println("siu");
-                    System.out.println("ok"); 
                 }
             } 
         }

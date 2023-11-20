@@ -1,5 +1,6 @@
 package gui;
 
+import controllers.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -12,7 +13,6 @@ import java.nio.file.Paths;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import model.ClydeController;
 import model.MazeState;
 
 
@@ -105,23 +105,21 @@ public class App extends Application {
         GameMenu2 gameMenu2 = new GameMenu2(root, k, button, btncase1, btncase2, btncase3, btncase4, son_effect);
         //on initialise les options in-game
         gameMenu2.setVisible(false);
+        // Controllers for Pacman and ghosts
         var pacmanController = new PacmanController(k, gameMenu2, root, button, btncase1, btncase2, btncase3, btncase4);
-        //on initialise la classe qui gère les touches pressées in-game
-        var clydeController = new ClydeController();
-        clydeController.startAI();
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        var maze = new MazeState(MazeConfig.originalMaze("maze2"), gameMenu2);
+        GhostsController[] ghostsController = {new ClydeController(), new PinkyController(),
+                new BlinkyController(), new InkyController()};
+        for (var ghost: ghostsController) {ghost.startAI();}
+        var maze = new MazeState(ghostsController, MazeConfig.originalMaze("maze2"), gameMenu2);
+        // Generate map from file
         maze.setLives(l);
+        // Set up game window
         var gameView = new GameView(maze, root, 30.0);
         Music.playBackgroundMusic();
         primaryStage.setScene(gameScene);
         primaryStage.show();
         gameView.animate();
     }
-        
-    
 }
-      
-
-
