@@ -5,18 +5,16 @@ import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.GameMenu2;
-import gui.PacmanController;
-import javafx.scene.input.KeyCode;
-import misc.Debug;
+import controllers.GhostsController;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static model.Ghost.*;
 
 public final class MazeState {
+    private final GhostsController[] ghostsController;
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -25,18 +23,19 @@ public final class MazeState {
 
     private static GameMenu2 gameMenu1;
 
-    private  static List<Critter> critters;
+    private static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private final Map<Critter, RealCoordinates> initialPos;
 
-    // TODO: these should be changed to constants determined by player or in seperate file.
+    // TODO: these should be changed to constants determined by player or in separate file.
     private static int lives = 3;
     private static int livesC = lives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
-    public MazeState(MazeConfig config, GameMenu2 gameMenu) {
+    public MazeState(GhostsController[] ghostsController, MazeConfig config, GameMenu2 gameMenu) {
         gameMenu1=gameMenu;
+        this.ghostsController = ghostsController;
         MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
@@ -67,6 +66,7 @@ public final class MazeState {
     public static int getInitLives(){
         return livesC;
     }
+
     public static int getLives(){
         return lives;
     }
@@ -89,11 +89,8 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
-        if(!gameMenu1.isVisible()){//si on est dans les options, alors on pause le jeu
-            
-        ClydeController.setDirection(config);
-        for  (var critter: critters) {
-
+        if(!gameMenu1.isVisible()){//si on est dans les options, alors on met en pause le jeu
+            for  (var critter: critters) {
 
             var curPos = critter.getPos();
             var nextPos = critter.nextPos(deltaTns);
@@ -108,8 +105,26 @@ public final class MazeState {
             // Set direction to the next direction if direction is NONE.
             if (critter.getDirection() == Direction.NONE) {
                 critter.setDirection(critter.getNextDirection());
-                if (critter instanceof PacMan)
-                    critter.setNextDirection(Direction.NONE);
+                critter.setNextDirection(Direction.NONE);
+            }
+
+            // Get the next direction of ghosts
+            if (critter instanceof Ghost) {
+                // Update scared mode for ghosts
+                if (!PacMan.INSTANCE.isEnergized()) ((Ghost) critter).setScaredMode(false);
+                // Get new direction for each ghosts
+                if (Objects.equals(critter.toString(), "INKY"))
+                    ghostsController[3].setDirection((Ghost) critter, config, deltaTns);
+                else if (Objects.equals(critter.toString(), "BLINKY"))
+                    ghostsController[2].setDirection((Ghost) critter, config, deltaTns);
+                else if (Objects.equals(critter.toString(), "PINKY"))
+                    ghostsController[1].setDirection((Ghost) critter, config, deltaTns);
+                else if (Objects.equals(critter.toString(), "CLYDE"))
+                    ghostsController[0].setDirection((Ghost) critter, config, deltaTns);
+                // Update direction to EAST if the ghost just respawned and do not move
+                if (critter.getDirection() == Direction.NONE && critter.getNextDirection() == Direction.NONE) {
+                    critter.setDirection(Direction.EAST);
+                }
             }
 
             if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
@@ -178,7 +193,7 @@ public final class MazeState {
 
         for (var critter : critters) {
             if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
-                if (PacMan.isEnergized()) {
+                if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
                     resetCritter(critter);
                 } else {
                     playerLost();
@@ -190,14 +205,12 @@ public final class MazeState {
                     }
                     return;
                 }
-            
+            }
         }
         if(allPointsCollected()){
             resetCritters();
             resetGrid();
-            return;
         }
-    }
     }
 }
 
@@ -227,25 +240,33 @@ public final class MazeState {
 
 
     private void playerLost() {
-        Debug.out("player is going to lso ea live 2");
         if (!PacMan.INSTANCE.getIsDying()) {
             lives--;
-            Debug.out("Player lost a life");
             if (lives == 0) {
                 gui.Music.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
-                gui.Music.music_gameover(); // Et on lance le music de game over 
+                gui.Music.music_gameover(); // Et on lance le music de game over
                 gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
             }
             PacMan.INSTANCE.setStartedDeathAni(false);
-            
         }
     }
 
     private void resetCritter(Critter critter) {
+        if (critter instanceof Ghost ) {
+            if (Objects.equals(critter.toString(), "INKY"))
+                ghostsController[3].startAI();
+            else if (Objects.equals(critter.toString(), "BLINKY"))
+                ghostsController[2].startAI();
+            else if (Objects.equals(critter.toString(), "PINKY"))
+                ghostsController[1].startAI();
+            else if (Objects.equals(critter.toString(), "CLYDE"))
+                ghostsController[0].startAI();
+            ((Ghost) critter).setScaredMode(false);
+            if (!((Ghost) critter).isScatterMode()) ((Ghost) critter).changeScatterMode();
+        }
+        if (critter instanceof PacMan && PacMan.INSTANCE.isEnergized()) PacMan.INSTANCE.setEnergized(false);
         critter.setDirection(Direction.NONE);
-        // Forgot to add this in the issue #26
-        if (critter instanceof PacMan)
-            critter.setNextDirection(Direction.NONE);
+        critter.setNextDirection(Direction.NONE);
         critter.setPos(initialPos.get(critter));
     }
 
@@ -264,11 +285,4 @@ public final class MazeState {
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
     }
-
-    // ...
-
-
-    
-    
-
 }

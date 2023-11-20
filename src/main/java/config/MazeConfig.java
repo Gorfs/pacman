@@ -28,8 +28,8 @@ public class MazeConfig {
     }
 
     private final Cell[][] grid;
-    
-    
+
+
     private final IntCoordinates pacManPos, blinkyPos, pinkyPos, inkyPos, clydePos;
 
 
@@ -73,12 +73,12 @@ public class MazeConfig {
         // New class Cell to store the map
         Cell[][] map = new Cell[21][21];
 
-        // Open the file maze.txt
+        // Open the file maze2.txt
         File maze = new File("src/main/resources/" + file + ".txt");
         Scanner myReader;
         // Try if the file exist
         try {
-            // Read the file maze.txt
+            // Read the file maze2.txt
             myReader = new Scanner(maze);
             int n = 0;
             // while there is something to read
@@ -108,10 +108,10 @@ public class MazeConfig {
         }
         // Init the spawn of the entities
         IntCoordinates player = new IntCoordinates(10, 15),
-                blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
-                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 11);
+                blinky = new IntCoordinates(10, 8), inky = new IntCoordinates(11, 9),
+                pinky = new IntCoordinates(10, 9), clyde = new IntCoordinates(9, 9);
         // return everything
-        return new MazeConfig(map, player, blinky, inky, pinky, clyde);
+        return new MazeConfig(map, player, blinky, pinky, inky, clyde);
     }
 
 }
