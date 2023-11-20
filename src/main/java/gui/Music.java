@@ -1,7 +1,6 @@
 package gui;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.InputStream;
 
 import javax.sound.sampled.AudioInputStream;

@@ -1,24 +1,12 @@
 package gui;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
-import config.MazeConfig;
 import geometry.IntCoordinates;
-import gui.GameView;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-// unused imports are used when debugging and therefore should be kept unless pushing to master.
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import misc.Debug;
 import model.MazeState;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -92,24 +80,20 @@ public class Menu {
 
 
                 // resetting and updating the hearts counter.
-                String heartUrl = "pacmanSimple.png";
+                String heartUrl = "/pacmanSimple.png";
                 ImageView[] livesArray = new ImageView[initLives];
                 // Debug.out(MazeState.getLives() + "");
                 for(int i = 0 ; i < initLives; i++){
                     if ((MazeState.getLives() - 1) <= i){
-                        heartUrl = "empty1.png"; 
+                        heartUrl = "/empty1.png"; 
                     }
-                    livesArray[i] = new ImageView(new Image(heartUrl, scale*size,scale*size, true, true));
+                    livesArray[i] = new ImageView(new Image(getClass().getResourceAsStream(heartUrl), scale*size,scale*size, true, true));
                 }
                 
                 // custom font settings.
                 scoreText.setStyle("-fx-text-fill: white;"); //To change the font size you need to change the value in load font below
-                try{
-                    Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 16); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
-                    scoreText.setFont(scoreFont);
-                } catch (FileNotFoundException e){
-                    e.printStackTrace();
-                }
+                Font scoreFont = Font.loadFont(getClass().getResourceAsStream("/fonts/TeleSys.ttf"), 16); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+                scoreText.setFont(scoreFont);
 
                 // the final step, adding the updated objects back into the javaFX objects.
                 scoreHb.getChildren().add(scoreText);

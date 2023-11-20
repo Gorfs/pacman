@@ -1,18 +1,11 @@
 package config;
 
 import geometry.IntCoordinates;
-import misc.Debug;
 
 import static config.Cell.*;
 import static config.Cell.Content.*;
 
-import java.io.BufferedReader;
-// Import the File class
-import java.io.File;
-// Import this class to handle errors
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 // Import the Scanner class to read text files
 import java.util.Scanner;
 

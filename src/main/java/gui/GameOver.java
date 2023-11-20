@@ -1,8 +1,5 @@
 package gui;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import geometry.IntCoordinates;

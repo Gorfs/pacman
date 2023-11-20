@@ -14,7 +14,7 @@ import java.util.Objects;
 import static model.Ghost.*;
 
 public final class MazeState {
-    private final GhostsController[] ghostsController;
+    private static GhostsController[] ghostsController;
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -26,7 +26,7 @@ public final class MazeState {
     private static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
-    private final Map<Critter, RealCoordinates> initialPos;
+    private static Map<Critter, RealCoordinates> initialPos;
 
     // TODO: these should be changed to constants determined by player or in separate file.
     private static int lives = 3;
@@ -201,7 +201,6 @@ public final class MazeState {
                     if (!PacMan.INSTANCE.isStartedDeathAni()){
                         PacMan.INSTANCE.setDying(true);
                         resetCritters();
-                        playerLost();
                         gui.Music.music_death();
                     }
                     playerLost();
@@ -253,7 +252,7 @@ public final class MazeState {
         }
     }
 
-    private void resetCritter(Critter critter) {
+    private static void resetCritter(Critter critter) {
         if (critter instanceof Ghost ) {
             if (Objects.equals(critter.toString(), "INKY"))
                 ghostsController[3].startAI();
