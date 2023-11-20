@@ -48,22 +48,20 @@ public final class CritterGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 if (!MazeState.getGameEnded()){
-                    // Pacman doesn't have a scared version so i check if critter isn't pacman
-                    if (!(critter instanceof PacMan)) {
+                    // Only ghosts have a scared version, so I check if critter is a ghost
+                    if (critter instanceof Ghost) {
                         Image fullImage;
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
-                        if (PacMan.isEnergized() && !PacMan.isAlmostNormal())
-                            fullImage = new Image("ghosts/scared_ghost.png");
-                        // If pacman is energized AND is almost normal, switch the sprite of ghosts every 0,1 second (the white one and the scared one)
-                        else if (PacMan.isAlmostNormal()){
-                            long currentTime = System.currentTimeMillis();
-                            if(currentTime - lastToggleTime > 100){
-                                isWhite = !isWhite;
-                                lastToggleTime = currentTime;
-                            }
-                            fullImage = isWhite ? new Image("ghosts/ghost_white.png") : new Image("ghosts/scared_ghost.png");
-                        }
-                        else fullImage = new Image(url);
+                        if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
+                            // If pacman is energized AND is almost normal, switch the sprite of ghosts every 0,1 second (the white one and the scared one)
+                            if (PacMan.isAlmostNormal()) {
+                                long currentTime = System.currentTimeMillis();
+                                if(currentTime - lastToggleTime > 100){
+                                    isWhite = !isWhite;
+                                    lastToggleTime = currentTime;
+                                } fullImage = isWhite ? new Image("ghosts/ghost_white.png") : new Image("ghosts/scared_ghost.png");
+                            } else fullImage = new Image("ghosts/scared_ghost.png");
+                        } else fullImage = new Image(url);
                         image.setImage(fullImage);
                         // Crop the image to get the right sprite.
                         image.setViewport(croppedPortion);
