@@ -61,10 +61,6 @@ public class MazeConfig {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
     }
 
-    public Cell[][] getGrid(){
-        return grid;
-    }
-
     public static MazeConfig originalMaze(String file) {
         // New class Cell to store the map
         Cell[][] map = new Cell[21][21];
@@ -84,12 +80,12 @@ public class MazeConfig {
             // For every 2 string
             for (int i = 0; i < data.length; i ++) {
                 // create a cell based on what there is inside(NOTHING, DOT, etc.)
-                switch (data[i]) {
-                    case "ENERGIZER" -> map[n][i] = slot(ENERGIZER);
-                    case "WALL" -> map[n][i] = slot(WALL);
-                    case "DOT" -> map[n][i] = slot(DOT);
-                    default -> map[n][i] = slot(NOTHING);
-                }
+                map[n][i] = switch (data[i]) {
+                    case "E" -> slot(ENERGIZER);
+                    case "W" -> slot(WALL);
+                    case "D" -> slot(DOT);
+                    default -> slot(NOTHING);
+                    };
             }
             n++;
         }
