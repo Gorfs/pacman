@@ -100,9 +100,7 @@ public class MazeConfig {
                     pinky = new IntCoordinates(Integer.parseInt(data[6]), Integer.parseInt(data[7]));
                     clyde = new IntCoordinates(Integer.parseInt(data[8]), Integer.parseInt(data[9]));
                 }
-
                 n++;
-
             }
             // close file
             myReader.close();
