@@ -67,7 +67,7 @@ public class GameMenu extends Parent {
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu0);
             //on initialise une transition qui dure 0.25s depuis le menu0
             tt.setToX(menu0.getTranslateX() - offset);
-            //le menu0 pendant la transition se deplacera
+            //le menu0 pendant que la transition se replace
             TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu1);
             tt1.setToX(menu0.getTranslateX());
 
@@ -345,7 +345,7 @@ public class GameMenu extends Parent {
             try {
                 App.start(primaryS,4,k);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 
@@ -354,7 +354,7 @@ public class GameMenu extends Parent {
             try {
                 App.start(primaryS,3,k);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 
@@ -363,7 +363,7 @@ public class GameMenu extends Parent {
             try {
                 App.start(primaryS, 2, k);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 
@@ -372,7 +372,7 @@ public class GameMenu extends Parent {
             try {
                 App.start(primaryS, 1, k);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 

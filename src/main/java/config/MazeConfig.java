@@ -1,7 +1,6 @@
 package config;
 
 import geometry.IntCoordinates;
-import misc.Debug;
 
 import static config.Cell.*;
 import static config.Cell.Content.*;
@@ -79,6 +78,7 @@ public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates
         InputStream is = MazeConfig.class.getResourceAsStream("/" + file + ".txt");
         Scanner myReader;
         // Read the file maze.txt
+        assert is != null;
         myReader = new Scanner(is);
         int n = 0;
         // while there is something to read
