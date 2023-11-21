@@ -61,24 +61,19 @@ public class MazeConfig {
         return grid[Math.floorMod(pos.y(), getHeight())][Math.floorMod(pos.x(), getWidth())];
     }
 
-    public Cell[][] getGrid(){
-        return grid;
-    }
-
     public static MazeConfig originalMaze(String file) {
         // New class Cell to store the map
         Cell[][] map = new Cell[21][21];
         // Open the file maze.txt
-        File maze = new File("src/main/resources/mazes/" + file + ".txt");
+        InputStream is = MazeConfig.class.getResourceAsStream("/" + file + ".txt");
         Scanner myReader;
-        // Try if the file exist
-        try {
-            // Read the file maze.txt
-            myReader = new Scanner(maze);
-            int n = 0;
-            // Init the spawn of the entities
+        // Read the file maze.txt
+        assert is != null;
+        myReader = new Scanner(is);
+        int n = 0;
+        // Init the spawn of the entities
             IntCoordinates player = new IntCoordinates(10, 15),
-                    blinky = new IntCoordinates(10, 16), inky = new IntCoordinates(10, 9),
+                    blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
                     pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
             // while there is something to read
             while (myReader.hasNextLine()) {
@@ -105,19 +100,12 @@ public class MazeConfig {
                     pinky = new IntCoordinates(Integer.parseInt(data[6]), Integer.parseInt(data[7]));
                     clyde = new IntCoordinates(Integer.parseInt(data[8]), Integer.parseInt(data[9]));
                 }
-
                 n++;
-
             }
             // close file
             myReader.close();
-
-            // return everything
-            return new MazeConfig(map, player, blinky, inky, pinky, clyde);
-        } catch (FileNotFoundException e) {
-            // If it doesn't find the file
-            throw new RuntimeException(e);
-        }
+        // return everything
+        return new MazeConfig(map, player, blinky, pinky, inky, clyde);
     }
 
 }
