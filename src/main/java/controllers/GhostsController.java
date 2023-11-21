@@ -7,6 +7,7 @@ import geometry.RealCoordinates;
 import model.Critter;
 import model.Direction;
 import model.Ghost;
+import model.MazeState;
 import model.PacMan;
 
 import java.util.Random;
@@ -37,6 +38,11 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      * @param deltaTns time passed between two frame
      */
     public void setDirection(Ghost critter, MazeConfig config, long deltaTns) {
+
+        if(MazeState.getGameEnded()){
+            return;
+        }
+
         // Update timer for scatter mode
         if (!critter.isScaredMode()) timer += (float) (deltaTns * 1E-9);
         if ((timer >= 7 && !critter.isScatterMode()) || (timer >= 5 && critter.isScatterMode())) {

@@ -6,6 +6,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import model.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public final class CritterGraphicsFactory {
@@ -15,18 +17,18 @@ public final class CritterGraphicsFactory {
         this.scale = scale;
     }
 
-    public GraphicsUpdater makeGraphics(Critter critter) {
+    public GraphicsUpdater makeGraphics(Critter critter) throws Exception {
         var size = 1.0;
-        var url = (critter instanceof PacMan) ? "pacman.png" :
+        var url = (critter instanceof PacMan) ? "/pacman.png" :
                 switch ((Ghost) critter) {
-                    case BLINKY -> "ghosts/ghost_blinky.png";
-                    case CLYDE -> "ghosts/ghost_clyde.png";
-                    case INKY -> "ghosts/ghost_inky.png";
-                    case PINKY -> "ghosts/ghost_pinky.png";
+                    case BLINKY -> "/ghosts/ghost_blinky.png";
+                    case CLYDE -> "/ghosts/ghost_clyde.png";
+                    case INKY -> "/ghosts/ghost_inky.png";
+                    case PINKY -> "/ghosts/ghost_pinky.png";
                 };
-
-        Image fullImage = new Image(url);
-
+        InputStream is = getClass().getResourceAsStream(url);
+        Image fullImage = new Image(is);
+        is.close();
         int y = 0, x = 0;
         final int width = 65, height = 65;
         var croppedPortion =  new Rectangle2D(x, y, width, height);
@@ -46,11 +48,14 @@ public final class CritterGraphicsFactory {
             private boolean isWhite = false;
             private long lastToggleTime = 0;
             @Override
-            public void update(long deltaT) {
+            public void update(long deltaT) throws IOException {
                 if (!MazeState.getGameEnded()){
                     // Only ghosts have a scared version, so I check if critter is a ghost
                     if (critter instanceof Ghost) {
                         Image fullImage;
+                        InputStream is = getClass().getResourceAsStream(url);
+                        InputStream is2 = getClass().getResourceAsStream("/ghosts/scared_ghost.png");
+                        InputStream is3 = getClass().getResourceAsStream("/ghosts/ghost_white.png");
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
                         if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
                             // If pacman is energized AND is almost normal, switch the sprite of ghosts every 0,1 second (the white one and the scared one)
@@ -59,9 +64,9 @@ public final class CritterGraphicsFactory {
                                 if(currentTime - lastToggleTime > 100){
                                     isWhite = !isWhite;
                                     lastToggleTime = currentTime;
-                                } fullImage = isWhite ? new Image("ghosts/ghost_white.png") : new Image("ghosts/scared_ghost.png");
-                            } else fullImage = new Image("ghosts/scared_ghost.png");
-                        } else fullImage = new Image(url);
+                                } fullImage = isWhite ? new Image(is3) : new Image(is2);
+                            } else fullImage = new Image(is2);
+                        } else fullImage = new Image(is);
                         image.setImage(fullImage);
                         // Crop the image to get the right sprite.
                         image.setViewport(croppedPortion);

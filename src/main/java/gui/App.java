@@ -8,8 +8,6 @@ import javafx.stage.Stage;
 import config.MazeConfig;
 
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -37,11 +35,10 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-
         Pane root = new Pane();//on initialise la fenêtre
         root.setPrefSize(630,630);//on incrémente les dimensions de l'écran dans la fenêtre
         root.setStyle("-fx-background-color: #000000");
-        InputStream is = Files.newInputStream(Paths.get("src/main/resources/pac.jpg"));//on prends une image situé dans ressources
+        InputStream is = getClass().getResourceAsStream("/pac.jpg");//on prends une image situé dans ressources
         Image img = new Image(is);
         is.close();
         btncase1.setVisible(false);//on met tout les boutons non visible au debut sauf options, exit et play
@@ -99,7 +96,7 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    public static void start(Stage primaryStage, int l, KeyCode[] k, float son_effect) {
+    public static void start(Stage primaryStage, int l, KeyCode[] k, float son_effect) throws Exception {
         var root = new Pane();
         root.setPrefSize(630,630);//on incrémente les dimensions de l'écran dans la fenêtre
         var gameScene = new Scene(root);

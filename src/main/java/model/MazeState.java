@@ -14,7 +14,7 @@ import java.util.Objects;
 import static model.Ghost.*;
 
 public final class MazeState {
-    private final GhostsController[] ghostsController;
+    private static GhostsController[] ghostsController;
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -26,7 +26,7 @@ public final class MazeState {
     private static List<Critter> critters;
     private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
 
-    private final Map<Critter, RealCoordinates> initialPos;
+    private static Map<Critter, RealCoordinates> initialPos;
 
     // TODO: these should be changed to constants determined by player or in separate file.
     private static int lives = 3;
@@ -82,6 +82,8 @@ public final class MazeState {
         gameEnded = false;
         lives = livesC;
         score = 0;
+        resetGrid();
+        resetCritters();
     }
 
     public static boolean[][] getGridState(){ //Need it for the Pacman Class
@@ -196,13 +198,12 @@ public final class MazeState {
                 if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
                     resetCritter(critter);
                 } else {
-                    playerLost();
                     if (!PacMan.INSTANCE.isStartedDeathAni()){
                         PacMan.INSTANCE.setDying(true);
                         resetCritters();
-                        playerLost();
                         gui.Music.music_death();
                     }
+                    playerLost();
                     return;
                 }
             }
@@ -225,7 +226,7 @@ public final class MazeState {
         return true;
     }
 
-    private void resetGrid() {
+    public static void resetGrid() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 gridState[i][j] = false;
@@ -240,7 +241,7 @@ public final class MazeState {
 
 
     private void playerLost() {
-        if (!PacMan.INSTANCE.getIsDying()) {
+        if (PacMan.INSTANCE.getIsDying()) {
             lives--;
             if (lives == 0) {
                 gui.Music.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
@@ -251,7 +252,7 @@ public final class MazeState {
         }
     }
 
-    private void resetCritter(Critter critter) {
+    private static void resetCritter(Critter critter) {
         if (critter instanceof Ghost ) {
             if (Objects.equals(critter.toString(), "INKY"))
                 ghostsController[3].startAI();
@@ -270,7 +271,7 @@ public final class MazeState {
         critter.setPos(initialPos.get(critter));
     }
 
-    private void resetCritters() {
+    public static void resetCritters() {
         for (var critter: critters) resetCritter(critter);
     }
 

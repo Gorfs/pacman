@@ -1,24 +1,12 @@
 package gui;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.*;
 
-import config.MazeConfig;
 import geometry.IntCoordinates;
-import gui.GameView;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-// unused imports are used when debugging and therefore should be kept unless pushing to master.
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import misc.Debug;
 import model.MazeState;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,7 +22,7 @@ public class Menu {
 
 
     }
-    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos){
+    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) throws Exception {
         // initializing JavaFX items and styles.
         HBox menu = new HBox();
         // uncomment the line under this to have a border around the menu object in the game.
@@ -49,7 +37,7 @@ public class Menu {
         // setting up the javaFX objects for the livres display.
         ImageView[] livesArray = new ImageView[initLives];
         for(int i = 0 ; i < initLives; i++){
-            livesArray[i] = new ImageView(new Image("pacmanSimple.png", scale*size,scale*size, true, true));
+            livesArray[i] = new ImageView(new Image(getClass().getResourceAsStream("/pacmanSimple.png"), scale*size,scale*size, true, true));
         }
         
         HBox scoreHb = new HBox();
@@ -67,7 +55,7 @@ public class Menu {
         menu.setTranslateY(670); // TODO set width and height to use root width and height instead of constants
         return new GraphicsUpdater() {
             @Override
-            public void update(long deltaT) {
+            public void update(long deltaT) throws IOException {
                 // runs on every update cycle.
                 if (MazeState.getGameEnded()){
                     livesHb.setVisible(false);
@@ -92,24 +80,20 @@ public class Menu {
 
 
                 // resetting and updating the hearts counter.
-                String heartUrl = "pacmanSimple.png";
+                String heartUrl = "/pacmanSimple.png";
                 ImageView[] livesArray = new ImageView[initLives];
                 // Debug.out(MazeState.getLives() + "");
                 for(int i = 0 ; i < initLives; i++){
                     if ((MazeState.getLives() - 1) <= i){
-                        heartUrl = "empty1.png"; 
+                        heartUrl = "/empty1.png"; 
                     }
-                    livesArray[i] = new ImageView(new Image(heartUrl, scale*size,scale*size, true, true));
+                    livesArray[i] = new ImageView(new Image(getClass().getResourceAsStream(heartUrl), scale*size,scale*size, true, true));
                 }
                 
                 // custom font settings.
                 scoreText.setStyle("-fx-text-fill: white;"); //To change the font size you need to change the value in load font below
-                try{
-                    Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 16); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
-                    scoreText.setFont(scoreFont);
-                } catch (FileNotFoundException e){
-                    e.printStackTrace();
-                }
+                Font scoreFont = Font.loadFont(getClass().getResourceAsStream("/fonts/TeleSys.ttf"), 16); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+                scoreText.setFont(scoreFont);
 
                 // the final step, adding the updated objects back into the javaFX objects.
                 scoreHb.getChildren().add(scoreText);

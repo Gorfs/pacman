@@ -1,5 +1,7 @@
 package gui;
 
+import java.io.InputStream;
+
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
@@ -16,7 +18,8 @@ public class MenuButton1 extends StackPane {
 
     public MenuButton1(String name, Pane root) {
         text = new Text(name);
-        text.setFont(Font.loadFont("file:src/main/resources/slkscrb.ttf", 100));
+        InputStream is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
+        text.setFont(Font.loadFont(is, 100));
         text.setFill(Color.BROWN);
         text.setStroke(Color.BLUEVIOLET);
         text.setStrokeWidth(0.5);

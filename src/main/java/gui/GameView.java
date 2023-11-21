@@ -6,6 +6,7 @@ import javafx.scene.layout.Pane;
 import model.MazeState;
 import model.PacMan;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class GameView {
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
      * @param scale le nombre de pixels représentant une unité du labyrinthe
      */
-    public GameView(MazeState maze, Pane root, double scale) {
+    public GameView(MazeState maze, Pane root, double scale) throws Exception {
         this.maze = maze;
         gameRoot = root;
         // pixels per cell
@@ -69,7 +70,11 @@ public class GameView {
                 if (!PacMan.INSTANCE.getIsDying())
                     maze.update(deltaT);
                 for (var updater : graphicsUpdaters) {
-                    updater.update(deltaT);
+                    try {
+                        updater.update(deltaT);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 // Removed this update from loop for because we just need to call it once.
                 PacMan.INSTANCE.update(deltaT);
