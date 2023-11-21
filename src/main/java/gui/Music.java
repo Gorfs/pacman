@@ -1,12 +1,10 @@
 package gui;
 
 import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.*;
 
 /**
  * Classe gérant la musique de fond et les effets sonores du jeu.
@@ -77,6 +75,7 @@ public class Music {
         try {
             InputStream audioSrc = Music.class.getResourceAsStream("/music/bgm.wav");
             //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            assert audioSrc != null;
             InputStream bufferedIn = new BufferedInputStream(audioSrc);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             bgmClip = AudioSystem.getClip();
@@ -97,26 +96,28 @@ public class Music {
         try {
             InputStream audioSrc = Music.class.getResourceAsStream("/music/score.wav");
             //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            assert audioSrc != null;
             InputStream bufferedIn = new BufferedInputStream(audioSrc);
-            importAudioFile(audioFile);
+            importAudioFile(bufferedIn);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * @param audioFile File used
-     * @throws UnsupportedAudioFileException An UnsupportedAudioFileException is an exception indicating
-     *                                       that an operation failed because a file did not contain valid data
-     *                                       of a recognized file type and format.
-     * @throws IOException Signals that an I/O exception to some sort has occurred.
-     *                     This class is the general class of exceptions produced
-     *                     by failed or interrupted I/O operations.
-     * @throws LineUnavailableException A LineUnavailableException is an exception indicating that a line
-     *                                  cannot be opened because it is unavailable. This situation arises most
-     *                                  commonly when a requested line is already in use by another application.
+     * @param bufferedIn file in inputStream version
+     * @throws UnsupportedAudioFileException An UnsupportedAudioFileException is an exception indicating that
+     *                                       an operation failed because a file did not contain valid data of
+     *                                       a recognized file type and format.
+     * @throws IOException Signals that an I/O exception of some sort has occurred.
+     *                     This class is the general class of exceptions produced by
+     *                     failed or interrupted I/O operations.
+     * @throws LineUnavailableException A LineUnavailableException is an exception indicating that a line cannot
+     *                                  be opened because it is unavailable. This situation arises most commonly
+     *                                  when a requested line is already in use by another application.
      */
-    private static void importAudioFile(File audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+    private static void importAudioFile(InputStream bufferedIn) throws UnsupportedAudioFileException,
+            IOException, LineUnavailableException {
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
         Clip clip = AudioSystem.getClip();
         clip.open(audioInputStream);
@@ -132,6 +133,7 @@ public class Music {
         try {
             InputStream audioSrc = Music.class.getResourceAsStream("/music/death2.wav");
             //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            assert audioSrc != null;
             InputStream bufferedIn = new BufferedInputStream(audioSrc);
             importAudioFile(bufferedIn);
         } catch (Exception e) {
@@ -146,6 +148,7 @@ public class Music {
         try {
             InputStream audioSrc = Music.class.getResourceAsStream("/music/game_over.wav");
             //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            assert audioSrc != null;
             InputStream bufferedIn = new BufferedInputStream(audioSrc);
             importAudioFile(bufferedIn);
         } catch (Exception e) {

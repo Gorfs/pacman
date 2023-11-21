@@ -15,7 +15,7 @@ public class GameMenu extends Parent {
     //class qui gère les boutons dans le menu
     private static GameMenu2 gameMenu;
     public GameMenu(GameMenu2 gameMenu1, Pane root, Stage primaryS, KeyCode[] k, MenuButton2 button, MenuButton btncase1,
-                    MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a, double widht, double height) {
+                    MenuButton btncase2, MenuButton btncase3, MenuButton btncase4) {
 
         gameMenu=gameMenu1;
 
@@ -65,7 +65,7 @@ public class GameMenu extends Parent {
         btnOptions.setOnMouseClicked(event -> {//quand on appuie sur le bouton OPTIONS :
             getChildren().add(menu1);//on ajoute le menu1
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu0);
-            //on initialise un transition qui dure 0.25s depuis le menu0
+            //on initialise une transition qui dure 0.25s depuis le menu0
             tt.setToX(menu0.getTranslateX() - offset);
             //le menu0 pendant la transition se deplacera
             TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu1);
@@ -343,7 +343,7 @@ public class GameMenu extends Parent {
         MenuButton btnf = new MenuButton("FACILE");
         btnf.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS,4,k,a);
+                App.start(primaryS,4,k);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -352,7 +352,7 @@ public class GameMenu extends Parent {
         MenuButton btnm = new MenuButton("MEDIUM");
         btnm.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS,3,k,a);
+                App.start(primaryS,3,k);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -361,7 +361,7 @@ public class GameMenu extends Parent {
         MenuButton btnh = new MenuButton("HARD");
         btnh.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS, 2, k, a);
+                App.start(primaryS, 2, k);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -370,7 +370,7 @@ public class GameMenu extends Parent {
         MenuButton btne = new MenuButton("EXPERT");
         btne.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS, 1, k, a);
+                App.start(primaryS, 1, k);
             } catch (Exception e) {
                 e.printStackTrace();
             }

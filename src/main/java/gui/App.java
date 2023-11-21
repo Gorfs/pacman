@@ -20,8 +20,6 @@ import model.MazeState;
 public class App extends Application {
     // array of keycode used to move pacman
     private static final KeyCode[] keyCodes = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
-    // pour régler le son
-    private static final float son_effect = 1;
     //bouton qui permet de confirmer le pseudo
     private static final MenuButton2 nameSubmit = new MenuButton2("Submit");
     //message qui s'affiche une fois qu'on appuie sur le bouton LEFT dans les options
@@ -58,7 +56,8 @@ public class App extends Application {
         root.setStyle("-fx-background-color: #000000");
 
         // on prend une image située dans les ressources
-        InputStream is = getClass().getResourceAsStream("/pac.jpg");//on prends une image situé dans ressources
+        InputStream is = getClass().getResourceAsStream("/pac.jpg");//on prend une image située dans les ressources
+        assert is != null;
         Image img = new Image(is);
         is.close();
 
@@ -76,7 +75,7 @@ public class App extends Application {
         GameMenu2 gameMenu2 = new GameMenu2(root, keyCodes, nameSubmit, btnWest, btnEast, btnNorth, btnSouth);
         gameMenu2.setVisible(false);
         // Les boutons dans le menu, option et pour jouer
-        GameMenu gameMenu = new GameMenu(gameMenu2, root, primaryStage, keyCodes, nameSubmit, btnWest, btnEast, btnNorth, btnSouth, son_effect, 800, 600);
+        GameMenu gameMenu = new GameMenu(gameMenu2, root, primaryStage, keyCodes, nameSubmit, btnWest, btnEast, btnNorth, btnSouth);
         //on initiale les boutons dans le menu
         gameMenu.setVisible(true);
         root.getChildren().addAll(imgView, btnWest, btnEast, btnNorth, btnSouth, gameMenu, nameSubmit);
@@ -130,10 +129,6 @@ public class App extends Application {
         return scene;
     }
 
-    /**
-     * Main method
-     * @param args
-     */
     public static void main(String[] args) {
         launch(args);
     }
@@ -146,7 +141,7 @@ public class App extends Application {
      * @param live number of lives
      * @param keyCodes array of keycode used to move pacman
      */
-    public static void start(Stage primaryStage, int live, KeyCode[] keyCodes) {
+    public static void start(Stage primaryStage, int live, KeyCode[] keyCodes) throws Exception {
         var root = new Pane();
         //on incrémente les dimensions de l'écran dans la fenêtre
         root.setPrefSize(630,630);
