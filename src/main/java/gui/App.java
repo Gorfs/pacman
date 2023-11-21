@@ -13,30 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import javafx.animation.FadeTransition;
-import javafx.animation.TranslateTransition;
-import javafx.geometry.Pos;
-import javafx.scene.Parent;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.effect.Glow;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
-import javafx.scene.input.KeyCode;
-import javafx.scene.text.Font;
-import javafx.scene.control.*;
-import model.ClydeController;
-import model.MazeState;
-
 
 public class App extends Application {
 
@@ -131,7 +107,13 @@ public class App extends Application {
         var pacmanController = new PacmanController(k, gameMenu2, root, button, btncase1, btncase2, btncase3, btncase4);
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
-        var maze = new MazeState(MazeConfig.originalMaze("Gr3Ma8h"));
+        GhostsController[] ghostsController = {new ClydeController(), new PinkyController(),
+                new BlinkyController(), new InkyController()};
+        for (var ghost: ghostsController) {ghost.startAI();}
+        var maze = new MazeState(ghostsController, MazeConfig.originalMaze("maze2"), gameMenu2);
+        // Generate map from file
+        maze.setLives(l);
+        // Set up game window
         var gameView = new GameView(maze, root, 30.0);
         Music.playBackgroundMusic();
         primaryStage.setScene(gameScene);
