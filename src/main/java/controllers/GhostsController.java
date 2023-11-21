@@ -22,10 +22,6 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
     // If it can start chasing/scatter
     boolean started = false;
 
-    public void setStarted(boolean started) {
-        this.started = started;
-    }
-
     /**
      * Method that start the ghost AI.
      */
@@ -103,8 +99,9 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
 
         IntCoordinates pos = critter.getPos().round();
 
-        IntCoordinates[] voisins = new IntCoordinates[4];
+        // Initialise variable that we will use to find pathing
         double[] distances = {-1.0,-1.0,-1.0,-1.0}; int n = 0;
+        IntCoordinates[] voisins = new IntCoordinates[4];
         voisins[0] = pos.toRealCoordinates(1.0).plus(RealCoordinates.NORTH_UNIT).round();
         voisins[1] = pos.toRealCoordinates(1.0).plus(RealCoordinates.EAST_UNIT).round();
         voisins[2] = pos.toRealCoordinates(1.0).plus(RealCoordinates.SOUTH_UNIT).round();

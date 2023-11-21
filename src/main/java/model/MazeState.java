@@ -35,18 +35,18 @@ public final class MazeState {
 
     public MazeState(GhostsController[] ghostsController, MazeConfig config, GameMenu2 gameMenu) {
         gameMenu1=gameMenu;
-        this.ghostsController = ghostsController;
+        MazeState.ghostsController = ghostsController;
         MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
         gridState = new boolean[height][width];
         initialPos = Map.of(
-                PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
-                BLINKY, config.getBlinkyPos().toRealCoordinates(1.0),
-                INKY, config.getInkyPos().toRealCoordinates(1.0),
-                CLYDE, config.getClydePos().toRealCoordinates(1.0),
-                PINKY, config.getPinkyPos().toRealCoordinates(1.0)
+                PacMan.INSTANCE, config.pacManPos().toRealCoordinates(1.0),
+                BLINKY, config.blinkyPos().toRealCoordinates(1.0),
+                INKY, config.inkyPos().toRealCoordinates(1.0),
+                CLYDE, config.clydePos().toRealCoordinates(1.0),
+                PINKY, config.pinkyPos().toRealCoordinates(1.0)
         );
         resetCritters();
     }
@@ -245,7 +245,7 @@ public final class MazeState {
             lives--;
             if (lives == 0) {
                 gui.Music.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
-                gui.Music.music_gameover(); // Et on lance le music de game over
+                gui.Music.music_gameOver(); // Et on lance le music de game over
                 gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
             }
             PacMan.INSTANCE.setStartedDeathAni(false);
