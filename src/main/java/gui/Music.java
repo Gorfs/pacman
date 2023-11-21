@@ -1,10 +1,8 @@
 package gui;
 
 import java.io.File;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
+import java.io.IOException;
+import javax.sound.sampled.*;
 
 /**
  * Classe gérant la musique de fond et les effets sonores du jeu.
@@ -25,8 +23,7 @@ public class Music {
      */
     public static void setVolume(float volumeLevel) {
         if(volumeLevel < 0.0f) volume = 0.0f;
-        else if(volumeLevel > 1.0f) volume = 1.0f;
-        else volume = volumeLevel;
+        else volume = Math.min(volumeLevel, 1.0f);
         if (bgmClip != null && bgmClip.isRunning()) {
             FloatControl gainControl = (FloatControl) bgmClip.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(20f * (float) Math.log10(volume));
@@ -83,7 +80,7 @@ public class Music {
             bgmClip.loop(Clip.LOOP_CONTINUOUSLY); 
             bgmClip.start();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -93,15 +90,31 @@ public class Music {
     public static void music_score(){
         try {
             File audioFile = new File("src/main/resources/music/score.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
-            clip.start();
+            importAudioFile(audioFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * @param audioFile File used
+     * @throws UnsupportedAudioFileException An UnsupportedAudioFileException is an exception indicating
+     *                                       that an operation failed because a file did not contain valid data
+     *                                       of a recognized file type and format.
+     * @throws IOException Signals that an I/O exception to some sort has occurred.
+     *                     This class is the general class of exceptions produced
+     *                     by failed or interrupted I/O operations.
+     * @throws LineUnavailableException A LineUnavailableException is an exception indicating that a line
+     *                                  cannot be opened because it is unavailable. This situation arises most
+     *                                  commonly when a requested line is already in use by another application.
+     */
+    private static void importAudioFile(File audioFile) throws UnsupportedAudioFileException, IOException, LineUnavailableException {
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioInputStream);
+        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
+        clip.start();
     }
 
     /**
@@ -110,31 +123,21 @@ public class Music {
     public static void music_death(){
         try {
             File audioFile = new File("src/main/resources/music/death2.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
-            clip.start();
+            importAudioFile(audioFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
     /**
      * Joue l'effet sonore pour la fin de la partie.
      */
-    public static void music_gameover(){
+    public static void music_gameOver(){
         try {
             File audioFile = new File("src/main/resources/music/game_over.wav");
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile);
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
-            clip.start();
+            importAudioFile(audioFile);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 

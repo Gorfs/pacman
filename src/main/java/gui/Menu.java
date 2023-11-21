@@ -108,7 +108,7 @@ public class Menu {
                     Font scoreFont = Font.loadFont(new FileInputStream(new File("src/main/resources/fonts/TeleSys.ttf")), 16); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
                     scoreText.setFont(scoreFont);
                 } catch (FileNotFoundException e){
-                    e.printStackTrace();
+                    throw new RuntimeException(e);
                 }
 
                 // the final step, adding the updated objects back into the javaFX objects.
