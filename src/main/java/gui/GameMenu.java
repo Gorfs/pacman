@@ -80,9 +80,7 @@ public class GameMenu extends Parent {
         });
 
         MenuButton btnExit = new MenuButton("EXIT");
-        btnExit.setOnMouseClicked(event -> {
-            System.exit(0);
-        });
+        btnExit.setOnMouseClicked(event -> System.exit(0));
 
         MenuButton btnBack = new MenuButton("BACK");
         btnBack.setOnMouseClicked(event -> {
@@ -96,9 +94,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu1);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu1));
         });
 
         MenuButton btnBack1 = new MenuButton("BACK");

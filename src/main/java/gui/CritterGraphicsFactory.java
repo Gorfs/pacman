@@ -6,10 +6,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import model.*;
-import java.io.IOException;
 import java.io.InputStream;
 
 
+/**
+ * Class CritterGraphicsFactory is used to
+ */
 public final class CritterGraphicsFactory {
     private final double scale;
 
@@ -27,6 +29,7 @@ public final class CritterGraphicsFactory {
                     case PINKY -> "/ghosts/ghost_pinky.png";
                 };
         InputStream is = getClass().getResourceAsStream(url);
+        assert is != null;
         Image fullImage = new Image(is);
         is.close();
         int y = 0, x = 0;
@@ -48,7 +51,7 @@ public final class CritterGraphicsFactory {
             private boolean isWhite = false;
             private long lastToggleTime = 0;
             @Override
-            public void update(long deltaT) throws IOException {
+            public void update(long deltaT) {
                 if (!MazeState.getGameEnded()){
                     // Only ghosts have a scared version, so I check if critter is a ghost
                     if (critter instanceof Ghost) {
@@ -64,9 +67,22 @@ public final class CritterGraphicsFactory {
                                 if(currentTime - lastToggleTime > 100){
                                     isWhite = !isWhite;
                                     lastToggleTime = currentTime;
-                                } fullImage = isWhite ? new Image(is3) : new Image(is2);
-                            } else fullImage = new Image(is2);
-                        } else fullImage = new Image(is);
+                                }
+                                if (isWhite) {
+                                    assert is3 != null;
+                                    fullImage = new Image(is3);
+                                } else {
+                                    assert is2 != null;
+                                    fullImage = new Image(is2);
+                                }
+                            } else {
+                                assert is2 != null;
+                                fullImage = new Image(is2);
+                            }
+                        } else {
+                            assert is != null;
+                            fullImage = new Image(is);
+                        }
                         image.setImage(fullImage);
                         // Crop the image to get the right sprite.
                         image.setViewport(croppedPortion);
