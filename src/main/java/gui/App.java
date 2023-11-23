@@ -88,6 +88,11 @@ public class App extends Application {
                 }
             }
         });
+        
+        // close correctly the game when this listener on the stage detects a closing window event
+        primaryStage.setOnCloseRequest(event -> {
+            System.exit(0);
+        });
 
         primaryStage.setScene(scene);//on met la scene sur le stage
         primaryStage.show();//on affiche le menu
