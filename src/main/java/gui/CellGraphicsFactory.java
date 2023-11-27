@@ -89,19 +89,13 @@ public class CellGraphicsFactory {
         }
 
         return new GraphicsUpdater() {
-            // float timer = 0;
             /**
-             * @param deltaT
+             * Method that update the graphics for each cell
+             * @param deltaT time between two frames in nanoseconds
              */
             @Override
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
-                /* timer += (float) (deltaT * 1E-9);
-                if (timer > 1) timer = 0F;
-                dot.setFill(Color.color(timer,timer,timer));
-                wallX.setFill(Color.color(timer,timer,timer));
-                wallY.setFill(Color.color(timer,timer,timer));
-                */
             }
 
             @Override

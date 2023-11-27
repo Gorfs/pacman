@@ -6,11 +6,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import model.*;
+
+import java.io.IOException;
 import java.io.InputStream;
 
 
 /**
- * Class CritterGraphicsFactory is used to
+ * Class CritterGraphicsFactory is used to update graphics of critter (pacman and ghosts)
  */
 public final class CritterGraphicsFactory {
     private final double scale;
@@ -19,7 +21,15 @@ public final class CritterGraphicsFactory {
         this.scale = scale;
     }
 
-    public GraphicsUpdater makeGraphics(Critter critter) throws Exception {
+    /**
+     * Method used to create a group of graphics for a critter.
+     * @param critter variable that represent a critter (pacman or ghosts)
+     * @return graphicsUpdater method that update the sprite of the critter
+     * @throws IOException Signals that an I/O exception of some sort has occurred.
+     *                     This class is the general class of exceptions produced by
+     *                     failed or interrupted I/O operations.
+     */
+    public GraphicsUpdater makeGraphics(Critter critter) throws IOException {
         var size = 1.0;
         var url = (critter instanceof PacMan) ? "/pacman.png" :
                 switch ((Ghost) critter) {
@@ -50,6 +60,11 @@ public final class CritterGraphicsFactory {
         return new GraphicsUpdater() {
             private boolean isWhite = false;
             private long lastToggleTime = 0;
+
+            /**
+             * Method that update the graphics for each cell
+             * @param deltaT time between two frames in nanoseconds
+             */
             @Override
             public void update(long deltaT) {
                 if (!MazeState.getGameEnded()){
@@ -136,6 +151,13 @@ public final class CritterGraphicsFactory {
             }
         };
     }
+
+    /**
+     * Method that used to crop an image. Here it's used to separate different sprite of critters from the sprite sheet
+     * @param image sprite sheet file
+     * @param critter variable that represent the critter
+     * @param x position of the sprite we want to get
+     */
     private void croppedImage(ImageView image, Critter critter, int x) {
         // Update image and get the pos of the sprite we need in the image.
         // By default, we are using the sprite that going to the right.
