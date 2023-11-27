@@ -153,7 +153,6 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      */
     public Direction waiting(Critter critter) {
         IntCoordinates pos = critter.getPos().round();
-        System.out.println(critter);
         if (conditionOut() && pos.x() == 10 && pos.y() == 9) {
             started = true;return Direction.NORTH;
         } else if (pos.x() == 9 && pos.y() == 9) return Direction.EAST;

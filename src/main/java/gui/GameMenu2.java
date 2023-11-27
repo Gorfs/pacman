@@ -285,7 +285,7 @@ public class GameMenu2 extends Parent {
             });
             });
 
-// Curseur de volume Bgm
+        // Curseur de volume Bgm
         Slider volumeSliderBgm = new Slider(0, 1, Music.getVolume());
         volumeSliderBgm.setMajorTickUnit(0.1);
         volumeSliderBgm.setBlockIncrement(0.05);

@@ -2,7 +2,6 @@ package gui;
 
 import java.io.InputStream;
 
-import geometry.IntCoordinates;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -13,47 +12,47 @@ import model.MazeState;
 
 public class GameOver {
 
-    private final double scale;
+    public GameOver(){}
 
-    public GameOver(double scale){
-        this.scale = scale;
-    }
-
-    public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos){
+    public GraphicsUpdater makeGraphics(){
         VBox vb = new VBox();
         vb.setVisible(false);
-        Label titleText = new Label("Game Over"); //To change the font size you need to change the value in load font below
+        //To change the font size you need to change the value in load font below
+        Label titleText = new Label("Game Over");
         titleText.setTranslateX(-7);
         titleText.setStyle("-fx-text-fill:white;");
         InputStream is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
-        Font titleFont = Font.loadFont(is, 50); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+        // 'TeleSys' works great, OpeningHoursMonoVF is ok but not great,
+        // 'Pocod' and 'Technodelic-Regular' are not working right now.
+        Font titleFont = Font.loadFont(is, 50);
         titleText.setFont(titleFont);
-        HBox hbox1 = new HBox();
-        hbox1.getChildren().add(titleText);
-        hbox1.setAlignment(Pos.BASELINE_CENTER);
+        HBox hBox1 = new HBox();
+        hBox1.getChildren().add(titleText);
+        hBox1.setAlignment(Pos.BASELINE_CENTER);
         Label restartText = new Label("Press Enter to restart");
         restartText.setTranslateX(-13);
-        restartText.setStyle("-fx-text-fill:red; -fx-border-color:red;"); //To change the font size you need to change the value in load font below
+        // To change the font size you need to change the value in load font below
+        restartText.setStyle("-fx-text-fill:red; -fx-border-color:red;");
         is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
-        Font restartFont = Font.loadFont(is, 40); //TeleSys works great, OpeningHoursMonoVF is ok but not great, Pocod and Technodelic-Regular are not working right now. 
+        // 'TeleSys' works great, OpeningHoursMonoVF is ok but not great,
+        // 'Pocod' and 'Technodelic-Regular' are not working right now.
+        Font restartFont = Font.loadFont(is, 40);
         restartText.setFont(restartFont);
-        HBox hbox2 = new HBox();
-        hbox2.getChildren().add(restartText);
-        hbox2.setAlignment(Pos.BASELINE_CENTER);
-        vb.getChildren().addAll(hbox1, hbox2);
+        HBox hBox2 = new HBox();
+        hBox2.getChildren().add(restartText);
+        hBox2.setAlignment(Pos.BASELINE_CENTER);
+        vb.getChildren().addAll(hBox1, hBox2);
         vb.setTranslateX(115);
         vb.setTranslateY(225);
 
         return new GraphicsUpdater() {
+            /**
+             * Methods that display game over menu
+             * @param deltaT time between two frames in nanoseconds
+             */
             @Override
             public void update(long deltaT){
-                
-                if (MazeState.getGameEnded()){
-                    vb.setVisible(true);
-                }
-                else{
-                    vb.setVisible(false);
-                }
+                vb.setVisible(MazeState.getGameEnded());
             }
 
             @Override
