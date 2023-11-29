@@ -7,6 +7,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.PacMan;
@@ -14,9 +16,19 @@ import model.PacMan;
 public class GameMenu extends Parent {
 //class qui gère les boutons dans le menu
 private static GameMenu2 gameMenu;
-        public GameMenu(GameMenu2 gameMenu1, Pane root, Stage primaryS, KeyCode[] k, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a, double widht, double height) {
+private Text LEFT;
+private Text RIGHT;
+private Text UP;
+private Text DOWN;
+
+        public GameMenu(Text left, Text right, Text up, Text down, GameMenu2 gameMenu1, Pane root, Stage primaryS, KeyCode[] k, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a, double widht, double height) {
             
             gameMenu=gameMenu1;
+
+            LEFT = left;
+            RIGHT = right;
+            UP = up;
+            DOWN = down;
 
             VBox menu0 = new VBox(10);
             VBox menu1 = new VBox(10);
@@ -280,8 +292,8 @@ private static GameMenu2 gameMenu;
             TextField btnName = new TextField("Name");
                 btnName.setOnKeyTyped(event -> {
                 button.setVisible(true);//le bouton submit
-                button.setTranslateX(225);
-                button.setTranslateY(203);
+                button.setTranslateX(220);
+                button.setTranslateY(205);
                 button.setOnMouseClicked(event1 -> {//quand on appuie sur le bouton submit :
                     button.setVisible(false);
                     String b="";
@@ -304,6 +316,31 @@ private static GameMenu2 gameMenu;
                     getChildren().remove(menu8);
                     });
                  });
+                 btnName.setOnKeyPressed(event2 -> {
+                    if(event2.getCode()==KeyCode.ENTER){//quand on appuie sur la touche ENTER :
+                        button.setVisible(false);
+                        button.setOpacity(0);
+                        String b="";
+                        b = btnName.getText();//on recupère le pseudo rentrer, pour l'instant on ne l'utilise pas
+                        System.out.println(b);
+                        PacMan.INSTANCE = new PacMan(gameMenu,b);
+                        PacMan.INSTANCE.getInstance(b);
+                        //on assigne le pseudo rentrer au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au desus du pacman
+                        getChildren().add(menu7);
+                        TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu8);
+                        tt.setToX(menu8.getTranslateX() + offset);
+                        TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu7);
+                        tt1.setToX(menu8.getTranslateX());
+
+                        tt.play();
+                        tt1.play();
+
+                        tt.setOnFinished(evt1 -> {
+                            getChildren().remove(menu8);
+                        });
+                        }
+                    });
+                    if(button.getOpacity()==0){button.setOpacity(1);button.setVisible(false);}
             });
 
             MenuButton btnBack5 = new MenuButton("BACK");
@@ -342,22 +379,22 @@ private static GameMenu2 gameMenu;
 
             MenuButton btnf = new MenuButton("FACILE");
             btnf.setOnMouseClicked(event -> {
-                App.start(primaryS,4,k,a);
+                App.start(primaryS,4,k,a, LEFT, RIGHT, UP, DOWN);
             });
 
             MenuButton btnm = new MenuButton("MEDIUM");
             btnm.setOnMouseClicked(event -> {
-                App.start(primaryS,3,k,a);
+                App.start(primaryS,3,k,a, LEFT, RIGHT, UP, DOWN);
             });
 
             MenuButton btnh = new MenuButton("HARD");
             btnh.setOnMouseClicked(event -> {
-                App.start(primaryS,2,k,a);
+                App.start(primaryS,2,k,a, LEFT, RIGHT, UP, DOWN);
             });
 
             MenuButton btne = new MenuButton("EXPERT");
             btne.setOnMouseClicked(event -> {
-                App.start(primaryS,1,k,a);
+                App.start(primaryS,1,k,a, LEFT, RIGHT, UP, DOWN);
             });
 
             btnOptions.setTranslateX(0);
@@ -390,17 +427,17 @@ private static GameMenu2 gameMenu;
             btnSound.setTranslateX(0);
             btnSound.setTranslateY(10);
 
-            btncaseLeft.setTranslateX(0);
-            btncaseLeft.setTranslateY(10);
+            btncaseLeft.setTranslateX(0); LEFT.setTranslateX(300);
+            btncaseLeft.setTranslateY(10); LEFT.setTranslateY(40);
 
-            btncaseRight.setTranslateX(0);
-            btncaseRight.setTranslateY(20);
+            btncaseRight.setTranslateX(0); RIGHT.setTranslateX(300);
+            btncaseRight.setTranslateY(20); RIGHT.setTranslateY(50);
 
-            btncaseUp.setTranslateX(0);
-            btncaseUp.setTranslateY(30);
+            btncaseUp.setTranslateX(0); UP.setTranslateX(300);
+            btncaseUp.setTranslateY(30); UP.setTranslateY(60);
 
-            btncaseDown.setTranslateX(0);
-            btncaseDown.setTranslateY(40);
+            btncaseDown.setTranslateX(0); DOWN.setTranslateX(300);
+            btncaseDown.setTranslateY(40); DOWN.setTranslateY(70);
 
             btns1.setTranslateX(0);
             btns1.setTranslateY(10);
@@ -429,7 +466,7 @@ private static GameMenu2 gameMenu;
             volumeSliderEff.setTranslateX(0);
             volumeSliderEff.setTranslateY(20);
 
-            menu2.getChildren().addAll(btnBack1, btncaseLeft, btncaseRight, btncaseUp, btncaseDown);
+            menu2.getChildren().addAll(btnBack1,LEFT, btncaseLeft,RIGHT, btncaseRight,UP, btncaseUp,DOWN, btncaseDown);
             menu3.getChildren().addAll(btnBack2, btns1, btns2);
             menu0.getChildren().addAll(btnPlay, btnOptions, btnExit);
             menu1.getChildren().addAll(btnBack, btnSound, btnKey);

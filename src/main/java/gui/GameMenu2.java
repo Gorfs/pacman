@@ -6,14 +6,14 @@ import javafx.scene.control.Slider;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class GameMenu2 extends Parent {
 //class qui gère les boutons in-game (options et exit)
 
     private static VBox actuelle;
-
-    private static float son_effect;
 
     private static MenuButton b;
 
@@ -41,7 +41,12 @@ public class GameMenu2 extends Parent {
     public VBox getMenuf(){return menuf;}
     public void setMenuf(VBox menuf){this.menuf=menuf;}
 
-        public GameMenu2(Pane root, KeyCode[] k, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a) {
+    private Text LEFT;
+    private Text RIGHT;
+    private Text UP;
+    private Text DOWN;
+
+        public GameMenu2(Text left, Text right, Text up, Text down, Stage primaryStage, Pane root, KeyCode[] k, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a) {
             VBox menu0 = new VBox(10);
             VBox menu1 = new VBox(10);
             VBox menu2 = new VBox(10);
@@ -49,13 +54,16 @@ public class GameMenu2 extends Parent {
             VBox menu4 = new VBox(10);
             VBox menu5 = new VBox(10);
 
-            son_effect=a;
-
             menua=menu0;
             menub=menu1;
             menuc=menu2;
             menud=menu3;
             menue=menu4;
+
+            LEFT = left;
+            RIGHT = right;
+            UP = up;
+            DOWN = down;
       
             menu0.setTranslateX(100);
             menu0.setTranslateY(200);
@@ -306,8 +314,22 @@ public class GameMenu2 extends Parent {
                 Music.setSFXVolume(newValue.floatValue());
             });
 
+            // MenuButton btnMenu = new MenuButton("MENU");
+            // btnMenu.setOnMouseClicked(event -> {
+            //     App c= new App();
+            //     try {
+            //         c.start(primaryStage);
+            //     } catch (Exception e) {
+            //         // TODO Auto-generated catch block
+            //         e.printStackTrace();
+            //     }
+            // });
+
             btnOptions.setTranslateX(0);
             btnOptions.setTranslateY(40);
+
+            // btnMenu.setTranslateX(0);
+            // btnMenu.setTranslateY(50);
 
             btnExit.setTranslateX(0);
             btnExit.setTranslateY(60);
@@ -333,17 +355,17 @@ public class GameMenu2 extends Parent {
             btnSound.setTranslateX(0);
             btnSound.setTranslateY(10);
 
-            btncaseLeft.setTranslateX(0);
-            btncaseLeft.setTranslateY(10);
+            btncaseLeft.setTranslateX(0); LEFT.setTranslateX(300);
+            btncaseLeft.setTranslateY(10); LEFT.setTranslateY(40);
 
-            btncaseRight.setTranslateX(0);
-            btncaseRight.setTranslateY(20);
+            btncaseRight.setTranslateX(0); RIGHT.setTranslateX(300);
+            btncaseRight.setTranslateY(20); RIGHT.setTranslateY(50);
 
-            btncaseUp.setTranslateX(0);
-            btncaseUp.setTranslateY(30);
+            btncaseUp.setTranslateX(0); UP.setTranslateX(300);
+            btncaseUp.setTranslateY(30); UP.setTranslateY(60);
 
-            btncaseDown.setTranslateX(0);
-            btncaseDown.setTranslateY(40);
+            btncaseDown.setTranslateX(0); DOWN.setTranslateX(300);
+            btncaseDown.setTranslateY(40); DOWN.setTranslateY(70);
 
             btns1.setTranslateX(0);
             btns1.setTranslateY(10);
@@ -357,9 +379,9 @@ public class GameMenu2 extends Parent {
             volumeSliderEff.setTranslateX(0);
             volumeSliderEff.setTranslateY(20);
 
-            menu2.getChildren().addAll(btnBack1, btncaseLeft, btncaseRight, btncaseUp, btncaseDown);
+            menu2.getChildren().addAll(btnBack1,LEFT, btncaseLeft, RIGHT, btncaseRight,UP , btncaseUp,DOWN,  btncaseDown);
             menu3.getChildren().addAll(btnBack2, btns1, btns2);
-            menu0.getChildren().addAll(btnOptions, btnExit);
+            menu0.getChildren().addAll(btnOptions,/*btnMenu,*/ btnExit);
             menu1.getChildren().addAll(btnBack, btnSound, btnKey);
             menu4.getChildren().addAll(btnBack3, volumeSliderBgm); 
             menu5.getChildren().addAll(btnBack4, volumeSliderEff);
