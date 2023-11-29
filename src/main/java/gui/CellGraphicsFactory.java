@@ -8,6 +8,8 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import model.MazeState;
 
 
@@ -29,7 +31,8 @@ public class CellGraphicsFactory {
             case DOT -> scale/10;
             case ENERGIZER -> scale/5;
             case NOTHING -> 0;
-            case WALL -> scale/4;});
+            case WALL -> scale/4;
+            default -> 0;});
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
@@ -66,6 +69,12 @@ public class CellGraphicsFactory {
                     group.getChildren().add(wall);
                 }
             }
+        } else if (cell.initialContent() == Cell.Content.CHERRY){
+            var cherryImage = new Image(getClass().getResourceAsStream("/cherry.png"));
+            var cherryImageView = new ImageView(cherryImage);
+            cherryImageView.setFitWidth(scale);
+            cherryImageView.setFitHeight(scale);
+            group.getChildren().add(cherryImageView);
         } else {
             // If there isn't a wall in the cell
             dot.setFill(Color.YELLOW);
@@ -112,7 +121,7 @@ public class CellGraphicsFactory {
         return new GraphicsUpdater() {
             @Override
             public void update(long deltaT) {
-                dot.setVisible(!state.getGridState(pos));
+                group.setVisible(!state.getGridState(pos));
             }
 
             @Override

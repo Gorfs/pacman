@@ -166,6 +166,9 @@ public final class PacMan implements Critter {
                 compteur=11000L;
                 chrono();
             }
+            else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.CHERRY){
+                MazeState.addScore(10);
+            }
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
         if (this.isDying) {

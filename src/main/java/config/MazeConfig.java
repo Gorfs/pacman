@@ -8,6 +8,7 @@ import static config.Cell.Content.*;
 import java.io.InputStream;
 // Import the Scanner class to read text files
 import java.util.Scanner;
+import java.util.Random;
 
 public class MazeConfig {
     public MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
@@ -95,6 +96,15 @@ public class MazeConfig {
         }
             // close file
             myReader.close();
+
+        Random rand = new Random();
+        for(int i=0; i<map.length; i++){
+            for(int j=0; j<map[i].length; j++){
+                if(map[i][j].initialContent() == Cell.Content.DOT && rand.nextDouble() < 0.05){
+                    map[i][j] = new Cell(Cell.Content.CHERRY);
+                }
+            }
+        }
         // Init the spawn of the entities
         IntCoordinates player = new IntCoordinates(10, 15),
                 blinky = new IntCoordinates(10, 8), inky = new IntCoordinates(11, 9),
@@ -104,3 +114,4 @@ public class MazeConfig {
     }
 
 }
+ 

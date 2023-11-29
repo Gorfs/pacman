@@ -2,7 +2,7 @@ package config;
 
 // public record Cell(boolean northWall, boolean eastWall, boolean southWall, boolean westWall, Cell.Content initialContent) {
 public record Cell(Cell.Content initialContent) {
-    public enum Content {NOTHING, ENERGIZER, WALL, DOT}
+    public enum Content {NOTHING, ENERGIZER, WALL, DOT, CHERRY}
     // Create a cell shaped as we want
    public String toString(){
     return String.valueOf(this.initialContent); 
