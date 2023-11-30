@@ -10,6 +10,7 @@ public enum Ghost implements Critter {
     private Direction nextDirection = Direction.NONE;
     private boolean scatterMode = true;
     private boolean scaredMode = false;
+    private int speed = 2;
 
     private float timerAni = 0;
     private final float[] checkpointAni = {0.25F,0.5F};
@@ -61,9 +62,13 @@ public enum Ghost implements Critter {
     }
 
     @Override
-    public double getSpeed() {
+    public int getSpeed() {
         // speed is constant, we should probably get this from a file such as a CONSTANT.json
-        return 2;
+        return speed;
+    }
+
+    public void increaseSpeed() {
+        this.speed += 1;  
     }
 
     public boolean isScatterMode() {
@@ -82,4 +87,8 @@ public enum Ghost implements Critter {
     public void setScaredMode(boolean scaredMode) {
         this.scaredMode = scaredMode;
     }
+
+
+    
+
 }

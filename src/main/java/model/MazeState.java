@@ -33,6 +33,8 @@ public final class MazeState {
     private static int livesC = lives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
+    //private static int s = 2; //speed
+
     public MazeState(GhostsController[] ghostsController, MazeConfig config, GameMenu2 gameMenu) {
         gameMenu1=gameMenu;
         this.ghostsController = ghostsController;
@@ -211,6 +213,9 @@ public final class MazeState {
         if(allPointsCollected()){
             resetCritters();
             resetGrid();
+            for (Ghost ghost : Ghost.values()) {
+                ghost.increaseSpeed();
+            }
         }
     }
 }

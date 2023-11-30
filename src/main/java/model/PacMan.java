@@ -97,7 +97,7 @@ public final class PacMan implements Critter {
     }
 
     @Override
-    public double getSpeed() {
+    public int getSpeed() {
         // Changed so that when pacman is dying, it doesn't move anymore.
         return getIsDying()? 0:(isEnergized() ? 6 : 4);
     }
