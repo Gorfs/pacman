@@ -1,5 +1,7 @@
 package gui;
 
+import java.util.Random;
+
 import config.Cell;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -13,9 +15,15 @@ import model.MazeState;
 
 public class CellGraphicsFactory {
     private final double scale;
+    private Color colorWalls;
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
+        //On initialise la couleur des murs aléatoirement parmi une liste de couleurs
+        Color[] colors = {Color.BLUE, Color.RED, Color.PINK, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN, Color.PURPLE, Color.WHITE, Color.BROWN};
+        Random rand = new Random();
+        int n = rand.nextInt(10);
+        colorWalls = colors[n];
     }
 
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
@@ -33,37 +41,37 @@ public class CellGraphicsFactory {
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
+        var wallX = new Rectangle();
+        var wallY = new Rectangle();
         // if there is a wall in the cell
         if (cell.initialContent() == Cell.Content.WALL) {
             // set wall color
-            dot.setFill(Color.BLUEVIOLET);
+            dot.setFill(colorWalls);
             if (pos.x() < state.getWidth() - 1) {
                 // Get position of the right cell
                 IntCoordinates right = pos.toRealCoordinates(1.0).plus(RealCoordinates.EAST_UNIT).round();
                 if (state.getConfig().getCell(right).initialContent() == Cell.Content.WALL) {
                     // Draw the link between walls if the right cell is also a wall
-                    var wall = new Rectangle();
-                    wall.setHeight(scale/2);
-                    wall.setWidth(scale);
-                    wall.setY(scale/4);
-                    wall.setX(scale/2);
+                    wallX.setHeight(scale/2);
+                    wallX.setWidth(scale);
+                    wallX.setY(scale/4);
+                    wallX.setX(scale/2);
                     // set wall color
-                    wall.setFill(Color.BLUEVIOLET);
-                    group.getChildren().add(wall);
+                    wallX.setFill(colorWalls);
+                    group.getChildren().add(wallX);
                 }
             } if (pos.y() < state.getHeight() - 1) {
                 // Get position of the bottom cell
                 IntCoordinates bottom = pos.toRealCoordinates(1.0).plus(RealCoordinates.SOUTH_UNIT).round();
                 if (state.getConfig().getCell(bottom).initialContent() == Cell.Content.WALL) {
                     // Draw the link between walls if the right cell is also a wall
-                    var wall = new Rectangle();
-                    wall.setHeight(scale);
-                    wall.setWidth(scale/2);
-                    wall.setY(scale/2);
-                    wall.setX(scale/4);
+                    wallY.setHeight(scale);
+                    wallY.setWidth(scale/2);
+                    wallY.setY(scale/2);
+                    wallY.setX(scale/4);
                     // set wall color
-                    wall.setFill(Color.BLUEVIOLET);
-                    group.getChildren().add(wall);
+                    wallY.setFill(colorWalls);
+                    group.getChildren().add(wallY);
                 }
             }
         } else {
@@ -110,9 +118,24 @@ public class CellGraphicsFactory {
 
 
         return new GraphicsUpdater() {
+            float timer = 0;
             @Override
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
+                /* Prototype pour faire clignoter les murs (à retirer dans le futur si on ne l'utilise pas)
+                timer += (float) (deltaT * 1E-9);
+                if (timer > 1){
+                    Color[] colors = {Color.BLUE, Color.RED, Color.PINK, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN, Color.PURPLE, Color.WHITE, Color.BROWN};
+                    Random rand = new Random();
+                    int n = rand.nextInt(10);
+                    Color temp = colors[n];
+                    timer = 0;
+                    dot.setFill(temp);
+                    wallX.setFill(temp);
+                    wallY.setFill(temp);
+                }
+                */
+                
             }
 
             @Override
