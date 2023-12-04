@@ -32,7 +32,6 @@ public final class MazeState {
 
     private static Map<Critter, RealCoordinates> initialPos;
 
-    // TODO: these should be changed to constants determined by PLAYER or in separate file.
     private static int defaultLives = Constants.NORMAL_LIVES;
     private static int lives = defaultLives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée

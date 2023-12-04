@@ -110,9 +110,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu2);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu2));
         });
 
         MenuButton btnBack2 = new MenuButton("BACK");
@@ -127,9 +125,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu3);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu3));
         });
 
         MenuButton btnSound = new MenuButton("SOUND");
@@ -144,9 +140,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu1);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu1));
         });
 
         MenuButton btnKey = new MenuButton("KEY");
@@ -161,9 +155,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu1);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu1));
         });
 
         MenuButton btncaseLeft = new MenuButton("LEFT");// a faire : mettre le nom de la touche prise par le jeu -> k[i] a coté du bouton
@@ -198,9 +190,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu4);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu4));
         });
 
         MenuButton btns1 = new MenuButton("Background music");
@@ -215,9 +205,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu3);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu3));
             });
 
         MenuButton btnBack4 = new MenuButton("BACK");
@@ -232,9 +220,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu5);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu5));
         });
 
         MenuButton btns2 = new MenuButton("Sound effects");
@@ -249,9 +235,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu3);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu3));
             });
 
         //Curseur de volume Bgm
@@ -260,9 +244,7 @@ public class GameMenu extends Parent {
         volumeSliderBgm.setBlockIncrement(0.05);
         volumeSliderBgm.setShowTickMarks(true);
         volumeSliderBgm.setShowTickLabels(true);
-        volumeSliderBgm.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Music.setVolume(newValue.floatValue());
-        });
+        volumeSliderBgm.valueProperty().addListener((observable, oldValue, newValue) -> Music.setVolume(newValue.floatValue()));
 
         //Curseur de volume Effet sonore
         Slider volumeSliderEff = new Slider(0, 1, Music.getSFXVolume());
@@ -270,9 +252,7 @@ public class GameMenu extends Parent {
         volumeSliderEff.setBlockIncrement(0.05);
         volumeSliderEff.setShowTickMarks(true);
         volumeSliderEff.setShowTickLabels(true);
-        volumeSliderEff.valueProperty().addListener((observable, oldValue, newValue) -> {
-            Music.setSFXVolume(newValue.floatValue());
-        });
+        volumeSliderEff.valueProperty().addListener((observable, oldValue, newValue) -> Music.setSFXVolume(newValue.floatValue()));
 
         TextField btnName = new TextField("Name");
             btnName.setOnKeyTyped(event -> {
@@ -297,9 +277,7 @@ public class GameMenu extends Parent {
                 tt.play();
                 tt1.play();
 
-                tt.setOnFinished(evt -> {
-                getChildren().remove(menu8);
-                });
+                tt.setOnFinished(evt -> getChildren().remove(menu8));
              });
         });
 
@@ -315,9 +293,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu7);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu7));
         });
 
         MenuButton1 btnPlay = new MenuButton1("PLAY", root);
@@ -332,9 +308,7 @@ public class GameMenu extends Parent {
             tt.play();
             tt1.play();
 
-            tt.setOnFinished(evt -> {
-                getChildren().remove(menu0);
-            });
+            tt.setOnFinished(evt -> getChildren().remove(menu0));
         });
 
         MenuButton btnEasy = new MenuButton("FACILE");
