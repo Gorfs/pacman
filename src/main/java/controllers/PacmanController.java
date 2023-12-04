@@ -2,7 +2,6 @@ package controllers;
 
 import gui.GameMenu2;
 import gui.MenuButton;
-import gui.MenuButton2;
 import gui.Music;
 import model.Direction;
 import model.MazeState;

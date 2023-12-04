@@ -345,7 +345,7 @@ public class GameMenu extends Parent {
             try {
                 App.start(primaryS,4,k);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 
@@ -354,7 +354,7 @@ public class GameMenu extends Parent {
             try {
                 App.start(primaryS,3,k);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 
@@ -363,7 +363,7 @@ public class GameMenu extends Parent {
             try {
                 App.start(primaryS, 2, k);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 
@@ -372,7 +372,7 @@ public class GameMenu extends Parent {
             try {
                 App.start(primaryS, 1, k);
             } catch (Exception e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         });
 

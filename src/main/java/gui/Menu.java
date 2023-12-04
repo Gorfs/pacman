@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.*;
+import java.util.Objects;
 
 import geometry.IntCoordinates;
 import javafx.scene.Node;
@@ -87,7 +88,7 @@ public class Menu {
                     if ((MazeState.getLives() - 1) <= i){
                         heartUrl = "/empty1.png"; 
                     }
-                    livesArray[i] = new ImageView(new Image(getClass().getResourceAsStream(heartUrl), scale*size,scale*size, true, true));
+                    livesArray[i] = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(heartUrl)), scale*size,scale*size, true, true));
                 }
                 
                 // custom font settings.
