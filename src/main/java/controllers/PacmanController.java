@@ -8,6 +8,7 @@ import model.Direction;
 import model.MazeState;
 import model.PacMan;
 
+import java.security.Key;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,6 +19,7 @@ import javafx.scene.layout.Pane;
 public class PacmanController {
     //class qui gère les touches préssées in-game
     private KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
+    private static KeyCode lastKeyCode;
     private MenuButton btncase1a;
     private MenuButton btncase2a;
     private MenuButton btncase3a;
@@ -70,6 +72,16 @@ public class PacmanController {
                         gameMenu1.setVisible(false);
                     }
             }
+            else{
+                if (event.getCode() == k[0] || event.getCode() == k[1] || event.getCode() == k[2] || event.getCode() == k[3]){
+                    if (lastKeyCode == null || lastKeyCode != event.getCode()) {
+                        lastKeyCode = event.getCode();
+                    }
+                    else {
+                        return;
+                    }
+                }
+            }
             if(btncase1a.isVisible()){//même principe que dans App.java
                 if(event.getCode()!=null){
                     k[0]=event.getCode();
@@ -118,5 +130,9 @@ public class PacmanController {
     }
     public void keyReleasedHandler(KeyEvent event) {
         // Nothing to do?
+    }
+
+    public static void resetLastKeyCode() {
+        lastKeyCode = null;
     }
 }

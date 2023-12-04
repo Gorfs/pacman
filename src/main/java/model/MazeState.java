@@ -6,6 +6,7 @@ import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.GameMenu2;
 import controllers.GhostsController;
+import controllers.PacmanController;
 
 import java.util.List;
 import java.util.Map;
@@ -243,6 +244,7 @@ public final class MazeState {
     private void playerLost() {
         if (PacMan.INSTANCE.getIsDying()) {
             lives--;
+            PacmanController.resetLastKeyCode();
             if (lives == 0) {
                 gui.Music.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
                 gui.Music.music_gameover(); // Et on lance le music de game over

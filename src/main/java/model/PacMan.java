@@ -1,6 +1,8 @@
 package model;
 
 import config.Cell;
+import controllers.PacmanController;
+
 import java.util.Timer;
 import geometry.RealCoordinates;
 import gui.GameMenu2;

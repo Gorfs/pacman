@@ -19,7 +19,7 @@ public class CellGraphicsFactory {
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
-        //On initialise la couleur des murs aléatoirement parmi une liste de couleurs
+        //Set random color for walls
         Color[] colors = {Color.BLUE, Color.RED, Color.PINK, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN, Color.PURPLE, Color.WHITE, Color.BROWN};
         Random rand = new Random();
         int n = rand.nextInt(10);
@@ -122,7 +122,7 @@ public class CellGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
-                /* Prototype pour faire clignoter les murs (à retirer dans le futur si on ne l'utilise pas)
+                /* Just a try to change the color of the walls every second (to delete if not useful)
                 timer += (float) (deltaT * 1E-9);
                 if (timer > 1){
                     Color[] colors = {Color.BLUE, Color.RED, Color.PINK, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN, Color.PURPLE, Color.WHITE, Color.BROWN};
