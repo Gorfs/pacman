@@ -10,7 +10,6 @@ public record Cell(Cell.Content initialContent) {
     /**
      * @return the content of the cell
      */
-    // Create a cell shaped as we want
    public String toString(){
     return String.valueOf(this.initialContent); 
    }

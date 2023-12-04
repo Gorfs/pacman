@@ -13,9 +13,9 @@ import java.util.Scanner;
  * Class record that create the maze.
  * @param grid Array of cell that represent the maze
  * @param pacManPos used to initialize pacman spawn coordinates
- * @param blinkyPos used to initialize blinky spawn coordinates
- * @param pinkyPos used to initialize pinky spawn coordinates
- * @param inkyPos used to initialize inky spawn coordinates
+ * @param blinkyPos used to initialize BLINKY spawn coordinates
+ * @param pinkyPos used to initialize PINKY spawn coordinates
+ * @param inkyPos used to initialize INKY spawn coordinates
  * @param clydePos used to initialize clyde spawn coordinates
  */
 public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
@@ -23,11 +23,11 @@ public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates
     /**
      * Class record that create the maze.
      * @param grid Array of cell that represent the maze
-     * @param pacManPos used to initialize pacman spawn coordinates
-     * @param blinkyPos used to initialize blinky spawn coordinates
-     * @param pinkyPos used to initialize pinky spawn coordinates
-     * @param inkyPos used to initialize inky spawn coordinates
-     * @param clydePos used to initialize clyde spawn coordinates
+     * @param pacManPos used to initialize PLAYER spawn coordinates
+     * @param blinkyPos used to initialize BLINKY spawn coordinates
+     * @param pinkyPos used to initialize PINKY spawn coordinates
+     * @param inkyPos used to initialize INKY spawn coordinates
+     * @param clydePos used to initialize CLYDE spawn coordinates
      */
     public MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates blinkyPos, IntCoordinates pinkyPos,
                       IntCoordinates inkyPos, IntCoordinates clydePos) {
@@ -83,7 +83,7 @@ public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates
         int n = 0;
         // while there is something to read
         while (myReader.hasNextLine()) {
-            // Get the curent line
+            // Get the current line
             String line = myReader.nextLine();
             // Split everything into a String array
             String[] data = line.split(",");
@@ -103,9 +103,8 @@ public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates
         // close file
         myReader.close();
         // Init the spawn of the entities
-        IntCoordinates player = new IntCoordinates(10, 15),
-                blinky = new IntCoordinates(10, 8), inky = new IntCoordinates(11, 9),
-                pinky = new IntCoordinates(10, 9), clyde = new IntCoordinates(9, 9);
+        IntCoordinates player = Constants.PLAYER, blinky = Constants.BLINKY, inky = Constants.INKY,
+                pinky = Constants.PINKY, clyde = Constants.CLYDE;
         // return everything
         return new MazeConfig(map, player, blinky, pinky, inky, clyde);
     }

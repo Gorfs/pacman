@@ -1,5 +1,6 @@
 package gui;
 
+import config.Constants;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -25,18 +26,18 @@ public final class CritterGraphicsFactory {
      * Method used to create a group of graphics for a critter.
      * @param critter variable that represent a critter (pacman or ghosts)
      * @return graphicsUpdater method that update the sprite of the critter
-     * @throws IOException Signals that an I/O exception of some sort has occurred.
+     * @throws IOException Signals that an I/O exception to some sort has occurred.
      *                     This class is the general class of exceptions produced by
      *                     failed or interrupted I/O operations.
      */
     public GraphicsUpdater makeGraphics(Critter critter) throws IOException {
         var size = 1.0;
-        var url = (critter instanceof PacMan) ? "/pacman.png" :
+        var url = (critter instanceof PacMan) ? Constants.PACMAN_PNG :
                 switch ((Ghost) critter) {
-                    case BLINKY -> "/ghosts/ghost_blinky.png";
-                    case CLYDE -> "/ghosts/ghost_clyde.png";
-                    case INKY -> "/ghosts/ghost_inky.png";
-                    case PINKY -> "/ghosts/ghost_pinky.png";
+                    case BLINKY -> Constants.BLINKY_PNG;
+                    case INKY -> Constants.INKY_PNG;
+                    case PINKY -> Constants.PINKY_PNG;
+                    case CLYDE -> Constants.CLYDE_PNG;
                 };
         InputStream is = getClass().getResourceAsStream(url);
         assert is != null;
@@ -105,7 +106,7 @@ public final class CritterGraphicsFactory {
                         image.setFitHeight(scaledHeight);
                         image.setSmooth(true);
                     }
-                    // If critter is moving update animation, else just keep the curent sprite.
+                    // If critter is moving update animation, else just keep the current sprite.
                     if (critter.getDirection() != Direction.NONE && !PacMan.INSTANCE.getIsDying()) {
                         // I added to each critter an animation timer called timerAni that update each frame critter is moving.
                         critter.setTimerAni((float) (critter.getTimerAni() + deltaT * 1E-9));

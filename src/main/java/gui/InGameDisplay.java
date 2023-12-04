@@ -29,7 +29,7 @@ public class InGameDisplay {
         // menu.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.DOTTED, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 
         // the number of lives at the start of the game based on difficulty.
-        int initLives = MazeState.getInitLives() - 1;
+        int initLives = MazeState.getDefaultLives() - 1;
 
         Label scoreText = new Label("Score:" + score);
 

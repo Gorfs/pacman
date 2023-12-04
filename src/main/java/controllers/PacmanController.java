@@ -24,6 +24,7 @@ public class PacmanController {
     private final MenuButton btnNorth;
     private final MenuButton btnSouth;
     private final GameMenu2 optionMenu;
+    private final MazeState state;
     private final Pane root;
 
     /**
@@ -37,9 +38,9 @@ public class PacmanController {
      * @param btnSouth button used to change keycode to go south in the option
      */
     public PacmanController(KeyCode[] keyCodes, GameMenu2 optionMenu, Pane root, MenuButton btnWest,
-                            MenuButton btnEast, MenuButton btnNorth, MenuButton btnSouth){
+                            MenuButton btnEast, MenuButton btnNorth, MenuButton btnSouth, MazeState state){
         this.keyCodes = keyCodes; this.optionMenu = optionMenu; this.root = root; this.btnWest = btnWest;
-        this.btnEast = btnEast; this.btnNorth = btnNorth; this.btnSouth = btnSouth;
+        this.btnEast = btnEast; this.btnNorth = btnNorth; this.btnSouth = btnSouth; this.state = state;
     }
 
     /**
@@ -74,7 +75,7 @@ public class PacmanController {
                         }
                     } 
                 }
-                //si le bouton échap est pressé, alors le menu options se lance
+                //si le bouton echap est pressé, alors le menu options se lance
                 System.out.println("ouvrir option");
                     if(!optionMenu.isVisible()){
                         optionMenu.setVisible(true);
@@ -112,34 +113,32 @@ public class PacmanController {
                     btnSouth.setVisible(false);
                 }
             }
-        if(optionMenu.isVisible()){
-            if(event.getCode()==KeyCode.ESCAPE && !PacMan.getTimer2Marche()){
-                if(PacMan.INSTANCE.isEnergized() && PacMan.getCompteur()>0){
-                    PacMan.setTimer2Marche(true);
-                    PacMan.setTimerMarche(true);
+            // Thanks to this condition, if the options are open, we can't move pacman
+            if(optionMenu.isVisible()) {
+                if (event.getCode() == KeyCode.ESCAPE && !PacMan.getTimer2Marche()) {
+                    if (PacMan.INSTANCE.isEnergized() && PacMan.getCompteur() > 0) {
+                        PacMan.setTimer2Marche(true);
+                        PacMan.setTimerMarche(true);
+                    }
                 }
-            } 
-        }
-            //grâce à cette condition, si option est visible/activé, alors on ne peut pas déplacer pacman
+            }
             else if(event.getCode()== keyCodes[0]){PacMan.INSTANCE.setNextDirection(Direction.WEST);}
             else if(event.getCode()== keyCodes[1]){PacMan.INSTANCE.setNextDirection(Direction.EAST);}
             else if(event.getCode()== keyCodes[2]){PacMan.INSTANCE.setNextDirection(Direction.NORTH);}
             else if(event.getCode()== keyCodes[3]){PacMan.INSTANCE.setNextDirection(Direction.SOUTH);}
-            else {PacMan.INSTANCE.setNextDirection(PacMan.INSTANCE.getNextDirection());}}
-        else{
-            // Si la partie est terminée et que le joueur appuie sur entrer, alors on recommence la partie
+            else {PacMan.INSTANCE.setNextDirection(PacMan.INSTANCE.getNextDirection());}
+        } else {
+            // If the game has ended and the PLAYER press enter, the game restart
             if (event.getCode() == KeyCode.ENTER){
-                MazeState.restart();
+                state.restart();
                 Music.playBackgroundMusic();
             }
         }
     }
 
-    /**
+    /* Currently unused, so I commented it.
      * Method that check when a key is released
      * @param event get all the event that can happened in the game
      */
-    public void keyReleasedHandler(KeyEvent event) {
-        // Nothing to do?
-    }
+    // public void keyReleasedHandler(KeyEvent event) {}
 }

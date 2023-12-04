@@ -1,5 +1,6 @@
 package gui;
 
+import config.Constants;
 import controllers.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -52,7 +53,7 @@ public class App extends Application {
         // on initialise la fenêtre
         Pane root = new Pane();
         // on incrémente les dimensions de l'écran dans la fenêtre
-        root.setPrefSize(630,630);
+        root.setPrefSize(Constants.WINDOW_X,Constants.WINDOW_Y);
         root.setStyle("-fx-background-color: #000000");
 
         // on prend une image située dans les ressources
@@ -69,8 +70,8 @@ public class App extends Application {
         nameSubmit.setVisible(false);
 
         ImageView imgView = new ImageView(img);
-        imgView.setFitWidth(630); //image aux dimensions de l'écran
-        imgView.setFitHeight(350);
+        imgView.setFitWidth(Constants.WINDOW_X); //image aux dimensions de l'écran
+        imgView.setFitHeight(Constants.WINDOW_Y);
         imgView.setTranslateY(100);
         GameMenu2 gameMenu2 = new GameMenu2(root, keyCodes, nameSubmit, btnWest, btnEast, btnNorth, btnSouth);
         gameMenu2.setVisible(false);
@@ -143,8 +144,6 @@ public class App extends Application {
      */
     public static void start(Stage primaryStage, int live, KeyCode[] keyCodes) throws Exception {
         var root = new Pane();
-        //on incrémente les dimensions de l'écran dans la fenêtre
-        root.setPrefSize(630,630);
         var gameScene = new Scene(root);
         GameMenu2 gameMenu2 = new GameMenu2(root, keyCodes, nameSubmit, btnWest, btnEast, btnNorth, btnSouth);
 
@@ -152,19 +151,25 @@ public class App extends Application {
         gameMenu2.setVisible(false);
 
         // Controllers for Pacman and ghosts
-        var pacmanController = new PacmanController(keyCodes, gameMenu2, root, btnWest, btnEast, btnNorth, btnSouth);
-        gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
-        gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
+
         GhostsController[] ghostsController = {new ClydeController(), new PinkyController(),
                 new BlinkyController(), new InkyController()};
         for (var ghost: ghostsController) {ghost.startAI();}
 
         // Generate map from file
         var maze = new MazeState(ghostsController, MazeConfig.originalMaze("maze2"), gameMenu2);
+        Constants.WINDOW_X = (int) (maze.getWidth() * Constants.SCALE);
+        Constants.WINDOW_Y = maze.getHeight() * Constants.SCALE;
+        root.setPrefSize(Constants.WINDOW_X, Constants.WINDOW_Y);
         maze.setLives(live);
 
+        var pacmanController = new PacmanController(keyCodes, gameMenu2, root, btnWest, btnEast, btnNorth, btnSouth, maze);
+        gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
+        // Currently doing nothing, so I commented it.
+        // gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
+
         // Set up game window
-        var gameView = new GameView(maze, root, 30.0);
+        var gameView = new GameView(maze, root, Constants.SCALE);
         Music.playBackgroundMusic();
         primaryStage.setScene(gameScene);
         primaryStage.show();

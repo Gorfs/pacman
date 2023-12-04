@@ -1,5 +1,6 @@
 package gui;
 
+import config.Constants;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
 import javafx.scene.control.Slider;
@@ -280,12 +281,12 @@ public class GameMenu extends Parent {
             button.setTranslateY(203);
             button.setOnMouseClicked(event1 -> {//quand on appuie sur le bouton submit :
                 button.setVisible(false);
-                String b="";
-                b = btnName.getText();//on recupère le pseudo rentrer, pour l'instant on ne l'utilise pas
+                String b;
+                b = btnName.getText();//on récupère le pseudo rentré, pour l'instant, on ne l'utilise pas
                 System.out.println(b);
                 PacMan.INSTANCE = new PacMan(gameMenu,b);
                 PacMan.INSTANCE.getInstance(b);
-                //on assigne le pseudo rentrer au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au desus du pacman
+                // on assigne le pseudo rentré au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au-dessus du pacman
                 getChildren().add(menu7);
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu8);
                 tt.setToX(menu8.getTranslateX() + offset);
@@ -336,37 +337,37 @@ public class GameMenu extends Parent {
             });
         });
 
-        MenuButton btnf = new MenuButton("FACILE");
-        btnf.setOnMouseClicked(event -> {
+        MenuButton btnEasy = new MenuButton("FACILE");
+        btnEasy.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS,4,k);
+                App.start(primaryS, Constants.EASY_LIVES,k);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
 
-        MenuButton btnm = new MenuButton("MEDIUM");
-        btnm.setOnMouseClicked(event -> {
+        MenuButton btnNormal = new MenuButton("NORMAL");
+        btnNormal.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS,3,k);
+                App.start(primaryS,Constants.NORMAL_LIVES,k);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
 
-        MenuButton btnh = new MenuButton("HARD");
-        btnh.setOnMouseClicked(event -> {
+        MenuButton btnHard = new MenuButton("DIFFICILE");
+        btnHard.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS, 2, k);
+                App.start(primaryS, Constants.HARD_LIVES, k);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         });
 
-        MenuButton btne = new MenuButton("EXPERT");
-        btne.setOnMouseClicked(event -> {
+        MenuButton btnExpert = new MenuButton("EXPERT");
+        btnExpert.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS, 1, k);
+                App.start(primaryS, Constants.EXPERT_LIVES, k);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -423,17 +424,17 @@ public class GameMenu extends Parent {
         btnName.setTranslateX(0);
         btnName.setTranslateY(0);
 
-        btnf.setTranslateX(0);
-        btnf.setTranslateY(20);
+        btnEasy.setTranslateX(0);
+        btnEasy.setTranslateY(20);
 
-        btnm.setTranslateX(0);
-        btnm.setTranslateY(40);
+        btnNormal.setTranslateX(0);
+        btnNormal.setTranslateY(40);
 
-        btnh.setTranslateX(0);
-        btnh.setTranslateY(60);
+        btnHard.setTranslateX(0);
+        btnHard.setTranslateY(60);
 
-        btne.setTranslateX(0);
-        btne.setTranslateY(80);
+        btnExpert.setTranslateX(0);
+        btnExpert.setTranslateY(80);
 
         volumeSliderBgm.setTranslateX(0);
         volumeSliderBgm.setTranslateY(20);
@@ -448,7 +449,7 @@ public class GameMenu extends Parent {
         menu4.getChildren().addAll(btnBack3, volumeSliderBgm);
         menu5.getChildren().addAll(btnBack4, volumeSliderEff);
         menu8.getChildren().addAll(btnName);
-        menu7.getChildren().addAll(btnBack5,btnf,btnm,btnh,btne);
+        menu7.getChildren().addAll(btnBack5, btnEasy, btnNormal, btnHard, btnExpert);
         //on ajoute les boutons sur chaque menu
 
         getChildren().addAll(menu0);

@@ -1,6 +1,7 @@
 package model;
 
 import config.Cell;
+import config.Constants;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -14,26 +15,26 @@ import java.util.Objects;
 import static model.Ghost.*;
 
 /**
- * Class MazeState is used to update the maze while the player is playing.
+ * Class MazeState is used to update the maze while the PLAYER is playing.
  */
 public final class MazeState {
-    private static GhostsController[] ghostsController;
+    private final GhostsController[] ghostsController;
     private static MazeConfig config;
     private static int height;
     private static int width;
 
     private static boolean[][] gridState;
 
-    private static GameMenu2 gameMenu1;
+    private final GameMenu2 optionMenu;
 
     private static List<Critter> critters;
-    private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
+    private static int score; // J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private static Map<Critter, RealCoordinates> initialPos;
 
-    // TODO: these should be changed to constants determined by player or in separate file.
-    private static int lives = 3;
-    private static int InitLives = lives;
+    // TODO: these should be changed to constants determined by PLAYER or in separate file.
+    private static int defaultLives = Constants.NORMAL_LIVES;
+    private static int lives = defaultLives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
     /**
@@ -43,8 +44,8 @@ public final class MazeState {
      * @param gameMenu variable that contains in game option menu
      */
     public MazeState(GhostsController[] ghostsController, MazeConfig config, GameMenu2 gameMenu) {
-        gameMenu1=gameMenu;
-        MazeState.ghostsController = ghostsController;
+        this.optionMenu = gameMenu;
+        this.ghostsController = ghostsController;
         MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
@@ -72,15 +73,15 @@ public final class MazeState {
         return height;
     }
 
-    public static int getInitLives(){
-        return InitLives;
+    public static int getDefaultLives(){
+        return defaultLives;
     }
 
     public static int getLives(){
         return lives;
     }
 
-    public void setLives(int l){lives=l; InitLives =l;}
+    public void setLives(int l){lives=l; defaultLives =l;}
 
 
     public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
@@ -90,9 +91,9 @@ public final class MazeState {
     /**
      * This method is used to restart the game. It restarts lives, score maze and critters.
      */
-    public static void restart(){
+    public void restart(){
         gameEnded = false;
-        lives = InitLives;
+        lives = defaultLives;
         score = 0;
         resetGrid();
         resetCritters();
@@ -104,7 +105,7 @@ public final class MazeState {
 
     public void update(long deltaTns) {
         // Pause game if we're in the menu
-        if(!gameMenu1.isVisible()){
+        if(!optionMenu.isVisible()){
             for (var critter: critters) {
                 var curPos = critter.getPos();
                 var nextPos = critter.nextPos(deltaTns);
@@ -252,7 +253,8 @@ public final class MazeState {
 
     public static void addScore(int increment) {
         score += increment;
-        gui.Music.music_score(); //lorsque le score++ lance le music score
+        // Play a sound when it eats something
+        gui.Music.music_score();
     }
 
 
@@ -268,8 +270,9 @@ public final class MazeState {
         }
     }
 
-    private static void resetCritter(Critter critter) {
+    private void resetCritter(Critter critter) {
         if (critter instanceof Ghost ) {
+            addScore(Constants.GHOST_SCORE);
             if (Objects.equals(critter.toString(), "INKY"))
                 ghostsController[3].startAI();
             else if (Objects.equals(critter.toString(), "BLINKY"))
@@ -287,7 +290,7 @@ public final class MazeState {
         critter.setPos(initialPos.get(critter));
     }
 
-    public static void resetCritters() {
+    public void resetCritters() {
         for (var critter: critters) resetCritter(critter);
     }
 
