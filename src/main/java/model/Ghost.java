@@ -67,8 +67,8 @@ public enum Ghost implements Critter {
         return speed;
     }
 
-    public void increaseSpeed() {
-        this.speed += 1;  
+    public void setSpeed(int n) {
+        this.speed = n;  
     }
 
     public boolean isScatterMode() {

@@ -213,9 +213,6 @@ public final class MazeState {
         if(allPointsCollected()){
             resetCritters();
             resetGrid();
-            for (Ghost ghost : Ghost.values()) {
-                ghost.increaseSpeed();
-            }
         }
     }
 }

@@ -9,11 +9,13 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.Ghost;
 import model.PacMan;
 
 public class GameMenu extends Parent {
 //class qui gère les boutons dans le menu
 private static GameMenu2 gameMenu;
+
         public GameMenu(GameMenu2 gameMenu1, Pane root, Stage primaryS, KeyCode[] k, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4, float a, double widht, double height) {
             
             gameMenu=gameMenu1;
@@ -343,6 +345,9 @@ private static GameMenu2 gameMenu;
             MenuButton btnf = new MenuButton("FACILE");
             btnf.setOnMouseClicked(event -> {
                 try {
+                    for (Ghost ghost : Ghost.values()) {
+                        ghost.setSpeed(2);
+                    }
                     App.start(primaryS,4,k,a);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -352,6 +357,9 @@ private static GameMenu2 gameMenu;
             MenuButton btnm = new MenuButton("MEDIUM");
             btnm.setOnMouseClicked(event -> {
                 try {
+                    for (Ghost ghost : Ghost.values()) {
+                        ghost.setSpeed(2);
+                    }
                     App.start(primaryS,3,k,a);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -361,6 +369,9 @@ private static GameMenu2 gameMenu;
             MenuButton btnh = new MenuButton("HARD");
             btnh.setOnMouseClicked(event -> {
                 try {
+                    for (Ghost ghost : Ghost.values()) {
+                        ghost.setSpeed(3);
+                    }
                     App.start(primaryS, 2, k, a);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -370,6 +381,9 @@ private static GameMenu2 gameMenu;
             MenuButton btne = new MenuButton("EXPERT");
             btne.setOnMouseClicked(event -> {
                 try {
+                    for (Ghost ghost : Ghost.values()) {
+                        ghost.setSpeed(3);
+                    }
                     App.start(primaryS, 1, k, a);
                 } catch (Exception e) {
                     e.printStackTrace();
