@@ -33,29 +33,25 @@ public class GameView {
         gameRoot = root;
         // pixels per cell
         root.setMinWidth(maze.getWidth() * scale);
-        root.setMinHeight(maze.getHeight() * scale + 80); // le +80 c'est pour ajouter le menu en bas plutot que en haut
+        // le +80, c'est pour ajouter le menu en bas plutôt qu'en haut
+        root.setMinHeight(maze.getHeight() * scale + 80);
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
-        var gameover = new GameOver(scale * 1); //On initialise le GameOver
-        var menu = new Menu(scale * 1); //On initialise le Menu
+        //On initialise le GameOver
+        var gameover = new GameOver();
+        //On initialise le Menu
+        var menu = new InGameDisplay(scale * 1);
         graphicsUpdaters = new ArrayList<>();
 
         for (var critter : MazeState.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
         for (int x = 0; x < maze.getWidth(); x++)
             for (int y = 0; y < maze.getHeight(); y++)
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
-        addGraphics(gameover.makeGraphics(maze, new IntCoordinates(0,0))); //Pour pouvoir afficher le GameOver   
-        addGraphics(menu.makeGraphics(maze, new IntCoordinates(0, 0))); //Pour pouvoir afficher le Menu
+        addGraphics(gameover.makeGraphics()); //Pour pouvoir afficher le GameOver
+        addGraphics(menu.makeGraphics()); //Pour pouvoir afficher le Menu
     }
 
-    public double getRootWidth(){
-        return gameRoot.getWidth(); 
-    }
-    // I don't know why the height is an int and the width is a double, they should both be ints 
-    public double getRootHeight(){
-        return gameRoot.getHeight();
-    }
     public void animate() {
         new AnimationTimer() {
             long last = 0;

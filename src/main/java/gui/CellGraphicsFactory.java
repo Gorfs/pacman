@@ -13,10 +13,17 @@ import javafx.scene.shape.Rectangle;
 import model.MazeState;
 
 
+/**
+ * Class CellGraphicsFactory is used to update the maze
+ */
 public class CellGraphicsFactory {
     private final double scale;
     private Color colorWalls;
 
+    /**
+     * Constructor used to set up the scaling
+     * @param scale value of the base scaling
+     */
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
         //Set random color for walls
@@ -26,11 +33,21 @@ public class CellGraphicsFactory {
         colorWalls = colors[n];
     }
 
+    /**
+     * Method used to create a group of graphics for a cell.
+     * @param state current maze state.
+     * @param pos position of the current cell.
+     * @return a method that update the group of graphic that represent a cell.
+     */
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
+        // New group to stock every graphics for one cell
         var group = new Group();
+        // Place it to the right position
         group.setTranslateX(pos.x()*scale);
         group.setTranslateY(pos.y()*scale);
-        var cell = state.getConfig().getCell(pos);
+        // Get cell content
+        var cell = MazeState.getConfig().getCell(pos);
+        // Draw a dot
         var dot = new Circle();
         group.getChildren().add(dot);
         dot.setRadius(switch (cell.initialContent()) {
@@ -41,16 +58,16 @@ public class CellGraphicsFactory {
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
+        // if there is a wall in the cell
         var wallX = new Rectangle();
         var wallY = new Rectangle();
-        // if there is a wall in the cell
         if (cell.initialContent() == Cell.Content.WALL) {
             // set wall color
             dot.setFill(colorWalls);
             if (pos.x() < state.getWidth() - 1) {
                 // Get position of the right cell
                 IntCoordinates right = pos.toRealCoordinates(1.0).plus(RealCoordinates.EAST_UNIT).round();
-                if (state.getConfig().getCell(right).initialContent() == Cell.Content.WALL) {
+                if (MazeState.getConfig().getCell(right).initialContent() == Cell.Content.WALL) {
                     // Draw the link between walls if the right cell is also a wall
                     wallX.setHeight(scale/2);
                     wallX.setWidth(scale);
@@ -63,7 +80,7 @@ public class CellGraphicsFactory {
             } if (pos.y() < state.getHeight() - 1) {
                 // Get position of the bottom cell
                 IntCoordinates bottom = pos.toRealCoordinates(1.0).plus(RealCoordinates.SOUTH_UNIT).round();
-                if (state.getConfig().getCell(bottom).initialContent() == Cell.Content.WALL) {
+                if (MazeState.getConfig().getCell(bottom).initialContent() == Cell.Content.WALL) {
                     // Draw the link between walls if the right cell is also a wall
                     wallY.setHeight(scale);
                     wallY.setWidth(scale/2);
@@ -78,47 +95,13 @@ public class CellGraphicsFactory {
             // If there isn't a wall in the cell
             dot.setFill(Color.YELLOW);
         }
-        /*
-        if (cell.northWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale/10);
-            nWall.setWidth(scale);
-            nWall.setY(0);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUEVIOLET);
-            group.getChildren().add(nWall);
-        }
-        if (cell.eastWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale);
-            nWall.setWidth(scale/10);
-            nWall.setY(0);
-            nWall.setX(9*scale/10);
-            nWall.setFill(Color.BLUEVIOLET);
-            group.getChildren().add(nWall);
-        }
-        if (cell.southWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale/10);
-            nWall.setWidth(scale);
-            nWall.setY(9*scale/10);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUEVIOLET);
-            group.getChildren().add(nWall);
-        }
-        if (cell.westWall()) {
-            var nWall = new Rectangle();
-            nWall.setHeight(scale);
-            nWall.setWidth(scale/10);
-            nWall.setY(0);
-            nWall.setX(0);
-            nWall.setFill(Color.BLUEVIOLET);
-            group.getChildren().add(nWall);
-        }*/
-
 
         return new GraphicsUpdater() {
             float timer = 0;
+            /**
+             * Method that update the graphics for each cell
+             * @param deltaT time between two frames in nanoseconds
+            */
             @Override
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));

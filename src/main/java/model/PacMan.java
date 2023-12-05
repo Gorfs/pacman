@@ -4,32 +4,35 @@ import config.Cell;
 import controllers.PacmanController;
 
 import java.util.Timer;
+
+import config.Constants;
 import geometry.RealCoordinates;
 import gui.GameMenu2;
 
 import java.util.TimerTask;
 
+import static model.MazeState.allPointsCollected;
 import static model.MazeState.getCritters;
 
 /**
- * Implements Pac-Man character using singleton pattern. FIXME: check whether singleton is really a good idea.
+ * Implements Pac-Man character using singleton pattern.
  */
 public final class PacMan implements Critter {
     private Direction direction = Direction.NONE;
     private Direction nextDirection = Direction.NONE;
     private RealCoordinates pos;
 
-    private static long compteur = 11000L;//compteur pour le temps d'energie
-
-    public static void setCompteur(long compteur) {PacMan.compteur = compteur;}
+    private static long compteur = 11000L;//compteur pour le temps d'énergie
+    // Currently not used so I commented this line
+    // public static void setCompteur(long compteur) {PacMan.compteur = compteur;}
     public static long getCompteur() {return compteur;}
 
-    private static boolean timerMarche = false;//pour gerer le timer de setEnergized
-
-    public static boolean getTimerMarche(){return timerMarche;}
+    private static boolean timerMarche = false;// pour gérer le timer de setEnergized
+    // Currently not used, so I commented this line
+    // public static boolean getTimerMarche(){return timerMarche;}
     public static void setTimerMarche(boolean t){timerMarche = t;}
 
-    private static boolean timer2Marche = false;//pour gerer le timer de chrono
+    private static boolean timer2Marche = false;// pour gérer le timer de chrono
 
     public static void setTimer2Marche(boolean t) {timer2Marche = t;}
     public static boolean getTimer2Marche() {return timer2Marche;}
@@ -37,7 +40,8 @@ public final class PacMan implements Critter {
     private static boolean almostNormal = false;
     private static final long ENERGIZED_DURATION = 10000; // the energized duration is 10 seconds (timer is in milliseconds)
     private static final long ALMOST_NORMAL_DURATION = 2000; // the ghost flashing animation should last 2 seconds
-    private static Timer timer = new Timer("timer", true);
+    // Currently not used, so I commented this line
+    // private static Timer timer = new Timer("timer", true);
 
     // movement animation related
     private float timerAni = 0;
@@ -55,19 +59,21 @@ public final class PacMan implements Critter {
 
     public static GameMenu2 gameMenu;
     public static String name;
-    public static PacMan INSTANCE = new PacMan(gameMenu, name);
+    public static PacMan INSTANCE = new PacMan(null, null);
 
     public PacMan(GameMenu2 gameMenu2, String name) {
         gameMenu=gameMenu2;
-        PacMan.name=name;
+        PacMan.name = name;
     }
 
-    public PacMan getInstance(String name){
-        INSTANCE=new PacMan(gameMenu, name);
-        return INSTANCE;
+    // Result currently not used, so I made it return void
+    public void getInstance(String name){
+        INSTANCE = new PacMan(gameMenu, name);
+        // return INSTANCE;
     }
-    
-    public String getName(){return PacMan.name;}
+
+    // Currently not used, so I commented this line
+    // public String getName(){return PacMan.name;}
 
 
     @Override
@@ -155,12 +161,12 @@ public final class PacMan implements Critter {
     public void update(long deltaT){ //I moved what is related directly to Pacman
         var pacPos = INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
-        if (!MazeState.getGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()) {
+        if (!MazeState.getGridState()[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
             if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.DOT) {
-                MazeState.addScore(1);
-            }else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
+                MazeState.addScore(Constants.DOT_SCORE);
+            } else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
-                MazeState.addScore(15);
+                MazeState.addScore(Constants.ENERGIZER_SCORE);
                 for (var critter:getCritters()) if (critter instanceof Ghost) ((Ghost) critter).setScaredMode(true);
                 timer2Marche=false;
                 timerMarche=false;
@@ -221,12 +227,12 @@ public final class PacMan implements Critter {
             @Override
             public void run() {
                 if (!timerMarche){setEnergized(false);}
-                //si on est dans les options, alors pacman reste energisé,
-                //le timer sera reimplémenter une fois les options quittées
+                // si on est dans les options, alors pacman reste energisé,
+                // le timer sera de nouveau fonctionnel une fois les options quittées
             }
         };
         Timer timer = new Timer();
-        timer.schedule(task, temps);//on lance le chronomètre qui dure 'temps';
+        timer.schedule(task, temps);//on lance le chronomètre qui dure 'temps'
         if(timerMarche){timer.cancel();System.out.println("cancel");}
         setAlmostNormal(false);
         // this function set to true the boolean energized, and set to false 10 seconds after
