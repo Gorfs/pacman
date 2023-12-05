@@ -1,6 +1,8 @@
 package model;
 
 import config.Cell;
+import controllers.PacmanController;
+
 import java.util.Timer;
 
 import config.Constants;

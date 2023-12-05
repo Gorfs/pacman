@@ -7,6 +7,7 @@ import model.Direction;
 import model.MazeState;
 import model.PacMan;
 
+import java.security.Key;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,6 +19,9 @@ import javafx.scene.layout.Pane;
  * Class PacmanController is used to check all the keyboard input while in the game.
  */
 public class PacmanController {
+    //class qui gère les touches préssées in-game
+    private KeyCode[] k = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
+    private static KeyCode lastKeyCode;
     private final KeyCode[] keyCodes;
     private final MenuButton btnWest;
     private final MenuButton btnEast;
@@ -36,7 +40,7 @@ public class PacmanController {
      * @param btnEast button used to change keycode to go east in the option
      * @param btnNorth button used to change keycode to go north in the option
      * @param btnSouth button used to change keycode to go south in the option
-     */
+    */
     public PacmanController(KeyCode[] keyCodes, GameMenu2 optionMenu, Pane root, MenuButton btnWest,
                             MenuButton btnEast, MenuButton btnNorth, MenuButton btnSouth, MazeState state){
         this.keyCodes = keyCodes; this.optionMenu = optionMenu; this.root = root; this.btnWest = btnWest;
@@ -46,7 +50,7 @@ public class PacmanController {
     /**
      * Method that check when a key is pressed
      * @param event get all the event that can happened in the game
-     */
+    */
     public void keyPressedHandler(KeyEvent event) {
         if (!MazeState.getGameEnded()){
             // If the button escape is pressed, if the option menu is showed then close it else open it
@@ -88,6 +92,16 @@ public class PacmanController {
                         root.getChildren().removeAll(optionMenu);
                         optionMenu.setVisible(false);
                     }
+            }
+            else{
+                if (event.getCode() == k[0] || event.getCode() == k[1] || event.getCode() == k[2] || event.getCode() == k[3]){
+                    if (lastKeyCode == null || lastKeyCode != event.getCode()) {
+                        lastKeyCode = event.getCode();
+                    }
+                    else {
+                        return;
+                    }
+                }
             }
             if(btnWest.isVisible()){ //même principe que dans App.java
                 if(event.getCode()!=null){
@@ -136,9 +150,12 @@ public class PacmanController {
         }
     }
 
+    public static void resetLastKeyCode() {
+        lastKeyCode = null;
+    }
     /* Currently unused, so I commented it.
      * Method that check when a key is released
      * @param event get all the event that can happened in the game
-     */
+    */
     // public void keyReleasedHandler(KeyEvent event) {}
 }

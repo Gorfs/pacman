@@ -1,5 +1,7 @@
 package gui;
 
+import java.util.Random;
+
 import config.Cell;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -16,6 +18,7 @@ import model.MazeState;
  */
 public class CellGraphicsFactory {
     private final double scale;
+    private Color colorWalls;
 
     /**
      * Constructor used to set up the scaling
@@ -23,6 +26,11 @@ public class CellGraphicsFactory {
      */
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
+        //Set random color for walls
+        Color[] colors = {Color.BLUE, Color.RED, Color.PINK, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN, Color.PURPLE, Color.WHITE, Color.BROWN};
+        Random rand = new Random();
+        int n = rand.nextInt(10);
+        colorWalls = colors[n];
     }
 
     /**
@@ -55,7 +63,7 @@ public class CellGraphicsFactory {
         var wallY = new Rectangle();
         if (cell.initialContent() == Cell.Content.WALL) {
             // set wall color
-            dot.setFill(Color.BLUEVIOLET);
+            dot.setFill(colorWalls);
             if (pos.x() < state.getWidth() - 1) {
                 // Get position of the right cell
                 IntCoordinates right = pos.toRealCoordinates(1.0).plus(RealCoordinates.EAST_UNIT).round();
@@ -66,7 +74,7 @@ public class CellGraphicsFactory {
                     wallX.setY(scale/4);
                     wallX.setX(scale/2);
                     // set wall color
-                    wallX.setFill(Color.BLUEVIOLET);
+                    wallX.setFill(colorWalls);
                     group.getChildren().add(wallX);
                 }
             } if (pos.y() < state.getHeight() - 1) {
@@ -79,7 +87,7 @@ public class CellGraphicsFactory {
                     wallY.setY(scale/2);
                     wallY.setX(scale/4);
                     // set wall color
-                    wallY.setFill(Color.BLUEVIOLET);
+                    wallY.setFill(colorWalls);
                     group.getChildren().add(wallY);
                 }
             }
@@ -89,13 +97,28 @@ public class CellGraphicsFactory {
         }
 
         return new GraphicsUpdater() {
+            float timer = 0;
             /**
              * Method that update the graphics for each cell
              * @param deltaT time between two frames in nanoseconds
-             */
+            */
             @Override
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
+                /* Just a try to change the color of the walls every second (to delete if not useful)
+                timer += (float) (deltaT * 1E-9);
+                if (timer > 1){
+                    Color[] colors = {Color.BLUE, Color.RED, Color.PINK, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN, Color.PURPLE, Color.WHITE, Color.BROWN};
+                    Random rand = new Random();
+                    int n = rand.nextInt(10);
+                    Color temp = colors[n];
+                    timer = 0;
+                    dot.setFill(temp);
+                    wallX.setFill(temp);
+                    wallY.setFill(temp);
+                }
+                */
+                
             }
 
             @Override
