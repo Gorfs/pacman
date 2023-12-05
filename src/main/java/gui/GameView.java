@@ -4,14 +4,17 @@ import geometry.IntCoordinates;
 import javafx.animation.AnimationTimer;
 import javafx.scene.layout.Pane;
 import model.MazeState;
+import model.PacMan;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameView {
     // class parameters
     private final MazeState maze;
-    private final Pane gameRoot; // main node of the game
+    private static Pane gameRoot; // main node of the game
 
     private final List<GraphicsUpdater> graphicsUpdaters;
 
@@ -25,20 +28,28 @@ public class GameView {
      * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
      * @param scale le nombre de pixels représentant une unité du labyrinthe
      */
-    public GameView(MazeState maze, Pane root, double scale) {
+    public GameView(MazeState maze, Pane root, double scale) throws Exception {
         this.maze = maze;
-        this.gameRoot = root;
+        gameRoot = root;
         // pixels per cell
         root.setMinWidth(maze.getWidth() * scale);
-        root.setMinHeight(maze.getHeight() * scale);
+        // le +80, c'est pour ajouter le menu en bas plutôt qu'en haut
+        root.setMinHeight(maze.getHeight() * scale + 80);
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
+        //On initialise le GameOver
+        var gameover = new GameOver();
+        //On initialise le Menu
+        var menu = new InGameDisplay(scale * 1);
         graphicsUpdaters = new ArrayList<>();
-        for (var critter : maze.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
+
+        for (var critter : MazeState.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
         for (int x = 0; x < maze.getWidth(); x++)
             for (int y = 0; y < maze.getHeight(); y++)
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
+        addGraphics(gameover.makeGraphics()); //Pour pouvoir afficher le GameOver
+        addGraphics(menu.makeGraphics()); //Pour pouvoir afficher le Menu
     }
 
     public void animate() {
@@ -51,11 +62,19 @@ public class GameView {
                     last = now;
                     return;
                 }
+
                 var deltaT = now - last;
-                maze.update(deltaT);
+                if (!PacMan.INSTANCE.getIsDying())
+                    maze.update(deltaT);
                 for (var updater : graphicsUpdaters) {
-                    updater.update();
+                    try {
+                        updater.update(deltaT);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+                // Removed this update from loop for because we just need to call it once.
+                PacMan.INSTANCE.update(deltaT);
                 last = now;
             }
         }.start();
