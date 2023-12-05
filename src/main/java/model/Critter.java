@@ -4,17 +4,7 @@ import geometry.RealCoordinates;
 
 // Critter seems to be the main class used for any object that moves around in the maze with the pac-man
 public sealed interface Critter permits Ghost, PacMan {
-    RealCoordinates getPos();
-
-    Direction getDirection();
-
-    Direction getNextDirection();
-
-    float timerAni = 0;
-    float[] checkpointAni = new float[2];
-
     void setTimerAni(float timerAni);
-
     float getTimerAni();
     float[] getCheckpointAni();
 
@@ -37,7 +27,7 @@ public sealed interface Critter permits Ghost, PacMan {
 
     /**
     * @param deltaTNanoSeconds time since the last update in nanoseconds
-    * @return the next position if there is no wall
+    * @return the next position after the new one if there is no wall
     * */
     default RealCoordinates nextNextPos(long deltaTNanoSeconds) {
         return getPos().plus((switch (getNextDirection()) {
@@ -49,6 +39,9 @@ public sealed interface Critter permits Ghost, PacMan {
         }).times(getSpeed()*deltaTNanoSeconds * 1E-9));
     }
 
+    RealCoordinates getPos();
+    Direction getDirection();
+    Direction getNextDirection();
     void setPos(RealCoordinates realCoordinates);
     void setDirection(Direction direction);
     void setNextDirection(Direction direction);
