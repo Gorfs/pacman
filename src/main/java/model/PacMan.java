@@ -1,7 +1,6 @@
 package model;
 
 import config.Cell;
-import controllers.PacmanController;
 
 import java.util.Timer;
 
@@ -210,7 +209,6 @@ public final class PacMan implements Critter {
             public void run() {
                 if(!timer2Marche){compteur-=1000L;}
                 if(compteur>1000){chrono();}
-                System.out.println(compteur);
             }
         };
         Timer timer = new Timer();

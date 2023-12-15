@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.MazeState;
+import model.PacMan;
 
 
 /**
@@ -18,7 +19,7 @@ import model.MazeState;
  */
 public class CellGraphicsFactory {
     private final double scale;
-    private Color colorWalls;
+    private final Color colorWalls;
 
     /**
      * Constructor used to set up the scaling
@@ -40,6 +41,7 @@ public class CellGraphicsFactory {
      * @return a method that update the group of graphic that represent a cell.
      */
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
+        boolean wall = false;
         // New group to stock every graphics for one cell
         var group = new Group();
         // Place it to the right position
@@ -62,6 +64,7 @@ public class CellGraphicsFactory {
         var wallX = new Rectangle();
         var wallY = new Rectangle();
         if (cell.initialContent() == Cell.Content.WALL) {
+            wall = true;
             // set wall color
             dot.setFill(colorWalls);
             if (pos.x() < state.getWidth() - 1) {
@@ -96,8 +99,11 @@ public class CellGraphicsFactory {
             dot.setFill(Color.YELLOW);
         }
 
+        boolean finalWall = wall;
         return new GraphicsUpdater() {
-            float timer = 0;
+            final float[] timer = {0F,1F,0F};
+            int i = 0;
+            boolean t = true;
             /**
              * Method that update the graphics for each cell
              * @param deltaT time between two frames in nanoseconds
@@ -106,19 +112,25 @@ public class CellGraphicsFactory {
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
                 /* Just a try to change the color of the walls every second (to delete if not useful)
-                timer += (float) (deltaT * 1E-9);
-                if (timer > 1){
-                    Color[] colors = {Color.BLUE, Color.RED, Color.PINK, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN, Color.PURPLE, Color.WHITE, Color.BROWN};
-                    Random rand = new Random();
-                    int n = rand.nextInt(10);
-                    Color temp = colors[n];
-                    timer = 0;
+                 */
+                if (PacMan.INSTANCE.isEnergized() && finalWall){
+                    if (t) {
+                        timer[i] += (float) (deltaT * 1E-9);
+                        if (timer[i] >= 1) timer[i] = 1;
+                    } else {
+                        timer[i] -= (float) (deltaT * 1E-9);
+                        if (timer[i] <= 0) timer[i] = 0;
+                    }
+                    var temp = Color.color(timer[0], timer[1], timer[2]);
                     dot.setFill(temp);
                     wallX.setFill(temp);
                     wallY.setFill(temp);
+                    if (timer[i] == 1 || timer[i] == 0) {
+                        i++;
+                        t = !t;
+                        if (i >= 3) i = 0;
+                    }
                 }
-                */
-                
             }
 
             @Override

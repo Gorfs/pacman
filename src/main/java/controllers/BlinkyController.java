@@ -16,7 +16,7 @@ public final class BlinkyController extends GhostsController {
 
     @Override
     public IntCoordinates scatterDirection(Critter critter, MazeConfig config) {
-        return findPathing(critter, new IntCoordinates(config.getWidth() - 1, 0), config);
+        return findPathing(critter, new IntCoordinates(config.getWidth() - 2, -2), config);
     }
 
     @Override

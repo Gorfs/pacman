@@ -9,7 +9,6 @@ import model.PacMan;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class GameView {
     // class parameters
@@ -44,10 +43,10 @@ public class GameView {
         var menu = new InGameDisplay(scale * 1);
         graphicsUpdaters = new ArrayList<>();
 
-        for (var critter : MazeState.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
         for (int x = 0; x < maze.getWidth(); x++)
             for (int y = 0; y < maze.getHeight(); y++)
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
+        for (var critter : MazeState.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
         addGraphics(gameover.makeGraphics()); //Pour pouvoir afficher le GameOver
         addGraphics(menu.makeGraphics()); //Pour pouvoir afficher le Menu
     }
@@ -55,17 +54,29 @@ public class GameView {
     public void animate() {
         new AnimationTimer() {
             long last = 0;
+            int count = 0;
+            long fpsCount = 0;
 
             @Override
             public void handle(long now) {
                 if (last == 0) { // ignore the first tick, just compute the first deltaT
                     last = now;
+                    fpsCount = now;
                     return;
                 }
 
                 var deltaT = now - last;
+
+                count++;
+                if (now - fpsCount >= 1) {
+                    fpsCount = now - fpsCount;
+                    System.out.println(((int) (count/((int)deltaT*1E-9))) + " FPS");
+                    count = 0;
+                }
+
                 if (!PacMan.INSTANCE.getIsDying())
                     maze.update(deltaT);
+
                 for (var updater : graphicsUpdaters) {
                     try {
                         updater.update(deltaT);

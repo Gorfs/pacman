@@ -109,7 +109,7 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
 
         for (var v: voisins) {
             if (config.getCell(v).initialContent() != Cell.Content.WALL)
-                if (0 < pos.x() && 0 < pos.y() && pos.x() < config.getHeight() && pos.y() < config.getWidth()) {
+                if (0 <= pos.x() && 0 <= pos.y() && pos.x() < config.getHeight() && pos.y() < config.getWidth()) {
                     distances[n] = Math.sqrt(Math.pow(v.x() - goal.x(), 2) + Math.pow(v.y() - goal.y(), 2));
                 }
             n++;

@@ -108,6 +108,13 @@ public final class MazeState {
         if(!optionMenu.isVisible()){
             for (var critter: critters) {
                 var curPos = critter.getPos();
+
+                // Set direction to the next direction if direction is NONE.
+                if (critter.getDirection() == Direction.NONE) {
+                    critter.setDirection(critter.getNextDirection());
+                    critter.setNextDirection(Direction.NONE);
+                }
+
                 var nextPos = critter.nextPos(deltaTns);
                 // Get possible next pos for critter
                 var nextNextPos = critter.nextNextPos(deltaTns);
@@ -116,12 +123,6 @@ public final class MazeState {
                 var nextNeighbours = nextPos.intNeighbours();
                 // Get possible next cell
                 var nextNextNeighbours = nextNextPos.intNeighbours();
-
-                // Set direction to the next direction if direction is NONE.
-                if (critter.getDirection() == Direction.NONE) {
-                    critter.setDirection(critter.getNextDirection());
-                    critter.setNextDirection(Direction.NONE);
-                }
 
                 // Get the next direction of ghosts
                 if (critter instanceof Ghost) {
@@ -212,6 +213,7 @@ public final class MazeState {
                 if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
                     // If pacman is energized it can eat the ghost else it dies.
                     if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
+                        addScore(Constants.GHOST_SCORE);
                         resetCritter(critter);
                     } else {
                         if (!PacMan.INSTANCE.isStartedDeathAni()){
@@ -258,6 +260,7 @@ public final class MazeState {
     }
 
 
+
     private void playerLost() {
         if (PacMan.INSTANCE.getIsDying()) {
             lives--;
@@ -273,7 +276,6 @@ public final class MazeState {
 
     private void resetCritter(Critter critter) {
         if (critter instanceof Ghost ) {
-            addScore(Constants.GHOST_SCORE);
             if (Objects.equals(critter.toString(), "INKY"))
                 ghostsController[3].startAI();
             else if (Objects.equals(critter.toString(), "BLINKY"))
