@@ -85,28 +85,36 @@ public class App extends Application {
         btnSouth.setVisible(false);
         nameSubmit.setVisible(false);
 
-        LEFT = new Text(KeyCodetoString(keyCodes[0]));//on lui assigne la valeur par default
+        if(keyCodes[0]!=null){
+            LEFT = new Text(KeyCodetoString(keyCodes[0]));//on lui assigne la valeur par default
+        }
         LEFT.setVisible(true);//on la met visible pour qu'elle s'affiche une fois dans les options de touches
         LEFT.setFill(Color.WHITE);//on met la couleur du texte en blanc
         LEFT.setStroke(Color.WHITE);//on met des bordure en blancs
         LEFT.setScaleX(2);//on augmente la taille
         LEFT.setScaleY(2);
 
-        RIGHT = new Text(KeyCodetoString(keyCodes[1]));
+        if(keyCodes[1]!=null){
+            RIGHT = new Text(KeyCodetoString(keyCodes[1]));
+        }
         RIGHT.setVisible(true);
         RIGHT.setFill(Color.WHITE);
         RIGHT.setStroke(Color.WHITE);
         RIGHT.setScaleX(2);
         RIGHT.setScaleY(2);
 
-        UP = new Text(KeyCodetoString(keyCodes[2]));
+        if(keyCodes[2]!=null){
+            UP = new Text(KeyCodetoString(keyCodes[2]));
+        }
         UP.setVisible(true);
         UP.setFill(Color.WHITE);
         UP.setStroke(Color.WHITE);
         UP.setScaleX(2);
         UP.setScaleY(2);
 
-        DOWN = new Text(KeyCodetoString(keyCodes[3]));
+        if(keyCodes[3]!=null){
+            DOWN = new Text(KeyCodetoString(keyCodes[3]));
+        }
         DOWN.setVisible(true);
         DOWN.setFill(Color.WHITE);
         DOWN.setStroke(Color.WHITE);
