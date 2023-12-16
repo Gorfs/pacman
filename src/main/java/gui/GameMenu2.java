@@ -1,5 +1,7 @@
 package gui;
 
+import config.Constants;
+import geometry.RealCoordinates;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
 import javafx.scene.control.Slider;
@@ -9,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.MazeState;
+import model.PacMan;
 
 /**
  * Can't add javadoc here, WIP
@@ -366,22 +370,22 @@ public class GameMenu2 extends Parent {
             volumeSliderEff.setTranslateX(0);
             volumeSliderEff.setTranslateY(20);
 
-                // MenuButton btnMenu = new MenuButton("MENU");
-                // btnMenu.setOnMouseClicked(event -> {
-                //     App c= new App();
-                //     try {
-                //         c.start(primaryStage);
-                //     } catch (Exception e) {
-                //         // TODO Auto-generated catch block
-                //         e.printStackTrace();
-                //     }
-                // });
+                MenuButton btnMenu = new MenuButton("MENU");
+                btnMenu.setOnMouseClicked(event -> {
+                    App c= new App();
+                    try {
+                        Music.stopBackgroundMusic();
+                        c.start(primaryStage);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
 
                 btnOptions.setTranslateX(0);
                 btnOptions.setTranslateY(40);
 
-                // btnMenu.setTranslateX(0);
-                // btnMenu.setTranslateY(50);
+                btnMenu.setTranslateX(0);
+                btnMenu.setTranslateY(50);
 
                 btnExit.setTranslateX(0);
                 btnExit.setTranslateY(60);
@@ -433,7 +437,7 @@ public class GameMenu2 extends Parent {
 
                 menu2.getChildren().addAll(btnBack1,LEFT, btncaseLeft, RIGHT, btncaseRight,UP , btncaseUp,DOWN,  btncaseDown);
                 menu3.getChildren().addAll(btnBack2, btns1, btns2);
-                menu0.getChildren().addAll(btnOptions,/*btnMenu,*/ btnExit);
+                menu0.getChildren().addAll(btnOptions,btnMenu, btnExit);
                 menu1.getChildren().addAll(btnBack, btnSound, btnKey);
                 menu4.getChildren().addAll(btnBack3, volumeSliderBgm); 
                 menu5.getChildren().addAll(btnBack4, volumeSliderEff);

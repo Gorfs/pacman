@@ -72,6 +72,8 @@ public final class PacMan implements Critter {
         // return INSTANCE;
     }
 
+    public static PacMan getPacMan(){return INSTANCE;}
+
     // Currently not used, so I commented this line
     // public String getName(){return PacMan.name;}
 

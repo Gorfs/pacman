@@ -1,6 +1,7 @@
 package gui;
 
 import config.Constants;
+import geometry.RealCoordinates;
 import javafx.animation.TranslateTransition;
 import javafx.scene.Parent;
 import javafx.scene.control.Slider;
@@ -12,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import model.MazeState;
 import model.PacMan;
 
 public class GameMenu extends Parent {
@@ -291,6 +293,10 @@ public class GameMenu extends Parent {
                     System.out.println(b);
                     PacMan.INSTANCE = new PacMan(gameMenu,b);
                     PacMan.INSTANCE.getInstance(b);
+
+                    PacMan.getPacMan().setPos(new RealCoordinates(Constants.PLAYER.x(), Constants.PLAYER.y()));
+                    MazeState.setScore(0);
+
                     //on assigne le pseudo rentrer au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au desus du pacman
                     getChildren().add(menu7);
                     TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu8);
@@ -316,6 +322,10 @@ public class GameMenu extends Parent {
                         System.out.println(b);
                         PacMan.INSTANCE = new PacMan(gameMenu,b);
                         PacMan.INSTANCE.getInstance(b);
+
+                        PacMan.getPacMan().setPos(new RealCoordinates(Constants.PLAYER.x(), Constants.PLAYER.y()));
+                        MazeState.setScore(0);
+
                         //on assigne le pseudo rentrer au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au desus du pacman
                         getChildren().add(menu7);
                         TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu8);
