@@ -5,6 +5,8 @@ import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -13,6 +15,11 @@ import model.MazeState;
 
 public class CellGraphicsFactory {
     private final double scale;
+    private static final Image cherryImage;
+
+    static{
+        cherryImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/cherry.png"));
+    }
 
     public CellGraphicsFactory(double scale) {
         this.scale = scale;
@@ -33,6 +40,11 @@ public class CellGraphicsFactory {
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
+        var cherryImageView = new ImageView(cherryImage);
+        cherryImageView.setFitWidth(scale);
+        cherryImageView.setFitHeight(scale);
+        cherryImageView.setVisible(false);
+        group.getChildren().add(cherryImageView);
         // if there is a wall in the cell
         if (cell.initialContent() == Cell.Content.WALL) {
             // set wall color
@@ -113,6 +125,7 @@ public class CellGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
+                cherryImageView.setVisible(state.getCherryGridState(pos));
             }
 
             @Override

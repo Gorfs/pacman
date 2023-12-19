@@ -10,6 +10,9 @@ import controllers.GhostsController;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Random;
 
 import static model.Ghost.*;
 
@@ -20,6 +23,8 @@ public final class MazeState {
     private static int width;
 
     private static boolean[][] gridState;
+    private static boolean[][] cherryGridState; // Another grid for the cherries
+    private boolean cherryTimerStarted = false;
 
     private static GameMenu2 gameMenu1;
 
@@ -41,6 +46,7 @@ public final class MazeState {
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
         gridState = new boolean[height][width];
+        cherryGridState = new boolean[height][width];
         initialPos = Map.of(
                 PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
                 BLINKY, config.getBlinkyPos().toRealCoordinates(1.0),
@@ -88,6 +94,10 @@ public final class MazeState {
 
     public static boolean[][] getGridState(){ //Need it for the Pacman Class
         return gridState;
+    }
+
+    public static boolean[][] getCherryGridState(){
+        return cherryGridState;
     }
 
     public void update(long deltaTns) {
@@ -210,10 +220,37 @@ public final class MazeState {
         }
         if(allPointsCollected()){
             resetCritters();
+            resetCherryGrid();
             resetGrid();
+        }
+        // If the score is higher than 100 we start to generate cherries in the map
+        if(score>100 && !cherryTimerStarted){
+            generateRandomCherry();
+            cherryTimerStarted = true;
         }
     }
 }
+
+    // This function generate every 20 seconds cherries randomly in places where a dot was already collected
+    public void generateRandomCherry(){
+        TimerTask cherryTask = new TimerTask() {
+            @Override
+            public void run(){
+                    boolean w = false;
+                    Random rand = new Random();
+                    while(!w){
+                        int x = rand.nextInt(height);
+                        int y = rand.nextInt(width);
+                        if(gridState[x][y]){
+                            cherryGridState[x][y] = true;
+                            w = true;
+                        }
+                    }
+            }
+        };
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(cherryTask, 20000, 20000);
+    }
 
     public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
@@ -230,6 +267,14 @@ public final class MazeState {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 gridState[i][j] = false;
+            }
+        }
+    }
+
+    public static void resetCherryGrid() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                cherryGridState[i][j] = false;
             }
         }
     }
@@ -285,5 +330,9 @@ public final class MazeState {
 
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
+    }
+
+    public boolean getCherryGridState(IntCoordinates pos) {
+        return cherryGridState[pos.y()][pos.x()];
     }
 }
