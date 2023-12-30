@@ -100,7 +100,7 @@ public class Music {
             InputStream bufferedIn = new BufferedInputStream(audioSrc);
             importAudioFile(bufferedIn);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 

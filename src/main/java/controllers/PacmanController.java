@@ -57,7 +57,7 @@ public class PacmanController {
             if(event.getCode()==KeyCode.ESCAPE){
                 if(optionMenu.isVisible()){
                     if(PacMan.getTimer2Marche()){
-                        if(PacMan.INSTANCE.isEnergized() && PacMan.getCompteur()>0){//si le pacman est energized et le compteur>0
+                        if(PacMan.INSTANCE.isEnergized()){ //TODO: there was a check for "compter > 1" but I don't know why, please look
                             PacMan.setTimer2Marche(false);//on remet le compteur de chrono en route
                             TimerTask t = new TimerTask() {
                                 @Override
@@ -74,7 +74,7 @@ public class PacmanController {
                                 }
                             };
                             Timer tt = new Timer();
-                            tt.schedule(t,PacMan.getCompteur());
+                            tt.schedule(t,PacMan.getEnergizedTime());
                             //on lance un nouveau compteur, le dernier setEnergized étant fini
                         }
                     } 
@@ -130,7 +130,7 @@ public class PacmanController {
             // Thanks to this condition, if the options are open, we can't move pacman
             if(optionMenu.isVisible()) {
                 if (event.getCode() == KeyCode.ESCAPE && !PacMan.getTimer2Marche()) {
-                    if (PacMan.INSTANCE.isEnergized() && PacMan.getCompteur() > 0) {
+                    if (PacMan.INSTANCE.isEnergized() && PacMan.getEnergizedTime()> 0) {
                         PacMan.setTimer2Marche(true);
                         PacMan.setTimerMarche(true);
                     }
