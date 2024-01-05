@@ -109,8 +109,16 @@ public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates
                     inky = new IntCoordinates(Integer.parseInt(data[4]), Integer.parseInt(data[5]));
                     pinky = new IntCoordinates(Integer.parseInt(data[6]), Integer.parseInt(data[7]));
                     clyde = new IntCoordinates(Integer.parseInt(data[8]), Integer.parseInt(data[9]));
+
+                    Constants.PLAYER = player;
+                    Constants.BLINKY = blinky;
+                    Constants.INKY = inky;
+                    Constants.PINKY = pinky;
+                    Constants.CLYDE = clyde;
                 }
                 n++;
+
+
             }
 //            n++; PROBLEM
 //        } PROBLEM

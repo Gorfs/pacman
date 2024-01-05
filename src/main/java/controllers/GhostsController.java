@@ -176,10 +176,10 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
 
         }
         IntCoordinates pos = critter.getPos().round();
-        if (conditionOut() && pos.x() == startPosition1[0] && pos.y() == startPosition1[1]) {
+        if (conditionOut() && pos.x() == Constants.INKY.x() && pos.y() == Constants.INKY.y()) {
             started = true;return Direction.NORTH;
-        } else if (pos.x() == startPosition2[0] && pos.y() == startPosition2[1]) return Direction.EAST;
-        else if (pos.x() == startPosition3[0] && pos.y() == startPosition3[1]) return Direction.WEST;
+        } else if (pos.x() == Constants.BLINKY.x() && pos.y() == Constants.BLINKY.y()) return Direction.EAST;
+        else if (pos.x() == Constants.PINKY.x() && pos.y() == Constants.PINKY.y()) return Direction.WEST;
         return critter.getDirection();
     }
 
