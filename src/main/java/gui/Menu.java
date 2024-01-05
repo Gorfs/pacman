@@ -16,16 +16,16 @@ import javafx.util.Duration;
 import model.MazeState;
 import model.PacMan;
 
-public class GameMenu extends Parent {
+public class Menu extends Parent {
     //class qui gère les boutons dans le menu
-    private static GameMenu2 gameMenu;
+    private static OptionInGame gameMenu;
     //class qui gère les boutons dans le menu
     private static Text LEFT;
     private static Text RIGHT;
     private static Text UP;
     private static Text DOWN;
 
-        public GameMenu(Text left, Text right, Text up, Text down, GameMenu2 gameMenu1, Pane root, Stage primaryS, KeyCode[] k, MenuButton2 button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4) {
+        public Menu(Text left, Text right, Text up, Text down, OptionInGame gameMenu1, Pane root, Stage primaryS, KeyCode[] k, SubmitButton button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4) {
             
             gameMenu=gameMenu1;
 
@@ -361,7 +361,7 @@ public class GameMenu extends Parent {
                 });
             });
 
-            MenuButton1 btnPlay = new MenuButton1("PLAY", root);
+            ButtonPlay btnPlay = new ButtonPlay("PLAY", root);
             btnPlay.setOnMouseClicked(event -> {
                 getChildren().add(menu8);
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.50), menu0);

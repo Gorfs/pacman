@@ -12,11 +12,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class MenuButton1 extends StackPane {
+public class ButtonPlay extends StackPane {
     //class qui gère le bouton PLAY dans le menu    
     private Text text;
 
-    public MenuButton1(String name, Pane root) {
+    public ButtonPlay(String name, Pane root) {
         text = new Text(name);
         InputStream is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
         text.setFont(Font.loadFont(is, 100));

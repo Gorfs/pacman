@@ -27,7 +27,7 @@ public class App extends Application {
     // array of keycode used to move pacman
     private static final KeyCode[] keyCodes = {KeyCode.LEFT,KeyCode.RIGHT,KeyCode.UP,KeyCode.DOWN};
     //bouton qui permet de confirmer le pseudo
-    private static final MenuButton2 nameSubmit = new MenuButton2("Submit");
+    private static final SubmitButton nameSubmit = new SubmitButton("Submit");
     //message qui s'affiche une fois qu'on appuie sur le bouton LEFT dans les options
     private static final MenuButton btnWest = new MenuButton("Left : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton RIGHT dans les options
@@ -124,13 +124,13 @@ public class App extends Application {
         imgView.setFitWidth(Constants.WINDOW_X); //image aux dimensions de l'écran
         imgView.setFitHeight(Constants.WINDOW_Y);
         imgView.setTranslateY(100);
-        GameMenu2 gameMenu2 = new GameMenu2(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
+        OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
         gameMenu2.setVisible(false);
-        GameMenu gameMenu = new GameMenu(LEFT, RIGHT, UP, DOWN, gameMenu2, root, primaryStage,keyCodes,nameSubmit,btnWest,btnEast,btnNorth,btnSouth);
+        Menu menu = new Menu(LEFT, RIGHT, UP, DOWN, gameMenu2, root, primaryStage,keyCodes,nameSubmit,btnWest,btnEast,btnNorth,btnSouth);
         //on initialse les boutons dans le menu
-        gameMenu.setVisible(true);
-        root.getChildren().addAll(imgView, btnWest, btnEast, btnNorth, btnSouth, gameMenu, nameSubmit);
-        // on met tout dans l'affichage de la fenêtre
+        menu.setVisible(true);
+        root.getChildren().addAll(imgView, btnWest, btnEast, btnNorth, btnSouth, menu, nameSubmit);
+        //on met tout dans l'affichage de la fenêtre
         Scene scene = new Scene(root);
         scene.setOnKeyPressed(event -> {
             if(btnWest.isVisible()){
@@ -261,7 +261,7 @@ public class App extends Application {
     public static void start(Stage primaryStage, int live, KeyCode[] keyCodes) throws Exception {
         var root = new Pane();
         var gameScene = new Scene(root);
-        GameMenu2 gameMenu2 = new GameMenu2(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
+        OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
         //on initialise les options in-game
         gameMenu2.setVisible(false);
 
