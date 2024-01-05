@@ -136,6 +136,24 @@ public class Music {
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
         Clip clip = AudioSystem.getClip();
         clip.open(audioInputStream);
+
+        // LineListener pour fermer le clip une fois la lecture audio terminée
+        clip.addLineListener(event -> {
+            if (event.getType() == LineEvent.Type.STOP) {
+                clip.close();
+            }
+        });
+
+        // Logique de traitement lors de la fermeture du programme
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (clip.isRunning()) {
+                    clip.stop();
+                }
+                if (clip.isOpen()) {
+                    clip.close();
+                }
+            }));
+
         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
         clip.start();
