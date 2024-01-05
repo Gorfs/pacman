@@ -40,11 +40,6 @@ public enum Ghost implements Critter {
     }
 
     @Override
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    @Override
     public Direction getDirection() {
         return direction;
     }
@@ -52,6 +47,11 @@ public enum Ghost implements Critter {
     @Override
     public Direction getNextDirection() {
         return nextDirection;
+    }
+
+    @Override
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     @Override

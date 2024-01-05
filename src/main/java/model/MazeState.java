@@ -139,6 +139,7 @@ public final class MazeState {
                         ghostsController[0].setDirection((Ghost) critter, config, deltaTns);
                     // Update direction to EAST if the ghost just respawned and do not move
                     if (critter.getDirection() == Direction.NONE && critter.getNextDirection() == Direction.NONE) {
+                        System.out.println("test");
                         critter.setDirection(Direction.EAST);
                     }
                 }

@@ -147,11 +147,10 @@ public class App extends Application {
         var gameScene = new Scene(root);
         GameMenu2 gameMenu2 = new GameMenu2(root, keyCodes, nameSubmit, btnWest, btnEast, btnNorth, btnSouth);
 
-        //on initialise les options dans le jeu
+        // Initialise in game's options.
         gameMenu2.setVisible(false);
 
-        // Controllers for Pacman and ghosts
-
+        // Controllers for ghosts
         GhostsController[] ghostsController = {new ClydeController(), new PinkyController(),
                 new BlinkyController(), new InkyController()};
         for (var ghost: ghostsController) {ghost.startAI();}
@@ -163,6 +162,7 @@ public class App extends Application {
         root.setPrefSize(Constants.WINDOW_X, Constants.WINDOW_Y);
         maze.setLives(live);
 
+        // Controller for PacMan
         var pacmanController = new PacmanController(keyCodes, gameMenu2, root, btnWest, btnEast, btnNorth, btnSouth, maze);
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         // Currently doing nothing, so I commented it.

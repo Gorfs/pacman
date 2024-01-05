@@ -24,7 +24,7 @@ public class Music {
      *                    Si le niveau spécifié est supérieur à 1.0, le volume sera réglé sur 1.0.
      */
     public static void setVolume(float volumeLevel) {
-        if(volumeLevel < 0.0f) volume = 0.0f;
+        if (volumeLevel < 0.0f) volume = 0.0f;
         else volume = Math.min(volumeLevel, 1.0f);
         if (bgmClip != null && bgmClip.isRunning()) {
             FloatControl gainControl = (FloatControl) bgmClip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -74,7 +74,7 @@ public class Music {
     public static void playBackgroundMusic() { 
         try {
             InputStream audioSrc = Music.class.getResourceAsStream("/music/bgm.wav");
-            //Doit être mis en buffer pour supporter les marquages et les réinitialisations
+            // Doit être mis en buffer pour supporter les marquages et les réinitialisations
             assert audioSrc != null;
             InputStream bufferedIn = new BufferedInputStream(audioSrc);
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
@@ -100,30 +100,8 @@ public class Music {
             InputStream bufferedIn = new BufferedInputStream(audioSrc);
             importAudioFile(bufferedIn);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * @param bufferedIn file in inputStream version
-     * @throws UnsupportedAudioFileException An UnsupportedAudioFileException is an exception indicating that
-     *                                       an operation failed because a file did not contain valid data of
-     *                                       a recognized file type and format.
-     * @throws IOException Signals that an I/O exception of some sort has occurred.
-     *                     This class is the general class of exceptions produced by
-     *                     failed or interrupted I/O operations.
-     * @throws LineUnavailableException A LineUnavailableException is an exception indicating that a line cannot
-     *                                  be opened because it is unavailable. This situation arises most commonly
-     *                                  when a requested line is already in use by another application.
-     */
-    private static void importAudioFile(InputStream bufferedIn) throws UnsupportedAudioFileException,
-            IOException, LineUnavailableException {
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
-        Clip clip = AudioSystem.getClip();
-        clip.open(audioInputStream);
-        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
-        clip.start();
     }
 
     /**
@@ -156,4 +134,25 @@ public class Music {
         }
     }
 
+    /**
+     * @param bufferedIn file in inputStream version
+     * @throws UnsupportedAudioFileException An UnsupportedAudioFileException is an exception indicating that
+     *                                       an operation failed because a file did not contain valid data of
+     *                                       a recognized file type and format.
+     * @throws IOException Signals that an I/O exception of some sort has occurred.
+     *                     This class is the general class of exceptions produced by
+     *                     failed or interrupted I/O operations.
+     * @throws LineUnavailableException A LineUnavailableException is an exception indicating that a line cannot
+     *                                  be opened because it is unavailable. This situation arises most commonly
+     *                                  when a requested line is already in use by another application.
+     */
+    private static void importAudioFile(InputStream bufferedIn) throws UnsupportedAudioFileException,
+            IOException, LineUnavailableException {
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
+        Clip soundEffect = AudioSystem.getClip();
+        soundEffect.open(audioInputStream);
+        FloatControl gainControl = (FloatControl) soundEffect.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
+        soundEffect.start();
+    }
 }
