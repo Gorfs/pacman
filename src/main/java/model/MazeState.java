@@ -5,7 +5,7 @@ import config.Constants;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import gui.GameMenu2;
+import gui.OptionInGame;
 import controllers.GhostsController;
 import controllers.PacmanController;
 
@@ -26,7 +26,7 @@ public final class MazeState {
 
     private static boolean[][] gridState;
 
-    private final GameMenu2 optionMenu;
+    private final OptionInGame optionMenu;
 
     private static List<Critter> critters;
     private static int score; // J'ai passé la variable en static pour pouvoir la réinitialiser
@@ -43,7 +43,7 @@ public final class MazeState {
      * @param config variable that represent the initial version of the maze
      * @param gameMenu variable that contains in game option menu
      */
-    public MazeState(GhostsController[] ghostsController, MazeConfig config, GameMenu2 gameMenu) {
+    public MazeState(GhostsController[] ghostsController, MazeConfig config, OptionInGame gameMenu) {
         this.optionMenu = gameMenu;
         this.ghostsController = ghostsController;
         MazeState.config = config;

@@ -1,6 +1,6 @@
 package controllers;
 
-import gui.GameMenu2;
+import gui.OptionInGame;
 import gui.MenuButton;
 import gui.App;
 import gui.Music;
@@ -29,7 +29,7 @@ public class PacmanController {
     private final MenuButton btnEast;
     private final MenuButton btnNorth;
     private final MenuButton btnSouth;
-    private final GameMenu2 optionMenu;
+    private final OptionInGame optionMenu;
     private final MazeState state;
     private final Pane root;
     private static String[] touches = {null,null,null,null};
@@ -48,7 +48,7 @@ public class PacmanController {
      * @param btnNorth button used to change keycode to go north in the option
      * @param btnSouth button used to change keycode to go south in the option
     */
-    public PacmanController(String[] touche, KeyCode[] keyCodes, Text left, Text right, Text up, Text down, GameMenu2 optionMenu, Pane root, MenuButton btnWest,
+    public PacmanController(String[] touche, KeyCode[] keyCodes, Text left, Text right, Text up, Text down, OptionInGame optionMenu, Pane root, MenuButton btnWest,
                             MenuButton btnEast, MenuButton btnNorth, MenuButton btnSouth, MazeState state){
         this.keyCodes = keyCodes; this.optionMenu = optionMenu; this.root = root; this.btnWest = btnWest;
         this.btnEast = btnEast; this.btnNorth = btnNorth; this.btnSouth = btnSouth; this.state = state;

@@ -7,7 +7,7 @@ import java.util.Timer;
 
 import config.Constants;
 import geometry.RealCoordinates;
-import gui.GameMenu2;
+import gui.OptionInGame;
 
 import java.util.TimerTask;
 
@@ -57,11 +57,11 @@ public final class PacMan implements Critter {
     // So we don't have death animation instantly when death animation is finish and then create a loop.
     private boolean startedDeathAni = false;
 
-    public static GameMenu2 gameMenu;
+    public static OptionInGame gameMenu;
     public static String name;
     public static PacMan INSTANCE = new PacMan(null, null);
 
-    public PacMan(GameMenu2 gameMenu2, String name) {
+    public PacMan(OptionInGame gameMenu2, String name) {
         gameMenu=gameMenu2;
         PacMan.name = name;
     }

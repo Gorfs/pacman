@@ -17,7 +17,7 @@ import model.PacMan;
 /**
  * Can't add javadoc here, WIP
  */
-public class GameMenu2 extends Parent {
+public class OptionInGame extends Parent {
     // class qui gère les boutons in-game (options et exit)
 
     private static VBox actuelle;
@@ -53,7 +53,7 @@ public class GameMenu2 extends Parent {
     private static Text UP;
     private static Text DOWN;
 
-        public GameMenu2(Text left, Text right, Text up, Text down, Stage primaryStage, Pane root, KeyCode[] k, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4) {
+        public OptionInGame(Text left, Text right, Text up, Text down, Stage primaryStage, Pane root, KeyCode[] k, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4) {
             VBox menu0 = new VBox(10);
             VBox menu1 = new VBox(10);
             VBox menu2 = new VBox(10);
