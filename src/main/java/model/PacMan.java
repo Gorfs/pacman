@@ -6,8 +6,6 @@ import config.Constants;
 import geometry.RealCoordinates;
 import gui.GameMenu2;
 
-import javax.rmi.ssl.SslRMIClientSocketFactory;
-
 import static model.MazeState.allPointsCollected;
 import static model.MazeState.getCritters;
 
@@ -25,8 +23,6 @@ public final class PacMan implements Critter {
 
     private static boolean energized = false;
     private static boolean almostNormal = false;
-    private static final long ENERGIZED_DURATION = 10000; // the energized duration is 10 seconds (timer is in milliseconds)
-    private static final long ALMOST_NORMAL_DURATION = 2000; // the ghost flashing animation should last 2 seconds
 
     // movement animation related
     private float timerAni = 0;
@@ -139,11 +135,6 @@ public final class PacMan implements Critter {
     public static boolean isAlmostNormal(){
         return almostNormal;
     }
-
-    public static void setAlmostNormal(boolean e){
-        almostNormal = e;
-    }
-
 
     public void update(long deltaT){ //I moved what is related directly to Pacman
         var pacPos = INSTANCE.getPos().round();
