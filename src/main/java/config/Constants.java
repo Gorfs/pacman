@@ -33,4 +33,7 @@ public class Constants {
     public final static int DOT_SCORE = 10;
     public final static int ENERGIZER_SCORE = 50;
     public final static int GHOST_SCORE = 100;
+
+    // Index of the current map
+    public static int MAP_INDEX = 0;
 }

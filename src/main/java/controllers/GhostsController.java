@@ -1,6 +1,7 @@
 package controllers;
 
 import config.Cell;
+import config.Constants;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -20,7 +21,11 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
     // timer to update scatter mode
     float timer = 0;
     // If it can start chasing/scatter
-    boolean started = false;
+    boolean started = false; 
+
+    int[] startPosition1;
+    int[] startPosition2;
+    int[] startPosition3;
 
     /**
      * Method that start the ghost AI.
@@ -152,11 +157,29 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      * @return direction the ghost should go
      */
     public Direction waiting(Critter critter) {
+        switch (Constants.MAP_INDEX) {
+            case 1:
+                startPosition1 = new int[]{10, 9};
+                startPosition2 = new int[]{9, 9};
+                startPosition3 = new int[]{11, 9};
+                break;
+            case 2:
+                startPosition1 = new int[]{17, 19};
+                startPosition2 = new int[]{16, 19};
+                startPosition3 = new int[]{18, 19};
+                break;
+            case 3:
+                startPosition1 = new int[]{10, 1};
+                startPosition2 = new int[]{9, 1};
+                startPosition3 = new int[]{11, 1};
+                break;
+
+        }
         IntCoordinates pos = critter.getPos().round();
-        if (conditionOut() && pos.x() == 10 && pos.y() == 9) {
+        if (conditionOut() && pos.x() == startPosition1[0] && pos.y() == startPosition1[1]) {
             started = true;return Direction.NORTH;
-        } else if (pos.x() == 9 && pos.y() == 9) return Direction.EAST;
-        else if (pos.x() == 11 && pos.y() == 9) return Direction.WEST;
+        } else if (pos.x() == startPosition2[0] && pos.y() == startPosition2[1]) return Direction.EAST;
+        else if (pos.x() == startPosition3[0] && pos.y() == startPosition3[1]) return Direction.WEST;
         return critter.getDirection();
     }
 
