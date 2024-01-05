@@ -13,7 +13,6 @@ import config.MazeConfig;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.Key;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,7 +33,7 @@ public class App extends Application {
     //message qui s'affiche une fois qu'on appuie sur le bouton RIGHT dans les options
     private static final MenuButton btnEast = new MenuButton("Right : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton RIGHT dans les options
-    private static String[] touches = {null,null,null,null};//tableau qui permet de modifier les touches
+    private static final String[] touches = {null,null,null,null};//tableau qui permet de modifier les touches
 
     private static final MenuButton btnNorth = new MenuButton("Up : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton dans DOWN options
@@ -178,23 +177,9 @@ public class App extends Application {
         primaryStage.show();//on affiche le menu
     }
 
-    /**
-     * @param root the scene we need to update
-     * @return the scene once created
-     */
-
     public static void main(String[] args) {
         launch(args);
     }
-
-    /**
-     * @param primaryStage the primary stage for this application, onto which
-     *                     the application scene can be set.
-     *                     Applications may create other stages, if needed, but they will not be
-     *                     primary stages.
-     * @param live number of lives
-     * @param keyCodes array of keycode used to move pacman
-     */
 
     public static String KeyCodetoString(KeyCode key){//on recupere le String pour ensuite afficher la valeur de key
         String letter;
@@ -203,53 +188,47 @@ public class App extends Application {
     }
 
     public static void KeySpecial(String[] tab, int n, String s){
-        if(s.equals("é")){tab[n]="é";}
-        else if(s.equals("^")){tab[n]="^";}
-        else if(s.equals("è")){tab[n]="è";}
-        else if(s.equals("ç")){tab[n]="ç";}
-        else if(s.equals("à")){tab[n]="à";}
-        else if(s.equals("ù")){tab[n]="ù";}
-        else if(s.equals("&")){tab[n]="&";}
-        else if(s.equals("\"")){tab[n]="\"";}
-        else if(s.equals("'")){tab[n]="'";}
-        else if(s.equals("(")){tab[n]="(";}
-        else if(s.equals("-")){tab[n]="-";}
-        else if(s.equals("_")){tab[n]="_";}
-        else if(s.equals("1")){tab[n]="1";}
-        else if(s.equals("2")){tab[n]="2";}
-        else if(s.equals("3")){tab[n]="3";}
-        else if(s.equals("4")){tab[n]="4";}
-        else if(s.equals("5")){tab[n]="5";}
-        else if(s.equals("6")){tab[n]="6";}
-        else if(s.equals("7")){tab[n]="7";}
-        else if(s.equals("8")){tab[n]="8";}
-        else if(s.equals("9")){tab[n]="9";}
-        else if(s.equals("0")){tab[n]="0";}
+        switch (s) {
+            case "é" -> tab[n] = "é";
+            case "^" -> tab[n] = "^";
+            case "è" -> tab[n] = "è";
+            case "ç" -> tab[n] = "ç";
+            case "à" -> tab[n] = "à";
+            case "ù" -> tab[n] = "ù";
+            case "&" -> tab[n] = "&";
+            case "\"" -> tab[n] = "\"";
+            case "'" -> tab[n] = "'";
+            case "(" -> tab[n] = "(";
+            case "-" -> tab[n] = "-";
+            case "_" -> tab[n] = "_";
+            case "1" -> tab[n] = "1";
+            case "2" -> tab[n] = "2";
+            case "3" -> tab[n] = "3";
+            case "4" -> tab[n] = "4";
+            case "5" -> tab[n] = "5";
+            case "6" -> tab[n] = "6";
+            case "7" -> tab[n] = "7";
+            case "8" -> tab[n] = "8";
+            case "9" -> tab[n] = "9";
+            case "0" -> tab[n] = "0";
+        }
     }
 
     public static String keyName(String s){
-        if(s.equals("é")){return "2";}
-        else if(s.equals("è")){return "7";}
-        else if(s.equals("ç")){return "9";}
-        else if(s.equals("à")){return "0";}
-        else if(s.equals("ù")){return "ù";}
-        else if(s.equals("&")){return "1";}
-        else if(s.equals("'")){return "4";}
-        else if(s.equals("(")){return "5";}
-        else if(s.equals("-")){return "6";}
-        else if(s.equals("_")){return "8";}
-        else if(s.equals("\"")){return "3";}
-        else if(s.equals("1")){return "1";}
-        else if(s.equals("2")){return "2";}
-        else if(s.equals("3")){return "3";}
-        else if(s.equals("4")){return "4";}
-        else if(s.equals("5")){return "5";}
-        else if(s.equals("6")){return "6";}
-        else if(s.equals("7")){return "7";}
-        else if(s.equals("8")){return "8";}
-        else if(s.equals("9")){return "9";}
-        else if(s.equals("0")){return "0";}
-        else return null;
+        return switch (s) {
+            case "é", "2" -> "2";
+            case "è", "7" -> "7";
+            case "ç", "9" -> "9";
+            case "à", "0" -> "0";
+            case "ù" -> "ù";
+            case "&", "1" -> "1";
+            case "'", "4" -> "4";
+            case "(", "5" -> "5";
+            case "-", "6" -> "6";
+            case "_", "8" -> "8";
+            case "\"", "3" -> "3";
+            default -> null;
+        };
     }
 
     public static String KeySpecial(KeyCode key){
@@ -263,18 +242,22 @@ public class App extends Application {
     }
 
     public static boolean KeyForbidden(KeyCode key){
-        if(key==KeyCode.ACCEPT || key==KeyCode.ALT || key==KeyCode.F1 || key==KeyCode.F2 || key==KeyCode.F3 || key==KeyCode.F4 || key==KeyCode.F5
-        || key==KeyCode.F6 || key==KeyCode.F7 || key==KeyCode.F8 || key==KeyCode.F9 || key==KeyCode.F10 || key==KeyCode.F11 || key==KeyCode.F12
-        || key==KeyCode.F13 || key==KeyCode.F14 || key==KeyCode.F15 || key==KeyCode.F16 || key==KeyCode.F17 || key==KeyCode.F18 || key==KeyCode.F19
-        || key==KeyCode.F20 || key==KeyCode.F21 || key==KeyCode.F22 || key==KeyCode.F23 || key==KeyCode.F24 || key==KeyCode.SHIFT || key==KeyCode.CAPS
-        || key==KeyCode.ALT_GRAPH || key==KeyCode.BACK_SPACE || key==KeyCode.BEGIN || key==KeyCode.CANCEL || key==KeyCode.CLEAR || key==KeyCode.DELETE
-        || key==KeyCode.ESCAPE || key==KeyCode.NUM_LOCK || key==KeyCode.TAB || key==KeyCode.CONTROL || key==KeyCode.ENTER
-        ){
-            return false;
-        }
-        return true;
+        return key != KeyCode.ACCEPT && key != KeyCode.ALT && key != KeyCode.F1 && key != KeyCode.F2 && key != KeyCode.F3 && key != KeyCode.F4 && key != KeyCode.F5
+                && key != KeyCode.F6 && key != KeyCode.F7 && key != KeyCode.F8 && key != KeyCode.F9 && key != KeyCode.F10 && key != KeyCode.F11 && key != KeyCode.F12
+                && key != KeyCode.F13 && key != KeyCode.F14 && key != KeyCode.F15 && key != KeyCode.F16 && key != KeyCode.F17 && key != KeyCode.F18 && key != KeyCode.F19
+                && key != KeyCode.F20 && key != KeyCode.F21 && key != KeyCode.F22 && key != KeyCode.F23 && key != KeyCode.F24 && key != KeyCode.SHIFT && key != KeyCode.CAPS
+                && key != KeyCode.ALT_GRAPH && key != KeyCode.BACK_SPACE && key != KeyCode.BEGIN && key != KeyCode.CANCEL && key != KeyCode.CLEAR && key != KeyCode.DELETE
+                && key != KeyCode.ESCAPE && key != KeyCode.NUM_LOCK && key != KeyCode.TAB && key != KeyCode.CONTROL && key != KeyCode.ENTER;
     }
 
+    /**
+     * @param primaryStage the primary stage for this application, onto which
+     *                     the application scene can be set.
+     *                     Applications may create other stages, if needed, but they will not be
+     *                     primary stages.
+     * @param live number of lives
+     * @param keyCodes array of keycode used to move pacman
+     */
     public static void start(Stage primaryStage, int live, KeyCode[] keyCodes) throws Exception {
         var root = new Pane();
         var gameScene = new Scene(root);

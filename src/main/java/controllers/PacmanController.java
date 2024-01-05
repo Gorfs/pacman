@@ -8,7 +8,6 @@ import model.Direction;
 import model.MazeState;
 import model.PacMan;
 
-import java.security.Key;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,7 +49,7 @@ public class PacmanController {
     */
     public PacmanController(String[] touche, KeyCode[] keyCodes, Text left, Text right, Text up, Text down, OptionInGame optionMenu, Pane root, MenuButton btnWest,
                             MenuButton btnEast, MenuButton btnNorth, MenuButton btnSouth, MazeState state){
-        this.keyCodes = keyCodes; this.optionMenu = optionMenu; this.root = root; this.btnWest = btnWest;
+        PacmanController.keyCodes = keyCodes; this.optionMenu = optionMenu; this.root = root; this.btnWest = btnWest;
         this.btnEast = btnEast; this.btnNorth = btnNorth; this.btnSouth = btnSouth; this.state = state;
         touches=touche; LEFT=left; RIGHT=right; UP=up; DOWN=down;
     }
@@ -70,30 +69,6 @@ public class PacmanController {
 
             // If the button escape is pressed, if the option menu is showed then close it else open it
             if(event.getCode()==KeyCode.ESCAPE){
-                if(optionMenu.isVisible()){
-                    if(PacMan.getTimer2Marche()){
-                        if(PacMan.INSTANCE.isEnergized()){ //TODO: there was a check for "compter > 1" but I don't know why, please look
-                            PacMan.setTimer2Marche(false);//on remet le compteur de chrono en route
-                            TimerTask t = new TimerTask() {
-                                @Override
-                                public void run() {
-                                    PacMan.setAlmostNormal(true);
-                                    Timer timer = new Timer();
-                                     timer.schedule(new TimerTask() {
-                                        @Override
-                                        public void run() {
-                                            PacMan.INSTANCE.setEnergized(false);
-                                            PacMan.setAlmostNormal(false);
-                                        }
-                                    }, 1000);
-                                }
-                            };
-                            Timer tt = new Timer();
-                            tt.schedule(t,PacMan.getEnergizedTime());
-                            //on lance un nouveau compteur, le dernier setEnergized étant fini
-                        }
-                    } 
-                }
                 //si le bouton echap est pressé, alors le menu options se lance
                 System.out.println("ouvrir option");
                     if(!optionMenu.isVisible()){
@@ -111,57 +86,55 @@ public class PacmanController {
             
             // Thanks to this condition, if the options are open, we can't move pacman
             if(optionMenu.isVisible()) {
-                if (event.getCode() == KeyCode.ESCAPE && !PacMan.getTimer2Marche()) {
-                    if (PacMan.INSTANCE.isEnergized() && PacMan.getEnergizedTime() > 0) {
-                        PacMan.setTimer2Marche(true);
-                        PacMan.setTimerMarche(true);
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    if (PacMan.INSTANCE.isEnergized()) {
+                        PacMan.INSTANCE.setEnergizerPaused(true);
+                    }
+                } if(btnWest.isVisible()) {//même principe que dans App.java
+                    if(event.getCode()!=null && App.KeyForbidden(event.getCode())){
+                        if(App.keyName(event.getText())!=null){LEFT.setText(App.keyName(event.getText()));App.KeySpecial(touches, 0, event.getText());keyCodes[0]=null;}
+                        else if(event.getCode()!=KeyCode.UNDEFINED){App.bindKey(keyCodes, 0, event.getCode()); LEFT.setText(App.KeyCodetoString(keyCodes[0])); touches[0]=null;}
+                        btnWest.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
+                    }
+                } if(btnEast.isVisible()){
+                    if(event.getCode()!=null && App.KeyForbidden(event.getCode())){
+                        if(App.keyName(event.getText())!=null){RIGHT.setText(App.keyName(event.getText()));App.KeySpecial(touches, 1, event.getText());keyCodes[1]=null;}
+                        else if(event.getCode()!=KeyCode.UNDEFINED){App.bindKey(keyCodes, 1, event.getCode()); RIGHT.setText(App.KeyCodetoString(keyCodes[1])); touches[1]=null;}
+                        btnEast.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
+                    }
+                } if(btnNorth.isVisible()){
+                    if(event.getCode()!=null && App.KeyForbidden(event.getCode())){
+                        if(App.keyName(event.getText())!=null){UP.setText(App.keyName(event.getText()));App.KeySpecial(touches, 2, event.getText());keyCodes[2]=null;}
+                        else if(event.getCode()!=KeyCode.UNDEFINED){App.bindKey(keyCodes, 2, event.getCode()); UP.setText(App.KeyCodetoString(keyCodes[2])); touches[2]=null;}
+                        btnNorth.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
+                    }
+                } if(btnSouth.isVisible()){
+                    if(event.getCode()!=null  && App.KeyForbidden(event.getCode())){
+                        if(App.keyName(event.getText())!=null){DOWN.setText(App.keyName(event.getText()));App.KeySpecial(touches, 3, event.getText());keyCodes[3]=null;}
+                        else if(event.getCode()!=KeyCode.UNDEFINED){App.bindKey(keyCodes, 3, event.getCode()); DOWN.setText(App.KeyCodetoString(keyCodes[3])); touches[3]=null;}
+                        btnSouth.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
+                    }
+                } else {
+                    if (event.getCode() == keyCodes[0] || event.getCode() == keyCodes[1] || event.getCode() == keyCodes[2] || event.getCode() == keyCodes[3]){
+                        if (lastKeyCode == null || lastKeyCode != event.getCode()) {
+                            lastKeyCode = event.getCode();
+                        }
                     }
                 }
-                if(btnWest.isVisible()){//même principe que dans App.java
-                if(event.getCode()!=null && App.KeyForbidden(event.getCode())){
-                    if(App.keyName(event.getText())!=null){LEFT.setText(App.keyName(event.getText()));App.KeySpecial(touches, 0, event.getText());keyCodes[0]=null;}
-                    else if(event.getCode()!=KeyCode.UNDEFINED){App.bindKey(keyCodes, 0, event.getCode()); LEFT.setText(App.KeyCodetoString(keyCodes[0])); touches[0]=null;}
-                    btnWest.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
+            } else {
+                PacMan.INSTANCE.setEnergizerPaused(false);
+                if (event.getCode() == keyCodes[0]) {
+                    PacMan.INSTANCE.setNextDirection(Direction.WEST);
+                } else if (event.getCode() == keyCodes[1]) {
+                    PacMan.INSTANCE.setNextDirection(Direction.EAST);
+                } else if (event.getCode() == keyCodes[2]) {
+                    PacMan.INSTANCE.setNextDirection(Direction.NORTH);
+                } else if (event.getCode() == keyCodes[3]) {
+                    PacMan.INSTANCE.setNextDirection(Direction.SOUTH);
+                } else {
+                    PacMan.INSTANCE.setNextDirection(PacMan.INSTANCE.getNextDirection());
                 }
             }
-            if(btnEast.isVisible()){
-                if(event.getCode()!=null && App.KeyForbidden(event.getCode())){
-                    if(App.keyName(event.getText())!=null){RIGHT.setText(App.keyName(event.getText()));App.KeySpecial(touches, 1, event.getText());keyCodes[1]=null;}
-                    else if(event.getCode()!=KeyCode.UNDEFINED){App.bindKey(keyCodes, 1, event.getCode()); RIGHT.setText(App.KeyCodetoString(keyCodes[1])); touches[1]=null;}
-                    btnEast.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
-                }
-            }
-            if(btnNorth.isVisible()){
-                if(event.getCode()!=null && App.KeyForbidden(event.getCode())){
-                    if(App.keyName(event.getText())!=null){UP.setText(App.keyName(event.getText()));App.KeySpecial(touches, 2, event.getText());keyCodes[2]=null;}
-                    else if(event.getCode()!=KeyCode.UNDEFINED){App.bindKey(keyCodes, 2, event.getCode()); UP.setText(App.KeyCodetoString(keyCodes[2])); touches[2]=null;}
-                    btnNorth.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
-                }
-            }
-            if(btnSouth.isVisible()){
-                if(event.getCode()!=null  && App.KeyForbidden(event.getCode())){
-                    if(App.keyName(event.getText())!=null){DOWN.setText(App.keyName(event.getText()));App.KeySpecial(touches, 3, event.getText());keyCodes[3]=null;}
-                    else if(event.getCode()!=KeyCode.UNDEFINED){App.bindKey(keyCodes, 3, event.getCode()); DOWN.setText(App.KeyCodetoString(keyCodes[3])); touches[3]=null;}
-                    btnSouth.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
-                }
-            }
-             else{
-                     if (event.getCode() == keyCodes[0] || event.getCode() == keyCodes[1] || event.getCode() == keyCodes[2] || event.getCode() == keyCodes[3]){
-                    if (lastKeyCode == null || lastKeyCode != event.getCode()) {
-                        lastKeyCode = event.getCode();
-                    }
-                    else {
-                        return;
-                    }
-                }
-            }
-        }
-            
-            else if(event.getCode()== keyCodes[0]){PacMan.INSTANCE.setNextDirection(Direction.WEST);}
-            else if(event.getCode()== keyCodes[1]){PacMan.INSTANCE.setNextDirection(Direction.EAST);}
-            else if(event.getCode()== keyCodes[2]){PacMan.INSTANCE.setNextDirection(Direction.NORTH);}
-            else if(event.getCode()== keyCodes[3]){PacMan.INSTANCE.setNextDirection(Direction.SOUTH);}
-            else {PacMan.INSTANCE.setNextDirection(PacMan.INSTANCE.getNextDirection());}
             
         } else {
             // If the game has ended and the PLAYER press enter, the game restart

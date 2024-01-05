@@ -75,6 +75,7 @@ public class GameView {
                 }
                 // Removed this update from loop for because we just need to call it once.
                 PacMan.INSTANCE.update(deltaT);
+                if (PacMan.INSTANCE.isEnergized()) PacMan.INSTANCE.updateEnergizer(deltaT);
                 last = now;
             }
         }.start();

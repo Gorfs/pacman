@@ -1,15 +1,10 @@
 package model;
 
 import config.Cell;
-import controllers.PacmanController;
-
-import java.util.Timer;
 
 import config.Constants;
 import geometry.RealCoordinates;
 import gui.OptionInGame;
-
-import java.util.TimerTask;
 
 import static model.MazeState.allPointsCollected;
 import static model.MazeState.getCritters;
@@ -22,35 +17,12 @@ public final class PacMan implements Critter {
     private Direction nextDirection = Direction.NONE;
     private RealCoordinates pos;
 
-    private static long energizedTime = 11000L;//compteur pour le temps d'énergie
-    // Currently not used so I commented this line
-    // public static void setCompteur(long compteur) {PacMan.compteur = compteur;}
-    public static long getEnergizedTime() {return energizedTime;}
+    private long nanoSeconds = 0L;
 
-    // represents the time in unix milis when the timer has ended
-    private static long milisTimerTime = 0L;
+    private static boolean energizerPaused = false; // pour gérer le timer de setEnergized
 
-    // just to get the time when the energized timer has ended.
-    public static long getMilisTimerTime(){
-        return milisTimerTime;
-    }
-
-    private static boolean timerMarche = false;// pour gérer le timer de setEnergized
-
-    public static void setTimerMarche(boolean t){timerMarche = t;}
-
-
-
-    private static boolean timer2Marche = false;// pour gérer le timer de chrono
-
-    public static void setTimer2Marche(boolean t) {timer2Marche = t;}
-    public static boolean getTimer2Marche() {return timer2Marche;}
     private static boolean energized = false;
     private static boolean almostNormal = false;
-    private static final long ENERGIZED_DURATION = 10000; // the energized duration is 10 seconds (timer is in milliseconds)
-    private static final long ALMOST_NORMAL_DURATION = 2000; // the ghost flashing animation should last 2 seconds
-    // Currently not used, so I commented this line
-    // private static Timer timer = new Timer("timer", true);
 
     // movement animation related
     private float timerAni = 0;
@@ -164,11 +136,6 @@ public final class PacMan implements Critter {
         return almostNormal;
     }
 
-    public static void setAlmostNormal(boolean e){
-        almostNormal = e;
-    }
-
-
     public void update(long deltaT){ //I moved what is related directly to Pacman
         var pacPos = INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
@@ -178,11 +145,11 @@ public final class PacMan implements Critter {
             } else if (MazeState.getConfig().getCell(pacPos).initialContent() == Cell.Content.ENERGIZER){
                 // make the pacman energized -->
                 MazeState.addScore(Constants.ENERGIZER_SCORE);
-                for (var critter:getCritters()) if (critter instanceof Ghost) ((Ghost) critter).setScaredMode(true);
-                timer2Marche=false;
-                timerMarche=false;
-                setEnergized(energizedTime);
+                for (var critter:getCritters())
+                    if (critter instanceof Ghost) ((Ghost) critter).setScaredMode(true);
+                setEnergized(true);
             }
+
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
         if (this.isDying) {
@@ -213,17 +180,18 @@ public final class PacMan implements Critter {
         this.startedDeathAni = deathAni;
     }
 
+    public void setEnergizerPaused(boolean p) {
+        energizerPaused = p;
+    }
 
-    public void setEnergized(long temps) {
-        // Time is in miliseconds
-        // function will now no longer take a boolean,
-        milisTimerTime = (System.currentTimeMillis() + temps);
-        if (!energized){
-            setEnergized(true);
-            Thread checker = new EnergyChecker();
-            checker.start();
-        }else{
-            milisTimerTime = System.currentTimeMillis() + temps;
-        }    
+    public void updateEnergizer(long deltaT) {
+        if (!energizerPaused) nanoSeconds = nanoSeconds + deltaT;
+        System.out.println(nanoSeconds * 1E-9);
+        if (nanoSeconds * 1E-9 >= 8) almostNormal = true;
+        if (nanoSeconds * 1E-9 >= 10) {
+            nanoSeconds = 0L;
+            setEnergized(false);
+            almostNormal = false;
+        }
     }
 }
