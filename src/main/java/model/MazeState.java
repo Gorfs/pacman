@@ -303,10 +303,6 @@ public final class MazeState {
         return score;
     }
 
-    public static void setScore(int s){
-        score=s;
-    }
-
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
     }
