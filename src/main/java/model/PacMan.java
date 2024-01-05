@@ -22,15 +22,24 @@ public final class PacMan implements Critter {
     private Direction nextDirection = Direction.NONE;
     private RealCoordinates pos;
 
-    private static long compteur = 11000L;//compteur pour le temps d'énergie
+    private static long energizedTime = 11000L;//compteur pour le temps d'énergie
     // Currently not used so I commented this line
     // public static void setCompteur(long compteur) {PacMan.compteur = compteur;}
-    public static long getCompteur() {return compteur;}
+    public static long getEnergizedTime() {return energizedTime;}
+
+    // represents the time in unix milis when the timer has ended
+    private static long milisTimerTime = 0L;
+
+    // just to get the time when the energized timer has ended.
+    public static long getMilisTimerTime(){
+        return milisTimerTime;
+    }
 
     private static boolean timerMarche = false;// pour gérer le timer de setEnergized
-    // Currently not used, so I commented this line
-    // public static boolean getTimerMarche(){return timerMarche;}
+
     public static void setTimerMarche(boolean t){timerMarche = t;}
+
+
 
     private static boolean timer2Marche = false;// pour gérer le timer de chrono
 
@@ -172,9 +181,7 @@ public final class PacMan implements Critter {
                 for (var critter:getCritters()) if (critter instanceof Ghost) ((Ghost) critter).setScaredMode(true);
                 timer2Marche=false;
                 timerMarche=false;
-                setEnergized(10000L);
-                compteur=11000L;
-                chrono();
+                setEnergized(energizedTime);
             }
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
@@ -206,56 +213,17 @@ public final class PacMan implements Critter {
         this.startedDeathAni = deathAni;
     }
 
-    public void chrono(){
-        TimerTask task = new TimerTask() {
-            @Override
-            public void run() {
-                if(!timer2Marche){compteur-=1000L;}
-                if(compteur>1000){chrono();}
-                System.out.println(compteur);
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(task, 1000);
-    }
 
     public void setEnergized(long temps) {
+        // Time is in miliseconds
         // function will now no longer take a boolean,
-        //  but suppose that we always want to "energize" pacman rather than de-energize him
+        milisTimerTime = (System.currentTimeMillis() + temps);
         if (!energized){
-        setEnergized(true);
-        TimerTask task = new TimerTask() {
-
-            @Override
-            public void run() {
-                if (!timerMarche){setEnergized(false);}
-                // si on est dans les options, alors pacman reste energisé,
-                // le timer sera de nouveau fonctionnel une fois les options quittées
-            }
-        };
-        Timer timer = new Timer();
-        timer.schedule(task, temps);//on lance le chronomètre qui dure 'temps'
-        if(timerMarche){timer.cancel();System.out.println("cancel");}
-        setAlmostNormal(false);
-        // this function set to true the boolean energized, and set to false 10 seconds after
-        Timer timer1 = new Timer();
-        timer1.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                if(!timerMarche)setAlmostNormal(true);
-                timer.schedule(new TimerTask(){
-                    @Override
-                    public void run(){
-                        if(!timerMarche){
-                            setEnergized(false);
-                            setAlmostNormal(false);
-                        }
-                    }
-                }, ALMOST_NORMAL_DURATION);
-            }
-        }, ENERGIZED_DURATION - ALMOST_NORMAL_DURATION);
-        // timer's second argument is in milliseconds, s 1000 ms = 1s
-       }
+            setEnergized(true);
+            Thread checker = new EnergyChecker();
+            checker.start();
+        }else{
+            milisTimerTime = System.currentTimeMillis() + temps;
+        }    
     }
 }
