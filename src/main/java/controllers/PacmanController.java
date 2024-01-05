@@ -112,7 +112,7 @@ public class PacmanController {
             // Thanks to this condition, if the options are open, we can't move pacman
             if(optionMenu.isVisible()) {
                 if (event.getCode() == KeyCode.ESCAPE && !PacMan.getTimer2Marche()) {
-                    if (PacMan.INSTANCE.isEnergized() && PacMan.getCompteur() > 0) {
+                    if (PacMan.INSTANCE.isEnergized() && PacMan.getEnergizedTime() > 0) {
                         PacMan.setTimer2Marche(true);
                         PacMan.setTimerMarche(true);
                     }
