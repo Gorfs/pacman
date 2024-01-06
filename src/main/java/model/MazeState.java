@@ -46,6 +46,8 @@ public final class MazeState {
     private static int lives = defaultLives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
+    //private static int s = 2; //speed
+
     /**
      * Constructor used to initialise the maze and the entities on the window and being able to update the maze.
      * @param ghostsController Array that contains all the ghosts' controller.
