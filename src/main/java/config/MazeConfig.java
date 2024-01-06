@@ -75,7 +75,7 @@ public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates
         // New class Cell to store the map
         Cell[][] map = new Cell[21][21];
         // Open the file maze.txt
-        InputStream is = MazeConfig.class.getResourceAsStream("/" + file + ".txt");
+        InputStream is = MazeConfig.class.getResourceAsStream("/mazes/" + file + ".txt");
         Scanner myReader;
         // Read the file maze.txt
         assert is != null;
