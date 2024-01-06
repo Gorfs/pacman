@@ -8,7 +8,8 @@ public sealed interface Critter permits Ghost, PacMan {
     float getTimerAni();
     float[] getCheckpointAni();
 
-    double getSpeed();
+    int getSpeed();
+
 
     /**
      * @param deltaTNanoSeconds time since the last update in nanoseconds

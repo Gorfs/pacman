@@ -80,9 +80,24 @@ public class Music {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             bgmClip = AudioSystem.getClip();
             bgmClip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) bgmClip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(getVolume()));
-            bgmClip.loop(Clip.LOOP_CONTINUOUSLY); 
+
+            // LineListener pour fermer le clip une fois la lecture audio terminée
+            bgmClip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    bgmClip.close();
+                }
+            });
+
+            // Logique de traitement lors de la fermeture du programme
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (bgmClip.isRunning()) {
+                    bgmClip.stop();
+                }
+                if (bgmClip.isOpen()) {
+                    bgmClip.close();
+                }
+            }));
+
             bgmClip.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -102,6 +117,46 @@ public class Music {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * @param bufferedIn file in inputStream version
+     * @throws UnsupportedAudioFileException An UnsupportedAudioFileException is an exception indicating that
+     *                                       an operation failed because a file did not contain valid data of
+     *                                       a recognized file type and format.
+     * @throws IOException Signals that an I/O exception of some sort has occurred.
+     *                     This class is the general class of exceptions produced by
+     *                     failed or interrupted I/O operations.
+     * @throws LineUnavailableException A LineUnavailableException is an exception indicating that a line cannot
+     *                                  be opened because it is unavailable. This situation arises most commonly
+     *                                  when a requested line is already in use by another application.
+     */
+    private static void importAudioFile(InputStream bufferedIn) throws UnsupportedAudioFileException,
+            IOException, LineUnavailableException {
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
+        Clip clip = AudioSystem.getClip();
+        clip.open(audioInputStream);
+
+        // LineListener pour fermer le clip une fois la lecture audio terminée
+        clip.addLineListener(event -> {
+            if (event.getType() == LineEvent.Type.STOP) {
+                clip.close();
+            }
+        });
+
+        // Logique de traitement lors de la fermeture du programme
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (clip.isRunning()) {
+                    clip.stop();
+                }
+                if (clip.isOpen()) {
+                    clip.close();
+                }
+            }));
+
+        FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
+        clip.start();
     }
 
     /**
@@ -134,25 +189,4 @@ public class Music {
         }
     }
 
-    /**
-     * @param bufferedIn file in inputStream version
-     * @throws UnsupportedAudioFileException An UnsupportedAudioFileException is an exception indicating that
-     *                                       an operation failed because a file did not contain valid data of
-     *                                       a recognized file type and format.
-     * @throws IOException Signals that an I/O exception of some sort has occurred.
-     *                     This class is the general class of exceptions produced by
-     *                     failed or interrupted I/O operations.
-     * @throws LineUnavailableException A LineUnavailableException is an exception indicating that a line cannot
-     *                                  be opened because it is unavailable. This situation arises most commonly
-     *                                  when a requested line is already in use by another application.
-     */
-    private static void importAudioFile(InputStream bufferedIn) throws UnsupportedAudioFileException,
-            IOException, LineUnavailableException {
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
-        Clip soundEffect = AudioSystem.getClip();
-        soundEffect.open(audioInputStream);
-        FloatControl gainControl = (FloatControl) soundEffect.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
-        soundEffect.start();
-    }
 }

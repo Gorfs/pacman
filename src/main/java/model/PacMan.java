@@ -109,7 +109,7 @@ public final class PacMan implements Critter {
     }
 
     @Override
-    public double getSpeed() {
+    public int getSpeed() {
         // Changed so that when pacman is dying, it doesn't move anymore.
         return getIsDying()? 0:(isEnergized() ? 6 : 4);
     }
@@ -177,6 +177,10 @@ public final class PacMan implements Critter {
                 setEnergized(energizedTime);
             }
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
+        }
+        if(MazeState.getFruitsGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()){
+            MazeState.addScore(MazeState.getFruit(MazeState.id).getPoints());
+            MazeState.getFruitsGridState()[pacPos.y()][pacPos.x()] = false;
         }
         if (this.isDying) {
             this.deathTimerAni += (float) ((float) deltaT * 1E-9);
