@@ -9,9 +9,13 @@ import gui.GameMenu2;
 import controllers.GhostsController;
 import controllers.PacmanController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Random;
 
 import static model.Ghost.*;
 
@@ -25,6 +29,11 @@ public final class MazeState {
     private static int width;
 
     private static boolean[][] gridState;
+    private static boolean[][] fruitsGridState; // Another grid for the fruits
+    private static boolean fruitsTimerStarted = false;
+    // liste avec tous les fruits possibles et compteur id qui permet d'accéder aux données d'un fruit (nom, points, seuil de score pour passer à un autre fruit)
+    private static ArrayList<Fruit> fruits;
+    public static int id;
 
     private final GameMenu2 optionMenu;
 
@@ -51,6 +60,17 @@ public final class MazeState {
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
         gridState = new boolean[height][width];
+        fruitsGridState = new boolean[height][width];
+        id = 0;
+        fruits = new ArrayList<>();
+        fruits.add(new Fruit("cherry", 100, 100));
+        fruits.add(new Fruit("strawberry", 300, 500));
+        fruits.add(new Fruit("orange", 500, 1000));
+        fruits.add(new Fruit("apple", 700, 1500));
+        fruits.add(new Fruit("melon", 1000, 2000));
+        fruits.add(new Fruit("galaxian", 2000, 2500));
+        fruits.add(new Fruit("bell", 3000, 3000));
+        fruits.add(new Fruit("key", 5000, 3500));
         initialPos = Map.of(
                 PacMan.INSTANCE, config.pacManPos().toRealCoordinates(1.0),
                 BLINKY, config.blinkyPos().toRealCoordinates(1.0),
@@ -95,12 +115,23 @@ public final class MazeState {
         gameEnded = false;
         lives = defaultLives;
         score = 0;
+        id = 0;
         resetGrid();
+        resetFruitsGrid();
         resetCritters();
+        fruitsTimerStarted = false;
     }
 
     public static boolean[][] getGridState(){ //Need it for the Pacman Class
         return gridState;
+    }
+
+    public static boolean[][] getFruitsGridState(){
+        return fruitsGridState;
+    }
+
+    public static Fruit getFruit(int id){
+        return fruits.get(id);
     }
 
     public void update(long deltaTns) {
@@ -227,9 +258,50 @@ public final class MazeState {
             // When pacman collected all the dots, reset the map
             if(allPointsCollected()){
                 resetCritters();
-                resetGrid();
-            }
+                resetFruitsGrid();
+            resetGrid();
         }
+        // If the score is higher than 100 (threshold for the 1st fruit, cherry) we start to generate fruits in the map
+        if(score>fruits.get(0).getThresholds() && !fruitsTimerStarted){
+            generateRandomFruits();
+            fruitsTimerStarted = true;
+        }
+        if(id<fruits.size()-1){
+            if(score>fruits.get(id+1).getThresholds()) id++;
+        }
+    }
+}
+
+    // This function generate every 20 seconds fruits randomly in places where a dot was already collected, the fruits disapears after 10 seconds
+    public void generateRandomFruits(){
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run(){
+                    if(!gameEnded){
+                        boolean w = false;
+                        Random rand = new Random();
+                        while(!w){
+                            int x = rand.nextInt(height);
+                            int y = rand.nextInt(width);
+                            if(gridState[x][y]){
+                                fruitsGridState[x][y] = true;
+                                timer.schedule(new TimerTask(){
+                                    @Override
+                                    public void run(){
+                                        fruitsGridState[x][y] = false;
+                                    }
+                                }, 10000);
+                                w = true;
+                            }
+                        }
+                    } else{
+                        // stop generating fruits when the player lose
+                        timer.cancel();
+                        timer.purge();
+                    }
+            }
+        }, 10000, 20000);
     }
 
     public static boolean allPointsCollected() {
@@ -247,6 +319,14 @@ public final class MazeState {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 gridState[i][j] = false;
+            }
+        }
+    }
+
+    public static void resetFruitsGrid() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                fruitsGridState[i][j] = false;
             }
         }
     }
@@ -305,5 +385,9 @@ public final class MazeState {
 
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
+    }
+
+    public boolean getFruitsGridState(IntCoordinates pos) {
+        return fruitsGridState[pos.y()][pos.x()];
     }
 }
