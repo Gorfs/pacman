@@ -41,8 +41,7 @@ public enum Ghost implements Critter {
 
     @Override
     public void setDirection(Direction direction) {
-        this.direction = this.nextDirection;
-        this.nextDirection = direction;
+        this.direction = direction;
     }
 
     @Override

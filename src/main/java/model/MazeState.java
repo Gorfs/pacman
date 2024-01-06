@@ -1,11 +1,13 @@
 package model;
 
 import config.Cell;
+import config.Constants;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import gui.GameMenu2;
 import controllers.GhostsController;
+import controllers.PacmanController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +19,11 @@ import java.util.Random;
 
 import static model.Ghost.*;
 
+/**
+ * Class MazeState is used to update the maze while the PLAYER is playing.
+ */
 public final class MazeState {
-    private static GhostsController[] ghostsController;
+    private final GhostsController[] ghostsController;
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -30,20 +35,25 @@ public final class MazeState {
     private static ArrayList<Fruit> fruits;
     public static int id;
 
-    private static GameMenu2 gameMenu1;
+    private final GameMenu2 optionMenu;
 
     private static List<Critter> critters;
-    private static int score; //J'ai passé la variable en static pour pouvoir la réinitialiser
+    private static int score; // J'ai passé la variable en static pour pouvoir la réinitialiser
 
     private static Map<Critter, RealCoordinates> initialPos;
 
-    // TODO: these should be changed to constants determined by player or in separate file.
-    private static int lives = 3;
-    private static int livesC = lives;
+    private static int defaultLives = Constants.NORMAL_LIVES;
+    private static int lives = defaultLives;
     private static boolean gameEnded = false; //Variable qui permet de signaler si la partie est terminée
 
+    /**
+     * Constructor used to initialise the maze and the entities on the window and being able to update the maze.
+     * @param ghostsController Array that contains all the ghosts' controller.
+     * @param config variable that represent the initial version of the maze
+     * @param gameMenu variable that contains in game option menu
+     */
     public MazeState(GhostsController[] ghostsController, MazeConfig config, GameMenu2 gameMenu) {
-        gameMenu1=gameMenu;
+        this.optionMenu = gameMenu;
         this.ghostsController = ghostsController;
         MazeState.config = config;
         height = config.getHeight();
@@ -62,11 +72,11 @@ public final class MazeState {
         fruits.add(new Fruit("bell", 3000, 3000));
         fruits.add(new Fruit("key", 5000, 3500));
         initialPos = Map.of(
-                PacMan.INSTANCE, config.getPacManPos().toRealCoordinates(1.0),
-                BLINKY, config.getBlinkyPos().toRealCoordinates(1.0),
-                INKY, config.getInkyPos().toRealCoordinates(1.0),
-                CLYDE, config.getClydePos().toRealCoordinates(1.0),
-                PINKY, config.getPinkyPos().toRealCoordinates(1.0)
+                PacMan.INSTANCE, config.pacManPos().toRealCoordinates(1.0),
+                BLINKY, config.blinkyPos().toRealCoordinates(1.0),
+                INKY, config.inkyPos().toRealCoordinates(1.0),
+                CLYDE, config.clydePos().toRealCoordinates(1.0),
+                PINKY, config.pinkyPos().toRealCoordinates(1.0)
         );
         resetCritters();
     }
@@ -83,24 +93,27 @@ public final class MazeState {
         return height;
     }
 
-    public static int getInitLives(){
-        return livesC;
+    public static int getDefaultLives(){
+        return defaultLives;
     }
 
     public static int getLives(){
         return lives;
     }
 
-    public void setLives(int l){lives=l; livesC=l;}
+    public void setLives(int l){lives=l; defaultLives =l;}
 
 
     public static boolean getGameEnded(){ //Cette fonction permet aux objets de vérifier si la partie est terminée.
         return gameEnded;
     }
 
-    public static void restart(){ //Cette fonction permet de réinitialiser les valeurs à leur état d'origine
+    /**
+     * This method is used to restart the game. It restarts lives, score maze and critters.
+     */
+    public void restart(){
         gameEnded = false;
-        lives = livesC;
+        lives = defaultLives;
         score = 0;
         id = 0;
         resetGrid();
@@ -122,126 +135,130 @@ public final class MazeState {
     }
 
     public void update(long deltaTns) {
-        if(!gameMenu1.isVisible()){//si on est dans les options, alors on met en pause le jeu
-            for  (var critter: critters) {
+        // Pause game if we're in the menu
+        if(!optionMenu.isVisible()){
+            for (var critter: critters) {
+                var curPos = critter.getPos();
+                var nextPos = critter.nextPos(deltaTns);
+                // Get possible next pos for critter
+                var nextNextPos = critter.nextNextPos(deltaTns);
 
-            var curPos = critter.getPos();
-            var nextPos = critter.nextPos(deltaTns);
-            // Get possible next pos for critter
-            var nextNextPos = critter.nextNextPos(deltaTns);
+                var curNeighbours = curPos.intNeighbours();
+                var nextNeighbours = nextPos.intNeighbours();
+                // Get possible next cell
+                var nextNextNeighbours = nextNextPos.intNeighbours();
 
-            var curNeighbours = curPos.intNeighbours();
-            var nextNeighbours = nextPos.intNeighbours();
-            // Get possible next cell
-            var nextNextNeighbours = nextNextPos.intNeighbours();
-
-            // Set direction to the next direction if direction is NONE.
-            if (critter.getDirection() == Direction.NONE) {
-                critter.setDirection(critter.getNextDirection());
-                critter.setNextDirection(Direction.NONE);
-            }
-
-            // Get the next direction of ghosts
-            if (critter instanceof Ghost) {
-                // Update scared mode for ghosts
-                if (!PacMan.INSTANCE.isEnergized()) ((Ghost) critter).setScaredMode(false);
-                // Get new direction for each ghosts
-                if (Objects.equals(critter.toString(), "INKY"))
-                    ghostsController[3].setDirection((Ghost) critter, config, deltaTns);
-                else if (Objects.equals(critter.toString(), "BLINKY"))
-                    ghostsController[2].setDirection((Ghost) critter, config, deltaTns);
-                else if (Objects.equals(critter.toString(), "PINKY"))
-                    ghostsController[1].setDirection((Ghost) critter, config, deltaTns);
-                else if (Objects.equals(critter.toString(), "CLYDE"))
-                    ghostsController[0].setDirection((Ghost) critter, config, deltaTns);
-                // Update direction to EAST if the ghost just respawned and do not move
-                if (critter.getDirection() == Direction.NONE && critter.getNextDirection() == Direction.NONE) {
-                    critter.setDirection(Direction.EAST);
+                // Set direction to the next direction if direction is NONE.
+                if (critter.getDirection() == Direction.NONE) {
+                    critter.setDirection(critter.getNextDirection());
+                    critter.setNextDirection(Direction.NONE);
                 }
-            }
 
-            if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
-                // for next cell, check if this is a wall.
-                for (var n: nextNeighbours)
-                    if (config.getCell(n).initialContent() == Cell.Content.WALL) {
-                        // check if the critter is going to the wall and set his direction to direction.NONE if it is.
-                        switch (critter.getDirection()) {
-                            case NORTH -> {
-                                if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
-                                    nextPos = curPos.floorY();critter.setDirection(Direction.NONE);
+                // Get the next direction of ghosts
+                if (critter instanceof Ghost) {
+                    // Update scared mode for ghosts
+                    if (!PacMan.INSTANCE.isEnergized()) ((Ghost) critter).setScaredMode(false);
+                    // Get new direction for each ghosts
+                    if (Objects.equals(critter.toString(), "INKY"))
+                        ghostsController[3].setDirection((Ghost) critter, config, deltaTns);
+                    else if (Objects.equals(critter.toString(), "BLINKY"))
+                        ghostsController[2].setDirection((Ghost) critter, config, deltaTns);
+                    else if (Objects.equals(critter.toString(), "PINKY"))
+                        ghostsController[1].setDirection((Ghost) critter, config, deltaTns);
+                    else if (Objects.equals(critter.toString(), "CLYDE"))
+                        ghostsController[0].setDirection((Ghost) critter, config, deltaTns);
+                    // Update direction to EAST if the ghost just respawned and do not move
+                    if (critter.getDirection() == Direction.NONE && critter.getNextDirection() == Direction.NONE) {
+                        critter.setDirection(Direction.EAST);
+                    }
+                }
+
+                if (!curNeighbours.containsAll(nextNeighbours)) { // the critter would overlap new cells. Do we allow it?
+                    // for next cell, check if this is a wall.
+                    for (var n: nextNeighbours)
+                        if (config.getCell(n).initialContent() == Cell.Content.WALL) {
+                            // check if the critter is going to the wall and set his direction to direction.NONE if it is.
+                            switch (critter.getDirection()) {
+                                case NORTH -> {
+                                    if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
+                                        nextPos = curPos.floorY();critter.setDirection(Direction.NONE);
+                                    }
+                                }
+                                case EAST -> {
+                                    if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
+                                        nextPos = curPos.ceilX();critter.setDirection(Direction.NONE);
+                                    }
+                                }
+                                case SOUTH -> {
+                                    if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
+                                        nextPos = curPos.ceilY();critter.setDirection(Direction.NONE);
+                                    }
+                                }
+                                case WEST -> {
+                                    if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
+                                        nextPos = curPos.floorX();critter.setDirection(Direction.NONE);
+                                    }
                                 }
                             }
-                            case EAST -> {
-                                if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
-                                    nextPos = curPos.ceilX();critter.setDirection(Direction.NONE);
+
+                        }
+                    // for possible next cell, check if this is not a wall.
+                    for (var n: nextNextNeighbours)
+                        if (config.getCell(n).initialContent() != Cell.Content.WALL) {
+                            // check if the critter is going this way and set his direction to direction.NONE  and update nextPos if it is.
+                            switch (critter.getNextDirection()) {
+                                case NORTH -> {
+                                    if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
+                                        nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                                        critter.setDirection(Direction.NONE);
+                                    }
                                 }
-                            }
-                            case SOUTH -> {
-                                if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
-                                    nextPos = curPos.ceilY();critter.setDirection(Direction.NONE);
+                                case EAST -> {
+                                    if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
+                                        nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                                        critter.setDirection(Direction.NONE);
+                                    }
                                 }
-                            }
-                            case WEST -> {
-                                if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
-                                    nextPos = curPos.floorX();critter.setDirection(Direction.NONE);
+                                case SOUTH -> {
+                                    if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
+                                        nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
+                                        critter.setDirection(Direction.NONE);
+                                    }
+                                }
+                                case WEST -> {
+                                    if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
+                                        nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
+                                        critter.setDirection(Direction.NONE);
+                                    }
                                 }
                             }
                         }
-
-                    }
-                // for possible next cell, check if this is not a wall.
-                for (var n: nextNextNeighbours)
-                    if (config.getCell(n).initialContent() != Cell.Content.WALL) {
-                        // check if the critter is going this way and set his direction to direction.NONE  and update nextPos if it is.
-                        switch (critter.getNextDirection()) {
-                            case NORTH -> {
-                                if (Objects.equals(n, curPos.plus(RealCoordinates.NORTH_UNIT).round())) {
-                                    nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
-                                    critter.setDirection(Direction.NONE);
-                                }
-                            }
-                            case EAST -> {
-                                if (Objects.equals(n, curPos.plus(RealCoordinates.EAST_UNIT).round())) {
-                                    nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
-                                    critter.setDirection(Direction.NONE);
-                                }
-                            }
-                            case SOUTH -> {
-                                if (Objects.equals(n, curPos.plus(RealCoordinates.SOUTH_UNIT).round())) {
-                                    nextPos = new RealCoordinates(Math.round(nextPos.x()), nextPos.y());
-                                    critter.setDirection(Direction.NONE);
-                                }
-                            }
-                            case WEST -> {
-                                if (Objects.equals(n, curPos.plus(RealCoordinates.WEST_UNIT).round())) {
-                                    nextPos = new RealCoordinates(nextPos.x(), Math.round(nextPos.y()));
-                                    critter.setDirection(Direction.NONE);
-                                }
-                            }
-                        }
-                    }
+                }
+                // Update position of critter once calculated
+                critter.setPos(nextPos.warp(width, height));
             }
-            critter.setPos(nextPos.warp(width, height));
-        }
 
-        for (var critter : critters) {
-            if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
-                if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
-                    resetCritter(critter);
-                } else {
-                    if (!PacMan.INSTANCE.isStartedDeathAni()){
-                        PacMan.INSTANCE.setDying(true);
-                        resetCritters();
-                        gui.Music.music_death();
+            // Check for collision
+            for (var critter : critters) {
+                if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
+                    // If pacman is energized it can eat the ghost else it dies.
+                    if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
+                        resetCritter(critter);
+                    } else {
+                        if (!PacMan.INSTANCE.isStartedDeathAni()){
+                            PacMan.INSTANCE.setDying(true);
+                            resetCritters();
+                            gui.Music.music_death();
+                        }
+                        playerLost();
+                        return;
                     }
-                    playerLost();
-                    return;
                 }
             }
-        }
-        if(allPointsCollected()){
-            resetCritters();
-            resetFruitsGrid();
+            // When pacman collected all the dots, reset the map
+            if(allPointsCollected()){
+                resetCritters();
+                resetFruitsGrid();
             resetGrid();
         }
         // If the score is higher than 100 (threshold for the 1st fruit, cherry) we start to generate fruits in the map
@@ -316,24 +333,27 @@ public final class MazeState {
 
     public static void addScore(int increment) {
         score += increment;
-        gui.Music.music_score(); //lorsque le score++ lance le music score
+        // Play a sound when it eats something
+        gui.Music.music_score();
     }
 
 
     private void playerLost() {
         if (PacMan.INSTANCE.getIsDying()) {
             lives--;
+            PacmanController.resetLastKeyCode();
             if (lives == 0) {
                 gui.Music.stopBackgroundMusic(); // lorsqu'on a plus de vie, on arrête le bgm
-                gui.Music.music_gameover(); // Et on lance le music de game over
+                gui.Music.music_gameOver(); // Et on lance le music de game over
                 gameEnded = true; //Le joueur n'a plus de vie, la partie est terminée.
             }
             PacMan.INSTANCE.setStartedDeathAni(false);
         }
     }
 
-    private static void resetCritter(Critter critter) {
+    private void resetCritter(Critter critter) {
         if (critter instanceof Ghost ) {
+            addScore(Constants.GHOST_SCORE);
             if (Objects.equals(critter.toString(), "INKY"))
                 ghostsController[3].startAI();
             else if (Objects.equals(critter.toString(), "BLINKY"))
@@ -351,7 +371,7 @@ public final class MazeState {
         critter.setPos(initialPos.get(critter));
     }
 
-    public static void resetCritters() {
+    public void resetCritters() {
         for (var critter: critters) resetCritter(critter);
     }
 
