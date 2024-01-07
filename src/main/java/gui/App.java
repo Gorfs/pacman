@@ -161,7 +161,7 @@ public class App extends Application {
         for (var ghost: ghostsController) {ghost.startAI();}
 
         // Generate map from file
-        var maze = new MazeState(ghostsController, MazeConfig.originalMaze("maze2"), gameMenu2);
+        var maze = new MazeState(ghostsController, MazeConfig.originalMaze("maze4"), gameMenu2);
         Constants.WINDOW_X = (int) (maze.getWidth() * Constants.SCALE);
         Constants.WINDOW_Y = maze.getHeight() * Constants.SCALE;
         root.setPrefSize(Constants.WINDOW_X, Constants.WINDOW_Y);
