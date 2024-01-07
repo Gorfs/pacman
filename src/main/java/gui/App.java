@@ -130,6 +130,11 @@ public class App extends Application {
         return scene;
     }
 
+    /**
+     * Point d'entrée principal de l'application JavaFX.
+     * 
+     * @param args Arguments de ligne de commande.
+     */
     public static void main(String[] args) {
         launch(args);
     }
