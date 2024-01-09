@@ -8,9 +8,6 @@ import model.Direction;
 import model.MazeState;
 import model.PacMan;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
@@ -57,16 +54,9 @@ public class PacmanController {
     /**
      * Method that check when a key is pressed
      * @param event get all the event that can happened in the game
-    */
+     */
     public void keyPressedHandler(KeyEvent event) {
         if (!MazeState.getGameEnded()){
-            if(touches[0]!=null || touches[1]!=null || touches[2]!=null || touches[3]!=null){
-                if (event.getText().equals(touches[0])){PacMan.INSTANCE.setNextDirection(Direction.WEST);}
-                else if(event.getText().equals(touches[1])){PacMan.INSTANCE.setNextDirection(Direction.EAST);}
-                else if(event.getText().equals(touches[2])){PacMan.INSTANCE.setNextDirection(Direction.NORTH);}
-                else if(event.getText().equals(touches[3])){PacMan.INSTANCE.setNextDirection(Direction.SOUTH);}
-            }
-
             // If the button escape is pressed, if the option menu is showed then close it else open it
             if(event.getCode()==KeyCode.ESCAPE){
                 //si le bouton echap est pressé, alors le menu options se lance
@@ -151,6 +141,6 @@ public class PacmanController {
     /* Currently unused, so I commented it.
      * Method that check when a key is released
      * @param event get all the event that can happened in the game
-    */
+     */
     // public void keyReleasedHandler(KeyEvent event) {}
 }
