@@ -1,6 +1,7 @@
 package controllers;
 
 import config.Cell;
+import config.Constants;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -21,6 +22,10 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
     float timer = 0;
     // If it can start chasing/scatter
     boolean started = false;
+
+    int[] startPosition1;
+    int[] startPosition2;
+    int[] startPosition3;
 
     /**
      * Method that start the ghost AI.
@@ -51,7 +56,7 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
                 critter.setNextDirection(waiting(critter));
                 previousPos = critter.getPos().round();
                 return;
-            // if the ghost is scared, it goes in random direction mode
+                // if the ghost is scared, it goes in random direction mode
             } else if (critter.isScaredMode()) {
                 if (canTurn(critter, config)) {
                     Direction rdDir = randomDirection(critter, critter.getDirection(), config);
@@ -59,7 +64,7 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
                     previousPos = critter.getPos().round();
                     return;
                 }
-            // if the ghost is in scatter mode, it goes in scatter direction mode
+                // if the ghost is in scatter mode, it goes in scatter direction mode
             } else if (critter.isScatterMode()) result = scatterDirection(critter, config);
             else result = nextDirection(critter, config);
             previousPos = critter.getPos().round();
@@ -152,11 +157,28 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      * @return direction the ghost should go
      */
     public Direction waiting(Critter critter) {
+        switch (Constants.MAP_INDEX) {
+            case 1:
+                startPosition1 = new int[]{10, 9};
+                startPosition2 = new int[]{9, 9};
+                startPosition3 = new int[]{11, 9};
+                break;
+            case 2:
+                startPosition1 = new int[]{17, 19};
+                startPosition2 = new int[]{16, 19};
+                startPosition3 = new int[]{18, 19};
+                break;
+            case 3:
+                startPosition1 = new int[]{10, 1};
+                startPosition2 = new int[]{9, 1};
+                startPosition3 = new int[]{11, 1};
+                break;
+        }
         IntCoordinates pos = critter.getPos().round();
-        if (conditionOut() && pos.x() == 10 && pos.y() == 9) {
+        if (conditionOut() && pos.x() == Constants.INKY.x() && pos.y() == Constants.INKY.y()) {
             started = true;return Direction.NORTH;
-        } else if (pos.x() == 9 && pos.y() == 9) return Direction.EAST;
-        else if (pos.x() == 11 && pos.y() == 9) return Direction.WEST;
+        } else if (pos.x() == Constants.BLINKY.x() && pos.y() == Constants.BLINKY.y()) return Direction.EAST;
+        else if (pos.x() == Constants.PINKY.x() && pos.y() == Constants.PINKY.y()) return Direction.WEST;
         return critter.getDirection();
     }
 

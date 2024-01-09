@@ -11,7 +11,7 @@ import javax.sound.sampled.*;
  * Permet de régler le volume et de contrôler la lecture des sons.
  */
 public class Music {
-    
+
     private static Clip bgmClip; // Clip pour la musique de fond
     private static float volume = 0.6f; // Volume de la musique de fond
     private static float sfxVolume = 0.6f; // Volume des effets sonores
@@ -58,11 +58,11 @@ public class Music {
     public static float getSFXVolume() {
         return sfxVolume;
     }
-    
+
     /**
      * Arrête la musique de fond si elle est en cours de lecture.
      */
-    public static void stopBackgroundMusic() { 
+    public static void stopBackgroundMusic() {
         if (bgmClip != null && bgmClip.isRunning()) {
             bgmClip.stop();
         }
@@ -71,7 +71,7 @@ public class Music {
     /**
      * Joue la musique de fond en boucle continue.
      */
-    public static void playBackgroundMusic() { 
+    public static void playBackgroundMusic() {
         try {
             InputStream audioSrc = Music.class.getResourceAsStream("/music/bgm.wav");
             //Doit être mis en buffer pour supporter les marquages et les réinitialisations
@@ -80,9 +80,24 @@ public class Music {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             bgmClip = AudioSystem.getClip();
             bgmClip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) bgmClip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(getVolume()));
-            bgmClip.loop(Clip.LOOP_CONTINUOUSLY); 
+
+            // LineListener pour fermer le clip une fois la lecture audio terminée
+            bgmClip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    bgmClip.close();
+                }
+            });
+
+            // Logique de traitement lors de la fermeture du programme
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (bgmClip.isRunning()) {
+                    bgmClip.stop();
+                }
+                if (bgmClip.isOpen()) {
+                    bgmClip.close();
+                }
+            }));
+
             bgmClip.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -100,7 +115,7 @@ public class Music {
             InputStream bufferedIn = new BufferedInputStream(audioSrc);
             importAudioFile(bufferedIn);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 
@@ -121,6 +136,24 @@ public class Music {
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
         Clip clip = AudioSystem.getClip();
         clip.open(audioInputStream);
+
+        // LineListener pour fermer le clip une fois la lecture audio terminée
+        clip.addLineListener(event -> {
+            if (event.getType() == LineEvent.Type.STOP) {
+                clip.close();
+            }
+        });
+
+        // Logique de traitement lors de la fermeture du programme
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (clip.isRunning()) {
+                clip.stop();
+            }
+            if (clip.isOpen()) {
+                clip.close();
+            }
+        }));
+
         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
         clip.start();
