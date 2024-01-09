@@ -24,6 +24,7 @@ public class Menu extends Parent {
     private static Text RIGHT;
     private static Text UP;
     private static Text DOWN;
+    private static String choix_map ="";
 
         public Menu(Text left, Text right, Text up, Text down, OptionInGame gameMenu1, Pane root, Stage primaryS, KeyCode[] k, SubmitButton button, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4) {
             
@@ -43,6 +44,7 @@ public class Menu extends Parent {
             VBox menu6 = new VBox(10);
             VBox menu7 = new VBox(10);
             VBox menu8 = new VBox(10);
+            VBox menu9 = new VBox(10);
             //initialisation des boutons
             menu0.setTranslateX(100);
             menu0.setTranslateY(200);
@@ -70,6 +72,9 @@ public class Menu extends Parent {
 
             menu8.setTranslateX(100);
             menu8.setTranslateY(200);
+
+            menu9.setTranslateX(100);
+            menu9.setTranslateY(200);
 
         //on met les boutons au bon endroit
         final int offset = 400;
@@ -298,11 +303,11 @@ public class Menu extends Parent {
                     MazeState.setScore(0);
 
                     //on assigne le pseudo rentrer au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au desus du pacman
-                    getChildren().add(menu7);
+                    getChildren().add(menu9);
                     TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu8);
                     tt.setToX(menu8.getTranslateX() + offset);
 
-                    TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu7);
+                    TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu9);
                     tt1.setToX(menu8.getTranslateX());
 
                     tt.play();
@@ -313,7 +318,7 @@ public class Menu extends Parent {
 
                  });
                 });
-                 btnName.setOnKeyPressed(event2 -> {
+                btnName.setOnKeyPressed(event2 -> {
                     if(event2.getCode()==KeyCode.ENTER){//quand on appuie sur la touche ENTER :
                         button.setVisible(false);
                         button.setOpacity(0);
@@ -327,20 +332,21 @@ public class Menu extends Parent {
                         MazeState.setScore(0);
 
                         //on assigne le pseudo rentrer au pacman créer dans le jeu, possibilité de mettre le pseudo en jeu au desus du pacman
-                        getChildren().add(menu7);
+                        getChildren().add(menu9);
                         TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu8);
                         tt.setToX(menu8.getTranslateX() + offset);
-                        TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu7);
+
+                        TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu9);
                         tt1.setToX(menu8.getTranslateX());
 
                         tt.play();
                         tt1.play();
 
-                        tt.setOnFinished(evt1 -> {
+                        tt.setOnFinished(evt -> {
                             getChildren().remove(menu8);
                         });
-                        }
-                    });
+                    }
+                });
                     if(button.getOpacity()==0){button.setOpacity(1);button.setVisible(false);}
             });
 
@@ -377,11 +383,83 @@ public class Menu extends Parent {
                     getChildren().remove(menu0);
                 });
             });
+        
+        MenuButton btnMap1 = new MenuButton("Map 1");
+        btnMap1.setOnMouseClicked(event -> {
+            choix_map = "maze2";
+            getChildren().add(menu7);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.50), menu9);
+                tt.setToX(menu9.getTranslateX()+offset);
+
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu7);
+                tt1.setToX(menu9.getTranslateX());
+
+                tt.play();
+                tt1.play();
+
+                tt.setOnFinished(evt -> {
+                    getChildren().remove(menu9);
+                });
+        });
+
+        MenuButton btnMap2 = new MenuButton("Map 2");
+        btnMap2.setOnMouseClicked(event -> {
+            choix_map = "maze3";
+            getChildren().add(menu7);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.50), menu9);
+                tt.setToX(menu9.getTranslateX()+offset);
+
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu7);
+                tt1.setToX(menu9.getTranslateX());
+
+                tt.play();
+                tt1.play();
+
+                tt.setOnFinished(evt -> {
+                    getChildren().remove(menu9);
+                });
+        });
+
+        MenuButton btnMap3 = new MenuButton("Map 3");
+        btnMap3.setOnMouseClicked(event -> {
+            choix_map = "maze4";
+            getChildren().add(menu7);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.50), menu9);
+                tt.setToX(menu9.getTranslateX()+offset);
+
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu7);
+                tt1.setToX(menu9.getTranslateX());
+
+                tt.play();
+                tt1.play();
+
+                tt.setOnFinished(evt -> {
+                    getChildren().remove(menu9);
+                });
+        });
+
+        MenuButton btnMap4 = new MenuButton("Map 4");
+        btnMap4.setOnMouseClicked(event -> {
+            choix_map = "Gr3Ma8h";
+            getChildren().add(menu7);
+                TranslateTransition tt = new TranslateTransition(Duration.seconds(0.50), menu9);
+                tt.setToX(menu9.getTranslateX()+offset);
+
+                TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), menu7);
+                tt1.setToX(menu9.getTranslateX());
+
+                tt.play();
+                tt1.play();
+
+                tt.setOnFinished(evt -> {
+                    getChildren().remove(menu9);
+                });
+        });
 
         MenuButton btnEasy = new MenuButton("FACILE");
         btnEasy.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS, Constants.EASY_LIVES,k);
+                App.start(primaryS, Constants.EASY_LIVES,k, choix_map);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -390,7 +468,7 @@ public class Menu extends Parent {
         MenuButton btnNormal = new MenuButton("NORMAL");
         btnNormal.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS,Constants.NORMAL_LIVES,k);
+                App.start(primaryS,Constants.NORMAL_LIVES,k, choix_map);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -399,7 +477,7 @@ public class Menu extends Parent {
         MenuButton btnHard = new MenuButton("DIFFICILE");
         btnHard.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS, Constants.HARD_LIVES, k);
+                App.start(primaryS, Constants.HARD_LIVES, k, choix_map);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -408,7 +486,7 @@ public class Menu extends Parent {
         MenuButton btnExpert = new MenuButton("EXPERT");
         btnExpert.setOnMouseClicked(event -> {
             try {
-                App.start(primaryS, Constants.EXPERT_LIVES, k);
+                App.start(primaryS, Constants.EXPERT_LIVES, k, choix_map);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
@@ -478,6 +556,18 @@ public class Menu extends Parent {
         btnExpert.setTranslateX(0);
         btnExpert.setTranslateY(80);
 
+        btnMap1.setTranslateX(0);
+        btnMap1.setTranslateY(20);
+
+        btnMap2.setTranslateX(0);
+        btnMap2.setTranslateY(40);
+
+        btnMap3.setTranslateX(0);
+        btnMap3.setTranslateY(60);
+
+        btnMap4.setTranslateX(0);
+        btnMap4.setTranslateY(80);
+
         volumeSliderBgm.setTranslateX(0);
         volumeSliderBgm.setTranslateY(20);
 
@@ -492,6 +582,7 @@ public class Menu extends Parent {
         menu5.getChildren().addAll(btnBack4, volumeSliderEff);
         menu8.getChildren().addAll(btnName);
         menu7.getChildren().addAll(btnBack5, btnEasy, btnNormal, btnHard, btnExpert);
+        menu9.getChildren().addAll(btnMap1, btnMap2, btnMap3, btnMap4);
         //on ajoute les boutons sur chaque menu
         getChildren().addAll(menu0);
         //le menu racine/mère est menu0

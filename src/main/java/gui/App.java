@@ -248,7 +248,7 @@ public class App extends Application {
      * @param live number of lives
      * @param keyCodes array of keycode used to move pacman
      */
-    public static void start(Stage primaryStage, int live, KeyCode[] keyCodes) throws Exception {
+    public static void start(Stage primaryStage, int live, KeyCode[] keyCodes, String choix_map) throws Exception {
         var root = new Pane();
         var gameScene = new Scene(root);
         OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
@@ -262,7 +262,8 @@ public class App extends Application {
         for (var ghost: ghostsController) {ghost.startAI();}
 
         // Generate map from file
-        var maze = new MazeState(ghostsController, MazeConfig.originalMaze("maze2"), gameMenu2);
+        //choix des maps
+        var maze = new MazeState(ghostsController, MazeConfig.originalMaze(choix_map), gameMenu2);
         Constants.WINDOW_X = (int) (maze.getWidth() * Constants.SCALE);
         Constants.WINDOW_Y = maze.getHeight() * Constants.SCALE;
         root.setPrefSize(Constants.WINDOW_X, Constants.WINDOW_Y);

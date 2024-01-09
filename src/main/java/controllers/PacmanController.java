@@ -57,6 +57,19 @@ public class PacmanController {
      */
     public void keyPressedHandler(KeyEvent event) {
         if (!MazeState.getGameEnded()){
+            if(touches[0]!=null || touches[1]!=null || touches[2]!=null || touches[3]!=null){
+                if (event.getText().equals(touches[0])) {
+                    PacMan.INSTANCE.setNextDirection(Direction.WEST);
+                } else if (event.getText().equals(touches[1])) {
+                    PacMan.INSTANCE.setNextDirection(Direction.EAST);
+                } else if (event.getText().equals(touches[2])) {
+                    PacMan.INSTANCE.setNextDirection(Direction.NORTH);
+                } else if (event.getText().equals(touches[3])) {
+                    PacMan.INSTANCE.setNextDirection(Direction.SOUTH);
+                } else {
+                    PacMan.INSTANCE.setNextDirection(PacMan.INSTANCE.getNextDirection());
+                }
+            }
             // If the button escape is pressed, if the option menu is showed then close it else open it
             if(event.getCode()==KeyCode.ESCAPE){
                 //si le bouton echap est pressé, alors le menu options se lance
