@@ -152,10 +152,6 @@ public final class PacMan implements Critter {
 
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
-        if(MazeState.getFruitsGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()){
-            MazeState.addScore(MazeState.getFruit(MazeState.id).getPoints());
-            MazeState.getFruitsGridState()[pacPos.y()][pacPos.x()] = false;
-        }
         if (this.isDying) {
             this.deathTimerAni += (float) ((float) deltaT * 1E-9);
             if (this.deathTimerAni > this.checkpointDeathAni[this.checkpointDeathAni.length - 1]) {

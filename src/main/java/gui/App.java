@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import config.MazeConfig;
-import model.MazeState;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -18,6 +17,7 @@ import java.nio.file.Paths;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import model.MazeState;
 
 
 /**
@@ -32,12 +32,13 @@ public class App extends Application {
     private static final MenuButton btnWest = new MenuButton("Left : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton RIGHT dans les options
     private static final MenuButton btnEast = new MenuButton("Right : Press a Key");
-    //message qui s'affiche une fois qu'on appuie sur le bouton dans UP options
+    //message qui s'affiche une fois qu'on appuie sur le bouton RIGHT dans les options
+    private static final String[] touches = {null,null,null,null};//tableau qui permet de modifier les touches
+
     private static final MenuButton btnNorth = new MenuButton("Up : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton dans DOWN options
     private static final MenuButton btnSouth = new MenuButton("Down : Press a Key");
-    //tableau qui permet de modifier les touches
-    private static final String[] touches = {null,null,null,null};
+
     private static Text LEFT;
     //texte qui affiche à côté du bouton LEFT la valeur
     private static Text RIGHT;
@@ -46,7 +47,6 @@ public class App extends Application {
     //texte qui affiche à côté du bouton UP la valeur
     private static Text DOWN;
     //texte qui affiche à côté du bouton DOWN la valeur
-
     /**
      * Method used to bind a new key in the array of keycode
      * @param k array of keycode used to move pacman
@@ -72,8 +72,8 @@ public class App extends Application {
         root.setStyle("-fx-background-color: #000000");
 
         // on prend une image située dans les ressources
-        InputStream is = getClass().getResourceAsStream("/pac.jpg");
-        assert is != null;
+        InputStream is = Files.newInputStream(Paths.get("src/main/resources/pac.jpg"));//on prend une image située dans les ressources
+        //assert is != null;
         Image img = new Image(is);
         is.close();
 
@@ -127,14 +127,14 @@ public class App extends Application {
         OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
         gameMenu2.setVisible(false);
         Menu menu = new Menu(LEFT, RIGHT, UP, DOWN, gameMenu2, root, primaryStage,keyCodes,nameSubmit,btnWest,btnEast,btnNorth,btnSouth);
-        //on initialise les boutons dans le menu
+        //on initialse les boutons dans le menu
         menu.setVisible(true);
         root.getChildren().addAll(imgView, btnWest, btnEast, btnNorth, btnSouth, menu, nameSubmit);
-        // on met tout dans l'affichage de la fenêtre
+        //on met tout dans l'affichage de la fenêtre
         Scene scene = new Scene(root);
         scene.setOnKeyPressed(event -> {
             if(btnWest.isVisible()){
-                //si le bouton est visible, donc qu'on a cliqué sur LEFT dans les options, alors la prochaine touche sera incrémenter dans k si elle n'est pas interdite
+                //si le bouton est visible, donc que on a cliqué sur LEFT dans options, alors la prochaine touche sera incrémenter dans k si elle n'est pas interdite
                 if(event.getCode()!=null && KeyForbidden(event.getCode())){
                     System.out.println(event.getText());
                     if(keyName(event.getText())!=null){LEFT.setText(keyName(event.getText()));KeySpecial(touches, 0, event.getText());keyCodes[0]=null;}
@@ -229,6 +229,16 @@ public class App extends Application {
             case "\"", "3" -> "3";
             default -> null;
         };
+    }
+
+    public static String KeySpecial(KeyCode key){
+        if(key==KeyCode.AMPERSAND)return "1";
+        if(key==KeyCode.QUOTEDBL)return "3";
+        if(key==KeyCode.QUOTE)return "4";
+        if(key==KeyCode.LEFT_PARENTHESIS)return "5";
+        if(key==KeyCode.MINUS)return "6";
+        if(key==KeyCode.UNDERSCORE)return "8";
+        else return null;
     }
 
     public static boolean KeyForbidden(KeyCode key){
