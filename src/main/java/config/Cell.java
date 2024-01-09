@@ -10,9 +10,9 @@ public record Cell(Cell.Content initialContent) {
     /**
      * @return the content of the cell
      */
-    public String toString(){
-        return String.valueOf(this.initialContent);
-    }
+   public String toString(){
+    return String.valueOf(this.initialContent); 
+   }
 
     /**
      * Method that create a new cell.
