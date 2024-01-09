@@ -10,11 +10,11 @@ public class Constants {
     public final static int EXPERT_LIVES = 1;
 
     // Initialise Critters spawn coordinates.
-    public final static IntCoordinates PLAYER = new IntCoordinates(10, 15);
-    public final static IntCoordinates BLINKY = new IntCoordinates(10, 8);
-    public final static IntCoordinates INKY = new IntCoordinates(11, 9);
-    public final static IntCoordinates PINKY = new IntCoordinates(10, 9);
-    public final static IntCoordinates CLYDE = new IntCoordinates(9, 9);
+    public static IntCoordinates PLAYER = new IntCoordinates(10, 15);
+    public static IntCoordinates BLINKY = new IntCoordinates(10, 8);
+    public static IntCoordinates INKY = new IntCoordinates(11, 9);
+    public static IntCoordinates PINKY = new IntCoordinates(10, 9);
+    public static IntCoordinates CLYDE = new IntCoordinates(9, 9);
 
     // Initialise Window size
     public static int SCALE = 30;
@@ -33,4 +33,7 @@ public class Constants {
     public final static int DOT_SCORE = 10;
     public final static int ENERGIZER_SCORE = 50;
     public final static int GHOST_SCORE = 100;
+
+    // Index of the current map
+    public static int MAP_INDEX = 0;
 }

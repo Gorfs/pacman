@@ -80,9 +80,24 @@ public class Music {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
             bgmClip = AudioSystem.getClip();
             bgmClip.open(audioInputStream);
-            FloatControl gainControl = (FloatControl) bgmClip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(20f * (float) Math.log10(getVolume()));
-            bgmClip.loop(Clip.LOOP_CONTINUOUSLY); 
+
+            // LineListener pour fermer le clip une fois la lecture audio terminée
+            bgmClip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    bgmClip.close();
+                }
+            });
+
+            // Logique de traitement lors de la fermeture du programme
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (bgmClip.isRunning()) {
+                    bgmClip.stop();
+                }
+                if (bgmClip.isOpen()) {
+                    bgmClip.close();
+                }
+            }));
+
             bgmClip.start();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -121,6 +136,24 @@ public class Music {
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
         Clip clip = AudioSystem.getClip();
         clip.open(audioInputStream);
+
+        // LineListener pour fermer le clip une fois la lecture audio terminée
+        clip.addLineListener(event -> {
+            if (event.getType() == LineEvent.Type.STOP) {
+                clip.close();
+            }
+        });
+
+        // Logique de traitement lors de la fermeture du programme
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                if (clip.isRunning()) {
+                    clip.stop();
+                }
+                if (clip.isOpen()) {
+                    clip.close();
+                }
+            }));
+
         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(20f * (float) Math.log10(getSFXVolume()));
         clip.start();

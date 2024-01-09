@@ -2,14 +2,11 @@ package controllers;
 
 import gui.OptionInGame;
 import gui.MenuButton;
-import gui.App;
 import gui.Music;
+import gui.App;
 import model.Direction;
 import model.MazeState;
 import model.PacMan;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -51,7 +48,7 @@ public class PacmanController {
                             MenuButton btnEast, MenuButton btnNorth, MenuButton btnSouth, MazeState state){
         PacmanController.keyCodes = keyCodes; this.optionMenu = optionMenu; this.root = root; this.btnWest = btnWest;
         this.btnEast = btnEast; this.btnNorth = btnNorth; this.btnSouth = btnSouth; this.state = state;
-        touches=touche; LEFT=left; RIGHT=right; UP=up; DOWN=down;
+        touches = touche; LEFT=left; RIGHT=right; UP=up; DOWN=down;
     }
 
     /**
@@ -60,13 +57,6 @@ public class PacmanController {
     */
     public void keyPressedHandler(KeyEvent event) {
         if (!MazeState.getGameEnded()){
-            if(touches[0]!=null || touches[1]!=null || touches[2]!=null || touches[3]!=null){
-                if (event.getText().equals(touches[0])){PacMan.INSTANCE.setNextDirection(Direction.WEST);}
-                else if(event.getText().equals(touches[1])){PacMan.INSTANCE.setNextDirection(Direction.EAST);}
-                else if(event.getText().equals(touches[2])){PacMan.INSTANCE.setNextDirection(Direction.NORTH);}
-                else if(event.getText().equals(touches[3])){PacMan.INSTANCE.setNextDirection(Direction.SOUTH);}
-            }
-
             // If the button escape is pressed, if the option menu is showed then close it else open it
             if(event.getCode()==KeyCode.ESCAPE){
                 //si le bouton echap est pressé, alors le menu options se lance

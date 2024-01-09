@@ -9,15 +9,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import config.MazeConfig;
+import model.MazeState;
 
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import model.MazeState;
 
 
 /**
@@ -33,7 +31,7 @@ public class App extends Application {
     //message qui s'affiche une fois qu'on appuie sur le bouton RIGHT dans les options
     private static final MenuButton btnEast = new MenuButton("Right : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton RIGHT dans les options
-    private static final String[] touches = {null,null,null,null};//tableau qui permet de modifier les touches
+    private static String[] touches = {null,null,null,null};//tableau qui permet de modifier les touches
 
     private static final MenuButton btnNorth = new MenuButton("Up : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton dans DOWN options
@@ -72,8 +70,8 @@ public class App extends Application {
         root.setStyle("-fx-background-color: #000000");
 
         // on prend une image située dans les ressources
-        InputStream is = Files.newInputStream(Paths.get("src/main/resources/pac.jpg"));//on prend une image située dans les ressources
-        //assert is != null;
+        InputStream is = getClass().getResourceAsStream("/pac.jpg");//on prend une image située dans les ressources
+        assert is != null;
         Image img = new Image(is);
         is.close();
 
@@ -124,59 +122,58 @@ public class App extends Application {
         imgView.setFitWidth(Constants.WINDOW_X); //image aux dimensions de l'écran
         imgView.setFitHeight(Constants.WINDOW_Y);
         imgView.setTranslateY(100);
-        OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
+        OptionInGame gameMenu2 = new OptionInGame(root, keyCodes, nameSubmit, btnWest, btnEast, btnNorth, btnSouth);
         gameMenu2.setVisible(false);
+        // Les boutons dans le menu, option et pour jouer
         Menu menu = new Menu(LEFT, RIGHT, UP, DOWN, gameMenu2, root, primaryStage,keyCodes,nameSubmit,btnWest,btnEast,btnNorth,btnSouth);
         //on initialse les boutons dans le menu
         menu.setVisible(true);
         root.getChildren().addAll(imgView, btnWest, btnEast, btnNorth, btnSouth, menu, nameSubmit);
-        //on met tout dans l'affichage de la fenêtre
+        // on met tout dans l'affichage de la fenêtre
         Scene scene = new Scene(root);
         scene.setOnKeyPressed(event -> {
             if(btnWest.isVisible()){
-                //si le bouton est visible, donc que on a cliqué sur LEFT dans options, alors la prochaine touche sera incrémenter dans k si elle n'est pas interdite
-                if(event.getCode()!=null && KeyForbidden(event.getCode())){
-                    System.out.println(event.getText());
-                    if(keyName(event.getText())!=null){LEFT.setText(keyName(event.getText()));KeySpecial(touches, 0, event.getText());keyCodes[0]=null;}
-                    //si la touche fait partie des touches non lisible par KeyCode, alors on le transforme en texte pour apres l'afficher et le mettre dans le tableau touche
-                    else if(event.getCode()!=KeyCode.UNDEFINED){bindKey(keyCodes, 0, event.getCode()); LEFT.setText(KeyCodetoString(keyCodes[0])); touches[0]=null;}
-                    //sinon on met la valeur KeyCode dans k, et on l'affiche
-                    btnWest.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
+                // si le bouton est visible, donc qu'on a cliqué sur WEST dans les options,
+                // alors la prochaine touche sera incrémenter dans 'keyCodes'
+                if(event.getCode()!=null){
+                    bindKey(keyCodes, 0, event.getCode());
+                    btnWest.setVisible(false);// une fois que le bouton est appuyé, on l'enlève
                 }
             }
             if(btnEast.isVisible()){
-                //si le bouton est visible, donc que on a cliqué sur RIGHT dans options, alors la prochaine touche sera incrémenter dans k
-                if(event.getCode()!=null && KeyForbidden(event.getCode())){
-                    System.out.println(event.getText());
-                    if(keyName(event.getText())!=null){RIGHT.setText(keyName(event.getText()));KeySpecial(touches, 1, event.getText());keyCodes[1]=null;}
-                    else if(event.getCode()!=KeyCode.UNDEFINED){bindKey(keyCodes, 1, event.getCode()); RIGHT.setText(KeyCodetoString(keyCodes[1])); touches[1]=null;}
+                // si le bouton est visible, donc qu'on a cliqué sur EAST dans les options,
+                // alors la prochaine touche sera incrémenté dans 'keyCodes'
+                if(event.getCode()!=null){
+                    bindKey(keyCodes, 1, event.getCode());
                     btnEast.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
                 }
             }
             if(btnNorth.isVisible()){
-                //si le bouton est visible, donc que on a cliqué sur RIGHT dans options, alors la prochaine touche sera incrémenter dans k
-                if(event.getCode()!=null && KeyForbidden(event.getCode())){
-                    System.out.println(event.getText());
-                    if(keyName(event.getText())!=null){UP.setText(keyName(event.getText()));KeySpecial(touches, 2, event.getText());keyCodes[2]=null;}
-                    else if(event.getCode()!=KeyCode.UNDEFINED){bindKey(keyCodes, 2, event.getCode()); UP.setText(KeyCodetoString(keyCodes[2])); touches[2]=null;}
+                // si le bouton est visible, donc qu'on a cliqué sur NORTH dans les options,
+                // alors la prochaine touche sera incrémenter dans 'keyCodes'
+                if(event.getCode()!=null){
+                    bindKey(keyCodes, 2, event.getCode());
                     btnNorth.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
                 }
             }
             if(btnSouth.isVisible()){
-                //si le bouton est visible, donc que on a cliqué sur RIGHT dans options, alors la prochaine touche sera incrémenter dans k
-                if(event.getCode()!=null && KeyForbidden(event.getCode())){
-                    System.out.println(event.getText());
-                    if(keyName(event.getText())!=null){DOWN.setText(keyName(event.getText()));KeySpecial(touches, 3, event.getText());keyCodes[3]=null;}
-                    else  if(event.getCode()!=KeyCode.UNDEFINED){bindKey(keyCodes, 3, event.getCode()); DOWN.setText(KeyCodetoString(keyCodes[3])); touches[3]=null;}
+                // si le bouton est visible, donc qu'on a cliqué sur SOUTH dans les options,
+                // alors la prochaine touche sera incrémenter dans 'keyCodes'
+                if(event.getCode()!=null){
+                    bindKey(keyCodes, 3, event.getCode());
                     btnSouth.setVisible(false);//une fois que le bouton est appuyé, on l'enlève
                 }
             }
         });
-
         primaryStage.setScene(scene);//on met la scene sur le stage
         primaryStage.show();//on affiche le menu
     }
 
+    /**
+     * Point d'entrée principal de l'application JavaFX.
+     *
+     * @param args Arguments de ligne de commande.
+     */
     public static void main(String[] args) {
         launch(args);
     }
@@ -231,16 +228,6 @@ public class App extends Application {
         };
     }
 
-    public static String KeySpecial(KeyCode key){
-        if(key==KeyCode.AMPERSAND)return "1";
-        if(key==KeyCode.QUOTEDBL)return "3";
-        if(key==KeyCode.QUOTE)return "4";
-        if(key==KeyCode.LEFT_PARENTHESIS)return "5";
-        if(key==KeyCode.MINUS)return "6";
-        if(key==KeyCode.UNDERSCORE)return "8";
-        else return null;
-    }
-
     public static boolean KeyForbidden(KeyCode key){
         return key != KeyCode.ACCEPT && key != KeyCode.ALT && key != KeyCode.F1 && key != KeyCode.F2 && key != KeyCode.F3 && key != KeyCode.F4 && key != KeyCode.F5
                 && key != KeyCode.F6 && key != KeyCode.F7 && key != KeyCode.F8 && key != KeyCode.F9 && key != KeyCode.F10 && key != KeyCode.F11 && key != KeyCode.F12
@@ -262,7 +249,8 @@ public class App extends Application {
         var root = new Pane();
         var gameScene = new Scene(root);
         OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
-        //on initialise les options in-game
+
+        //on initialise les options dans le jeu
         gameMenu2.setVisible(false);
 
         // Controllers for Pacman and ghosts
@@ -279,7 +267,6 @@ public class App extends Application {
         maze.setLives(live);
 
         var pacmanController = new PacmanController(touches, keyCodes, LEFT, RIGHT, UP, DOWN, gameMenu2, root, btnWest, btnEast, btnNorth, btnSouth, maze);
-        //on initialise la classe qui gère les touches pressées in-game
         gameScene.setOnKeyPressed(pacmanController::keyPressedHandler);
         // Currently doing nothing, so I commented it.
         // gameScene.setOnKeyReleased(pacmanController::keyReleasedHandler);
