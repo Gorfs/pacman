@@ -124,7 +124,7 @@ public class App extends Application {
         imgView.setFitWidth(Constants.WINDOW_X); //image aux dimensions de l'écran
         imgView.setFitHeight(Constants.WINDOW_Y);
         imgView.setTranslateY(100);
-        OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
+        OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, btnWest, btnEast, btnNorth, btnSouth);
         gameMenu2.setVisible(false);
         Menu menu = new Menu(LEFT, RIGHT, UP, DOWN, gameMenu2, root, primaryStage,keyCodes,nameSubmit,btnWest,btnEast,btnNorth,btnSouth);
         //on initialise les boutons dans le menu
@@ -251,7 +251,7 @@ public class App extends Application {
     public static void start(Stage primaryStage, int live, KeyCode[] keyCodes, String choix_map) throws Exception {
         var root = new Pane();
         var gameScene = new Scene(root);
-        OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, root, keyCodes, btnWest, btnEast, btnNorth, btnSouth);
+        OptionInGame gameMenu2 = new OptionInGame(LEFT, RIGHT, UP, DOWN, primaryStage, btnWest, btnEast, btnNorth, btnSouth);
         // Initialise in game's options.
         gameMenu2.setVisible(false);
 
