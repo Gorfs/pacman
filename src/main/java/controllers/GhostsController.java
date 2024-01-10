@@ -21,7 +21,7 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
     // timer to update scatter mode
     float timer = 0;
     // If it can start chasing/scatter
-    boolean started = false; 
+    boolean started = false;
 
     int[] startPosition1;
     int[] startPosition2;
@@ -56,7 +56,7 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
                 critter.setNextDirection(waiting(critter));
                 previousPos = critter.getPos().round();
                 return;
-            // if the ghost is scared, it goes in random direction mode
+                // if the ghost is scared, it goes in random direction mode
             } else if (critter.isScaredMode()) {
                 if (canTurn(critter, config)) {
                     Direction rdDir = randomDirection(critter, critter.getDirection(), config);
@@ -64,7 +64,7 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
                     previousPos = critter.getPos().round();
                     return;
                 }
-            // if the ghost is in scatter mode, it goes in scatter direction mode
+                // if the ghost is in scatter mode, it goes in scatter direction mode
             } else if (critter.isScatterMode()) result = scatterDirection(critter, config);
             else result = nextDirection(critter, config);
             previousPos = critter.getPos().round();
@@ -173,7 +173,6 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
                 startPosition2 = new int[]{9, 1};
                 startPosition3 = new int[]{11, 1};
                 break;
-
         }
         IntCoordinates pos = critter.getPos().round();
         if (conditionOut() && pos.x() == Constants.INKY.x() && pos.y() == Constants.INKY.y()) {

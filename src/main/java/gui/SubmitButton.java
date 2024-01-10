@@ -10,11 +10,11 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
-public class MenuButton2 extends StackPane {
+public class SubmitButton extends StackPane {
     //class qui gère le bouton submit dans le menu
     private Text text;
 
-    public MenuButton2(String name) {
+    public SubmitButton(String name) {
             
         text = new Text(name);
         text.setFont(Font.font(10));

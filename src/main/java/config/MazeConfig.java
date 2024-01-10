@@ -82,44 +82,44 @@ public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates
         myReader = new Scanner(is);
         int n = 0;
         // Init the spawn of the entities
-            IntCoordinates player = new IntCoordinates(10, 15),
-                    blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
-                    pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
-            // while there is something to read
-            while (myReader.hasNextLine()) {
-                // Get the curent line
-                String line = myReader.nextLine();
-                // Split everything into a String array
-                String[] data = line.split(",");
-                if (n < map.length) {
-                   // For every 2 string
-                   for (int i = 0; i < data.length; i++) {
-                       // create a cell based on what there is inside(NOTHING, DOT, etc.)
-                       map[n][i] = switch (data[i]) {
-                           case "E" -> slot(ENERGIZER);
-                           case "W" -> slot(WALL);
-                           case "D" -> slot(DOT);
-                           default -> slot(NOTHING);
-                       };
-                   }
-               } else if (n == map.length) {
-                    // Init the spawn of the entities
-                    player = new IntCoordinates(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
-                    blinky = new IntCoordinates(Integer.parseInt(data[2]), Integer.parseInt(data[3]));
-                    inky = new IntCoordinates(Integer.parseInt(data[4]), Integer.parseInt(data[5]));
-                    pinky = new IntCoordinates(Integer.parseInt(data[6]), Integer.parseInt(data[7]));
-                    clyde = new IntCoordinates(Integer.parseInt(data[8]), Integer.parseInt(data[9]));
-
-                    Constants.PLAYER = player;
-                    Constants.BLINKY = blinky;
-                    Constants.INKY = inky;
-                    Constants.PINKY = pinky;
-                    Constants.CLYDE = clyde;
+        IntCoordinates player = new IntCoordinates(10, 15),
+                blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
+                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
+        // while there is something to read
+        while (myReader.hasNextLine()) {
+            // Get the curent line
+            String line = myReader.nextLine();
+            // Split everything into a String array
+            String[] data = line.split(",");
+            if (n < map.length) {
+                // For every 2 string
+                for (int i = 0; i < data.length; i++) {
+                    // create a cell based on what there is inside(NOTHING, DOT, etc.)
+                    map[n][i] = switch (data[i]) {
+                        case "E" -> slot(ENERGIZER);
+                        case "W" -> slot(WALL);
+                        case "D" -> slot(DOT);
+                        default -> slot(NOTHING);
+                    };
                 }
-                n++;
+            } else if (n == map.length) {
+                // Init the spawn of the entities
+                player = new IntCoordinates(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+                blinky = new IntCoordinates(Integer.parseInt(data[2]), Integer.parseInt(data[3]));
+                inky = new IntCoordinates(Integer.parseInt(data[4]), Integer.parseInt(data[5]));
+                pinky = new IntCoordinates(Integer.parseInt(data[6]), Integer.parseInt(data[7]));
+                clyde = new IntCoordinates(Integer.parseInt(data[8]), Integer.parseInt(data[9]));
 
-
+                Constants.PLAYER = player;
+                Constants.BLINKY = blinky;
+                Constants.INKY = inky;
+                Constants.PINKY = pinky;
+                Constants.CLYDE = clyde;
             }
+            n++;
+
+
+        }
 //            n++; PROBLEM
 //        } PROBLEM
         // close file

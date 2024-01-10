@@ -1,5 +1,6 @@
 package gui;
 
+import java.util.Objects;
 import java.util.Random;
 
 import config.Cell;
@@ -25,15 +26,16 @@ public class CellGraphicsFactory {
     private static final Image cherryImage, strawberryImage, orangeImage, appleImage, melonImage, galaxianImage, bellImage, keyImage;
 
     static{
-        cherryImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/cherry.png"));
-        strawberryImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/strawberry.png"));
-        orangeImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/orange.png"));
-        appleImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/apple.png"));
-        melonImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/melon.png"));
-        galaxianImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/galaxian.png"));
-        bellImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/bell.png"));
-        keyImage = new Image(CellGraphicsFactory.class.getResourceAsStream("/key.png"));
+        cherryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/cherry.png")));
+        strawberryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/strawberry.png")));
+        orangeImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/orange.png")));
+        appleImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/apple.png")));
+        melonImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/melon.png")));
+        galaxianImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/galaxian.png")));
+        bellImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bell.png")));
+        keyImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/key.png")));
     }
+
 
     /**
      * Constructor used to set up the scaling
@@ -202,3 +204,4 @@ public class CellGraphicsFactory {
         };
     }
 }
+
