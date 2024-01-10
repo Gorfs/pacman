@@ -2,9 +2,10 @@ package model;
 
 
 public class Fruit {
-    private String name;
-    private int points, thresholds; // nombre de points que rapporte le fruit + le seuil qui permet de passer à un autre fruit
-    
+    private final String name;
+    private final int points;
+    private final int thresholds; // nombre de points que rapporte le fruit + le seuil qui permet de passer à un autre fruit
+
     public Fruit(String name, int points, int thresholds){
         this.name = name;
         this.points = points;
