@@ -2,6 +2,7 @@ package gui;
 
 import config.Constants;
 import controllers.*;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
@@ -34,6 +35,7 @@ public class App extends Application {
     private static final MenuButton btnNorth = new MenuButton("Up : Press a Key");
     //message qui s'affiche une fois qu'on appuie sur le bouton dans DOWN options
     private static final MenuButton btnSouth = new MenuButton("Down : Press a Key");
+    public static AnimationTimer animationTimer = null;
     //tableau qui permet de modifier les touches
     private static final String[] touches = {null,null,null,null};
     private static Text LEFT;
@@ -278,6 +280,7 @@ public class App extends Application {
         Music.playBackgroundMusic();
         primaryStage.setScene(gameScene);
         primaryStage.show();
-        gameView.animate();
+        animationTimer = gameView.animate();
+        animationTimer.start();
     }
 }

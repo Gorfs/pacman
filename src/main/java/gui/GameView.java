@@ -51,8 +51,8 @@ public class GameView {
         addGraphics(menu.makeGraphics()); //Pour pouvoir afficher le Menu
     }
 
-    public void animate() {
-        new AnimationTimer() {
+    public AnimationTimer animate() {
+        return new AnimationTimer() {
             long last = 0;
             int count = 0;
             long fpsCount = 0;
@@ -89,6 +89,6 @@ public class GameView {
                 if (PacMan.INSTANCE.isEnergized()) PacMan.INSTANCE.updateEnergizer(deltaT);
                 last = now;
             }
-        }.start();
+        };
     }
 }

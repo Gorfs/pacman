@@ -372,12 +372,13 @@ public class OptionInGame extends Parent {
 
                 MenuButton btnMenu = new MenuButton("MENU");
                 btnMenu.setOnMouseClicked(event -> {
-                    App c= new App();
+                    App c = new App();
                     try {
+                        App.animationTimer.stop();
                         Music.stopBackgroundMusic();
                         c.start(primaryStage);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        throw new RuntimeException(e);
                     }
                 });
 

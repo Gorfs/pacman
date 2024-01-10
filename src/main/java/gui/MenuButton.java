@@ -11,8 +11,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 public class MenuButton extends StackPane {
-//class qui gère tout les boutons sauf PLAY et le bouton submit
-    private Text text;
+//class qui gère tous les boutons sauf PLAY et le bouton submit
+    private final Text text;
 
     public MenuButton(String name) {
 
