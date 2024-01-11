@@ -11,7 +11,7 @@ public final class InkyController extends GhostsController {
     public void startAI() {
         Ghost.BLINKY.setDirection(Direction.NORTH);
         started = false;
-        timer = 0;
+        scatterTimer = 0;
     }
 
     @Override

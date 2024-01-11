@@ -11,7 +11,7 @@ public final class ClydeController extends GhostsController {
     public void startAI(){
         Ghost.CLYDE.setNextDirection(Direction.EAST);
         started = false;
-        timer = 0;
+        scatterTimer = 0;
     }
 
     @Override
