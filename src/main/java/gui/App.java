@@ -175,6 +175,10 @@ public class App extends Application {
 
         primaryStage.setScene(scene);//on met la scene sur le stage
         primaryStage.show();//on affiche le menu
+
+        primaryStage.setOnCloseRequest(event -> {
+            System.exit(0);
+        });
     }
 
     public static void main(String[] args) {

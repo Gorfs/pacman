@@ -23,9 +23,10 @@ import model.PacMan;
 public class CellGraphicsFactory {
     private final double scale;
     private final Color colorWalls;
-    private static final Image cherryImage, strawberryImage, orangeImage, appleImage, melonImage, galaxianImage, bellImage, keyImage;
+    private static final Image bonusImage, cherryImage, strawberryImage, orangeImage, appleImage, melonImage, galaxianImage, bellImage, keyImage;
 
     static{
+        bonusImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonus.png")));
         cherryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/cherry.png")));
         strawberryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/strawberry.png")));
         orangeImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/orange.png")));
@@ -76,6 +77,11 @@ public class CellGraphicsFactory {
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
+        var bonusImageView = new ImageView(bonusImage);
+        bonusImageView.setFitWidth(scale);
+        bonusImageView.setFitHeight(scale);
+        bonusImageView.setVisible(false);
+        group.getChildren().add(bonusImageView);
         var cherryImageView = new ImageView(cherryImage);
         cherryImageView.setFitWidth(scale);
         cherryImageView.setFitHeight(scale);
@@ -187,6 +193,7 @@ public class CellGraphicsFactory {
                         if (i >= 3) i = 0;
                     }
                 }
+                bonusImageView.setVisible(state.getBonusGridState(pos));
                 cherryImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("cherry"));
                 strawberryImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("strawberry"));
                 orangeImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("orange"));

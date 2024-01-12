@@ -31,7 +31,9 @@ public final class MazeState {
 
     private static boolean[][] gridState;
     private static boolean[][] fruitsGridState; // Another grid for the fruits
-    private static boolean fruitsTimerStarted = false;
+    private static boolean[][] bonusGridState; // Another grid for the bonus;
+    private static boolean fruitsAndBonusTimerStarted = false;
+    private Timer timer = new Timer();
     // liste avec tous les fruits possibles et compteur id qui permet d'accéder aux données d'un fruit (nom, points, seuil de score pour passer à un autre fruit)
     private static ArrayList<Fruit> fruits;
     public static int id;
@@ -62,16 +64,17 @@ public final class MazeState {
         critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
         gridState = new boolean[height][width];
         fruitsGridState = new boolean[height][width];
+        bonusGridState = new boolean[height][width];
         id = 0;
         fruits = new ArrayList<>();
-        fruits.add(new Fruit("cherry", 100, 100));
-        fruits.add(new Fruit("strawberry", 300, 500));
-        fruits.add(new Fruit("orange", 500, 1000));
-        fruits.add(new Fruit("apple", 700, 1500));
-        fruits.add(new Fruit("melon", 1000, 2000));
-        fruits.add(new Fruit("galaxian", 2000, 2500));
-        fruits.add(new Fruit("bell", 3000, 3000));
-        fruits.add(new Fruit("key", 5000, 3500));
+        fruits.add(new Fruit("cherry", 100, 1000));
+        fruits.add(new Fruit("strawberry", 300, 2000));
+        fruits.add(new Fruit("orange", 500, 3000));
+        fruits.add(new Fruit("apple", 700, 5000));
+        fruits.add(new Fruit("melon", 1000, 10000));
+        fruits.add(new Fruit("galaxian", 2000, 25000));
+        fruits.add(new Fruit("bell", 3000, 50000));
+        fruits.add(new Fruit("key", 5000, 100000));
         initialPos = Map.of(
                 PacMan.INSTANCE, config.pacManPos().toRealCoordinates(1.0),
                 BLINKY, config.blinkyPos().toRealCoordinates(1.0),
@@ -84,6 +87,10 @@ public final class MazeState {
 
     public static List<Critter> getCritters() {
         return critters;
+    }
+
+    public static Map<Critter, RealCoordinates> getInitialPos(){
+        return initialPos; // get it for the reset ghost positions function
     }
 
     public double getWidth() {
@@ -120,11 +127,15 @@ public final class MazeState {
         resetGrid();
         resetFruitsGrid();
         resetCritters();
-        fruitsTimerStarted = false;
+        fruitsAndBonusTimerStarted = false;
     }
 
     public static boolean[][] getFruitsGridState(){
         return fruitsGridState;
+    }
+
+    public static boolean[][] getBonusGridState(){
+        return bonusGridState;
     }
 
     public static Fruit getFruit(int id){
@@ -263,12 +274,14 @@ public final class MazeState {
             if(allPointsCollected()){
                 resetCritters();
                 resetFruitsGrid();
+                resetBonusGrid();
                 resetGrid();
             }
-            // If the score is higher than 100 (threshold for the 1st fruit, cherry) we start to generate fruits in the map
-            if(score>fruits.get(0).getThresholds() && !fruitsTimerStarted){
+            // If the score is higher than 1000 (threshold for the 1st fruit, cherry) we start to generate fruits and bonus in the map
+            if(score>fruits.get(0).getThresholds() && !fruitsAndBonusTimerStarted){
                 generateRandomFruits();
-                fruitsTimerStarted = true;
+                generateRandomBonus();
+                fruitsAndBonusTimerStarted = true;
             }
             if(id<fruits.size()-1){
                 if(score>fruits.get(id+1).getThresholds()) id++;
@@ -278,7 +291,6 @@ public final class MazeState {
 
     // This function generate every 20 seconds fruits randomly in places where a dot was already collected, the fruits disapears after 10 seconds
     public void generateRandomFruits(){
-        Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run(){
@@ -308,6 +320,36 @@ public final class MazeState {
         }, 10000, 20000);
     }
 
+    public void generateRandomBonus(){
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run(){
+                if(!gameEnded){
+                    boolean w = false;
+                    Random rand = new Random();
+                    while(!w){
+                        int x = rand.nextInt(height);
+                        int y = rand.nextInt(width);
+                        if(gridState[x][y] && !fruitsGridState[x][y]){
+                            bonusGridState[x][y] = true;
+                            timer.schedule(new TimerTask(){
+                                @Override
+                                public void run(){
+                                    bonusGridState[x][y] = false;
+                                }
+                            }, 10000);
+                            w = true;
+                        }
+                    }
+                } else{
+                    // stop generating bonus when the player lose
+                    timer.cancel();
+                    timer.purge();
+                }
+            }
+        }, 7000, 20000);
+    }
+
     public static boolean allPointsCollected() {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -331,6 +373,14 @@ public final class MazeState {
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 fruitsGridState[i][j] = false;
+            }
+        }
+    }
+
+    public static void resetBonusGrid() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                bonusGridState[i][j] = false;
             }
         }
     }
@@ -397,5 +447,9 @@ public final class MazeState {
 
     public boolean getFruitsGridState(IntCoordinates pos) {
         return fruitsGridState[pos.y()][pos.x()];
+    }
+
+    public boolean getBonusGridState(IntCoordinates pos) {
+        return bonusGridState[pos.y()][pos.x()];
     }
 }

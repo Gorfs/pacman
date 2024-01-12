@@ -13,6 +13,7 @@ public enum Ghost implements Critter {
 
     private float timerAni = 0;
     private final float[] checkpointAni = {0.25F,0.5F};
+    private double speed = 2;
 
     @Override
     public float[] getCheckpointAni() {
@@ -62,7 +63,12 @@ public enum Ghost implements Critter {
     @Override
     public double getSpeed() {
         // speed is constant, we should probably get this from a file such as a CONSTANT.json
-        return 2;
+        return speed;
+    }
+
+    @Override
+    public void setSpeed(double speed){
+        this.speed = speed;
     }
 
     public boolean isScatterMode() {
