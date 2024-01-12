@@ -42,6 +42,7 @@ public sealed interface Critter permits Ghost, PacMan {
     Direction getDirection();
     Direction getNextDirection();
     void setPos(RealCoordinates realCoordinates);
+    void setSpeed(double speed);
     void setDirection(Direction direction);
     void setNextDirection(Direction direction);
 }

@@ -14,12 +14,12 @@ public final class PinkyController extends GhostsController {
     public void startAI() {
         Ghost.PINKY.setNextDirection(Direction.NORTH);
         started = false;
-        timer = 0;
+        scatterTimer = 0;
     }
 
     @Override
     public IntCoordinates scatterDirection(Critter critter, MazeConfig config) {
-        return findPathing(critter, new IntCoordinates(0, 0), config);
+        return findPathing(critter, new IntCoordinates(1, -2), config);
     }
 
     @Override

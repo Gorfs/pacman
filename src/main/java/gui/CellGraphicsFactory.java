@@ -1,5 +1,6 @@
 package gui;
 
+import java.util.Objects;
 import java.util.Random;
 
 import config.Cell;
@@ -7,10 +8,13 @@ import geometry.IntCoordinates;
 import geometry.RealCoordinates;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.MazeState;
+import model.PacMan;
 
 
 /**
@@ -18,7 +22,21 @@ import model.MazeState;
  */
 public class CellGraphicsFactory {
     private final double scale;
-    private Color colorWalls;
+    private final Color colorWalls;
+    private static final Image bonusImage, cherryImage, strawberryImage, orangeImage, appleImage, melonImage, galaxianImage, bellImage, keyImage;
+
+    static{
+        bonusImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/bonus.png")));
+        cherryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/cherry.png")));
+        strawberryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/strawberry.png")));
+        orangeImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/orange.png")));
+        appleImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/apple.png")));
+        melonImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/melon.png")));
+        galaxianImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/galaxian.png")));
+        bellImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/bell.png")));
+        keyImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/key.png")));
+    }
+
 
     /**
      * Constructor used to set up the scaling
@@ -40,6 +58,7 @@ public class CellGraphicsFactory {
      * @return a method that update the group of graphic that represent a cell.
      */
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
+        boolean wall = false;
         // New group to stock every graphics for one cell
         var group = new Group();
         // Place it to the right position
@@ -58,10 +77,23 @@ public class CellGraphicsFactory {
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
-        // if there is a wall in the cell
+
+        // Initialise bonus image
+        var bonusImageView = addNewImage(group, bonusImage);
+        var cherryImageView = addNewImage(group, cherryImage);
+        var strawberryImageView = addNewImage(group, strawberryImage);
+        var orangeImageView = addNewImage(group, orangeImage);
+        var appleImageView = addNewImage(group, appleImage);
+        var melonImageView = addNewImage(group, melonImage);
+        var galaxianImageView = addNewImage(group, galaxianImage);
+        var bellImageView = addNewImage(group, bellImage);
+        var keyImageView = addNewImage(group, keyImage);
+
         var wallX = new Rectangle();
         var wallY = new Rectangle();
+        // if there is a wall in the cell
         if (cell.initialContent() == Cell.Content.WALL) {
+            wall = true;
             // set wall color
             dot.setFill(colorWalls);
             if (pos.x() < state.getWidth() - 1) {
@@ -96,8 +128,12 @@ public class CellGraphicsFactory {
             dot.setFill(Color.YELLOW);
         }
 
+        boolean finalWall = wall;
+
         return new GraphicsUpdater() {
-            float timer = 0;
+            final float[] timer = {0F,1F,0F};
+            int i = 0;
+            boolean t = true;
             /**
              * Method that update the graphics for each cell
              * @param deltaT time between two frames in nanoseconds
@@ -105,20 +141,34 @@ public class CellGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
-                /* Just a try to change the color of the walls every second (to delete if not useful)
-                timer += (float) (deltaT * 1E-9);
-                if (timer > 1){
-                    Color[] colors = {Color.BLUE, Color.RED, Color.PINK, Color.ORANGE, Color.CYAN, Color.YELLOW, Color.GREEN, Color.PURPLE, Color.WHITE, Color.BROWN};
-                    Random rand = new Random();
-                    int n = rand.nextInt(10);
-                    Color temp = colors[n];
-                    timer = 0;
+
+                if (PacMan.INSTANCE.isEnergized() && finalWall){
+                    if (t) {
+                        timer[i] += (float) (deltaT * 1E-9);
+                        if (timer[i] >= 1) timer[i] = 1;
+                    } else {
+                        timer[i] -= (float) (deltaT * 1E-9);
+                        if (timer[i] <= 0) timer[i] = 0;
+                    }
+                    var temp = Color.color(timer[0], timer[1], timer[2]);
                     dot.setFill(temp);
                     wallX.setFill(temp);
                     wallY.setFill(temp);
+                    if (timer[i] == 1 || timer[i] == 0) {
+                        i++;
+                        t = !t;
+                        if (i >= 3) i = 0;
+                    }
                 }
-                */
-                
+                bonusImageView.setVisible(state.getBonusGridState(pos));
+                cherryImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("cherry"));
+                strawberryImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("strawberry"));
+                orangeImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("orange"));
+                appleImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("apple"));
+                melonImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("melon"));
+                galaxianImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("galaxian"));
+                bellImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("bell"));
+                keyImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("key"));
             }
 
             @Override
@@ -127,4 +177,14 @@ public class CellGraphicsFactory {
             }
         };
     }
+
+    public ImageView addNewImage(Group group, Image image) {
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(scale);
+        imageView.setFitHeight(scale);
+        imageView.setVisible(false);
+        group.getChildren().add(imageView);
+        return imageView;
+    }
 }
+

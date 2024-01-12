@@ -5,28 +5,40 @@ import config.Constants;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
-import gui.GameMenu2;
+import gui.OptionInGame;
 import controllers.GhostsController;
 import controllers.PacmanController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Random;
 
 import static model.Ghost.*;
+
 
 /**
  * Class MazeState is used to update the maze while the PLAYER is playing.
  */
 public final class MazeState {
-    private final GhostsController[] ghostsController;
+    private static GhostsController[] ghostsController;
     private static MazeConfig config;
     private static int height;
     private static int width;
 
     private static boolean[][] gridState;
+    private static boolean[][] fruitsGridState; // Another grid for the fruits
+    private static boolean[][] bonusGridState; // Another grid for the bonus;
+    private static boolean fruitsAndBonusTimerStarted = false;
+    private final Timer timer = new Timer();
+    // liste avec tous les fruits possibles et compteur id qui permet d'accéder aux données d'un fruit (nom, points, seuil de score pour passer à un autre fruit)
+    private static ArrayList<Fruit> fruits;
+    public static int id;
 
-    private final GameMenu2 optionMenu;
+    private final OptionInGame optionMenu;
 
     private static List<Critter> critters;
     private static int score; // J'ai passé la variable en static pour pouvoir la réinitialiser
@@ -43,14 +55,26 @@ public final class MazeState {
      * @param config variable that represent the initial version of the maze
      * @param gameMenu variable that contains in game option menu
      */
-    public MazeState(GhostsController[] ghostsController, MazeConfig config, GameMenu2 gameMenu) {
+    public MazeState(GhostsController[] ghostsController, MazeConfig config, OptionInGame gameMenu) {
         this.optionMenu = gameMenu;
-        this.ghostsController = ghostsController;
+        MazeState.ghostsController = ghostsController;
         MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
         critters = List.of(PacMan.INSTANCE, CLYDE, BLINKY, INKY, PINKY);
         gridState = new boolean[height][width];
+        fruitsGridState = new boolean[height][width];
+        bonusGridState = new boolean[height][width];
+        id = 0;
+        fruits = new ArrayList<>();
+        fruits.add(new Fruit("cherry", 100, 1000));
+        fruits.add(new Fruit("strawberry", 300, 2000));
+        fruits.add(new Fruit("orange", 500, 3000));
+        fruits.add(new Fruit("apple", 700, 5000));
+        fruits.add(new Fruit("melon", 1000, 10000));
+        fruits.add(new Fruit("galaxian", 2000, 25000));
+        fruits.add(new Fruit("bell", 3000, 50000));
+        fruits.add(new Fruit("key", 5000, 100000));
         initialPos = Map.of(
                 PacMan.INSTANCE, config.pacManPos().toRealCoordinates(1.0),
                 BLINKY, config.blinkyPos().toRealCoordinates(1.0),
@@ -95,8 +119,23 @@ public final class MazeState {
         gameEnded = false;
         lives = defaultLives;
         score = 0;
+        id = 0;
         resetGrid();
+        resetFruitsGrid();
         resetCritters();
+        fruitsAndBonusTimerStarted = false;
+    }
+
+    public static boolean[][] getFruitsGridState(){
+        return fruitsGridState;
+    }
+
+    public static boolean[][] getBonusGridState(){
+        return bonusGridState;
+    }
+
+    public static Fruit getFruit(int id){
+        return fruits.get(id);
     }
 
     public static boolean[][] getGridState(){ //Need it for the Pacman Class
@@ -108,6 +147,13 @@ public final class MazeState {
         if(!optionMenu.isVisible()){
             for (var critter: critters) {
                 var curPos = critter.getPos();
+
+                // Set direction to the next direction if direction is NONE.
+                if (critter.getDirection() == Direction.NONE) {
+                    critter.setDirection(critter.getNextDirection());
+                    critter.setNextDirection(Direction.NONE);
+                }
+
                 var nextPos = critter.nextPos(deltaTns);
                 // Get possible next pos for critter
                 var nextNextPos = critter.nextNextPos(deltaTns);
@@ -116,12 +162,6 @@ public final class MazeState {
                 var nextNeighbours = nextPos.intNeighbours();
                 // Get possible next cell
                 var nextNextNeighbours = nextNextPos.intNeighbours();
-
-                // Set direction to the next direction if direction is NONE.
-                if (critter.getDirection() == Direction.NONE) {
-                    critter.setDirection(critter.getNextDirection());
-                    critter.setNextDirection(Direction.NONE);
-                }
 
                 // Get the next direction of ghosts
                 if (critter instanceof Ghost) {
@@ -138,6 +178,7 @@ public final class MazeState {
                         ghostsController[0].setDirection((Ghost) critter, config, deltaTns);
                     // Update direction to EAST if the ghost just respawned and do not move
                     if (critter.getDirection() == Direction.NONE && critter.getNextDirection() == Direction.NONE) {
+                        System.out.println("test");
                         critter.setDirection(Direction.EAST);
                     }
                 }
@@ -212,6 +253,7 @@ public final class MazeState {
                 if (critter instanceof Ghost && critter.getPos().round().equals(PacMan.INSTANCE.getPos().round())) {
                     // If pacman is energized it can eat the ghost else it dies.
                     if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
+                        addScore(Constants.GHOST_SCORE);
                         resetCritter(critter);
                     } else {
                         if (!PacMan.INSTANCE.isStartedDeathAni()){
@@ -227,9 +269,81 @@ public final class MazeState {
             // When pacman collected all the dots, reset the map
             if(allPointsCollected()){
                 resetCritters();
+                resetFruitsGrid();
+                resetBonusGrid();
                 resetGrid();
             }
+            // If the score is higher than 1000 (threshold for the 1st fruit, cherry) we start to generate fruits and bonus in the map
+            if(score>fruits.get(0).thresholds() && !fruitsAndBonusTimerStarted){
+                generateRandomFruits();
+                generateRandomBonus();
+                fruitsAndBonusTimerStarted = true;
+            }
+            if(id<fruits.size()-1){
+                if(score>fruits.get(id+1).thresholds()) id++;
+            }
         }
+    }
+
+    // This function generate every 20 seconds fruits randomly in places where a dot was already collected, the fruits disapears after 10 seconds
+    public void generateRandomFruits(){
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run(){
+                if(!gameEnded){
+                    boolean w = false;
+                    Random rand = new Random();
+                    while(!w){
+                        int x = rand.nextInt(height);
+                        int y = rand.nextInt(width);
+                        if(gridState[x][y]){
+                            fruitsGridState[x][y] = true;
+                            timer.schedule(new TimerTask(){
+                                @Override
+                                public void run(){
+                                    fruitsGridState[x][y] = false;
+                                }
+                            }, 10000);
+                            w = true;
+                        }
+                    }
+                } else{
+                    // stop generating fruits when the player lose
+                    timer.cancel();
+                    timer.purge();
+                }
+            }
+        }, 10000, 20000);
+    }
+
+    public void generateRandomBonus(){
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run(){
+                if(!gameEnded){
+                    boolean w = false;
+                    Random rand = new Random();
+                    while(!w){
+                        int x = rand.nextInt(height);
+                        int y = rand.nextInt(width);
+                        if(gridState[x][y] && !fruitsGridState[x][y]){
+                            bonusGridState[x][y] = true;
+                            timer.schedule(new TimerTask(){
+                                @Override
+                                public void run(){
+                                    bonusGridState[x][y] = false;
+                                }
+                            }, 10000);
+                            w = true;
+                        }
+                    }
+                } else{
+                    // stop generating bonus when the player lose
+                    timer.cancel();
+                    timer.purge();
+                }
+            }
+        }, 7000, 20000);
     }
 
     public static boolean allPointsCollected() {
@@ -251,11 +365,28 @@ public final class MazeState {
         }
     }
 
+    public static void resetFruitsGrid() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                fruitsGridState[i][j] = false;
+            }
+        }
+    }
+
+    public static void resetBonusGrid() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                bonusGridState[i][j] = false;
+            }
+        }
+    }
+
     public static void addScore(int increment) {
         score += increment;
         // Play a sound when it eats something
         gui.Music.music_score();
     }
+
 
 
     private void playerLost() {
@@ -271,9 +402,8 @@ public final class MazeState {
         }
     }
 
-    private void resetCritter(Critter critter) {
+    public static void resetCritter(Critter critter) {
         if (critter instanceof Ghost ) {
-            addScore(Constants.GHOST_SCORE);
             if (Objects.equals(critter.toString(), "INKY"))
                 ghostsController[3].startAI();
             else if (Objects.equals(critter.toString(), "BLINKY"))
@@ -303,7 +433,19 @@ public final class MazeState {
         return score;
     }
 
+    public static void setScore(int s){
+        score=s;
+    }
+
     public boolean getGridState(IntCoordinates pos) {
         return gridState[pos.y()][pos.x()];
+    }
+
+    public boolean getFruitsGridState(IntCoordinates pos) {
+        return fruitsGridState[pos.y()][pos.x()];
+    }
+
+    public boolean getBonusGridState(IntCoordinates pos) {
+        return bonusGridState[pos.y()][pos.x()];
     }
 }

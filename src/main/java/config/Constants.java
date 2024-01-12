@@ -10,11 +10,11 @@ public class Constants {
     public final static int EXPERT_LIVES = 1;
 
     // Initialise Critters spawn coordinates.
-    public final static IntCoordinates PLAYER = new IntCoordinates(10, 15);
-    public final static IntCoordinates BLINKY = new IntCoordinates(10, 8);
-    public final static IntCoordinates INKY = new IntCoordinates(11, 9);
-    public final static IntCoordinates PINKY = new IntCoordinates(10, 9);
-    public final static IntCoordinates CLYDE = new IntCoordinates(9, 9);
+    public static IntCoordinates PLAYER = new IntCoordinates(10, 15);
+    public static IntCoordinates BLINKY = new IntCoordinates(10, 8);
+    public static IntCoordinates INKY = new IntCoordinates(11, 9);
+    public static IntCoordinates PINKY = new IntCoordinates(10, 9);
+    public static IntCoordinates CLYDE = new IntCoordinates(9, 9);
 
     // Initialise Window size
     public static int SCALE = 30;
@@ -23,11 +23,11 @@ public class Constants {
     public static int WINDOW_Y = 630;
 
     // String name of file
-    public final static String PACMAN_PNG = "/pacman.png";
-    public final static String BLINKY_PNG = "/ghosts/ghost_blinky.png";
-    public final static String INKY_PNG = "/ghosts/ghost_inky.png";
-    public final static String PINKY_PNG = "/ghosts/ghost_pinky.png";
-    public final static String CLYDE_PNG = "/ghosts/ghost_clyde.png";
+    public final static String PACMAN_PNG = "/critters/pacman.png";
+    public final static String BLINKY_PNG = "/critters/ghost_blinky.png";
+    public final static String INKY_PNG = "/critters/ghost_inky.png";
+    public final static String PINKY_PNG = "/critters/ghost_pinky.png";
+    public final static String CLYDE_PNG = "/critters/ghost_clyde.png";
 
     // Score given by each possible input
     public final static int DOT_SCORE = 10;

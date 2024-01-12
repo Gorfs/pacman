@@ -1,6 +1,7 @@
 package controllers;
 
 import config.Cell;
+import config.Constants;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -13,12 +14,10 @@ import model.PacMan;
 import java.util.Random;
 
 public sealed abstract class GhostsController permits BlinkyController, ClydeController, InkyController, PinkyController {
-    // Variable that is used to get a random Direction
     private static final Random rd = new Random();
     // Stock previous pos so that we just check one time if the ghost can turn
     private IntCoordinates previousPos = new IntCoordinates(0, 0);
-    // timer to update scatter mode
-    float timer = 0;
+    float scatterTimer = 0;
     // If it can start chasing/scatter
     boolean started = false;
 
@@ -39,10 +38,10 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
             return;
         }
 
-        // Update timer for scatter mode
-        if (!critter.isScaredMode()) timer += (float) (deltaTns * 1E-9);
-        if ((timer >= 7 && !critter.isScatterMode()) || (timer >= 5 && critter.isScatterMode())) {
-            timer = 0; critter.changeScatterMode();
+        // Update scatterTimer for scatter mode
+        if (!critter.isScaredMode()) scatterTimer += (float) (deltaTns * 1E-9);
+        if ((scatterTimer >= 7 && !critter.isScatterMode()) || (scatterTimer >= 5 && critter.isScatterMode())) {
+            scatterTimer = 0; critter.changeScatterMode();
         }
         // Next cell the ghost should go
         IntCoordinates result = critter.getPos().round();
@@ -51,7 +50,7 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
                 critter.setNextDirection(waiting(critter));
                 previousPos = critter.getPos().round();
                 return;
-            // if the ghost is scared, it goes in random direction mode
+                // if the ghost is scared, it goes in random direction mode
             } else if (critter.isScaredMode()) {
                 if (canTurn(critter, config)) {
                     Direction rdDir = randomDirection(critter, critter.getDirection(), config);
@@ -59,7 +58,7 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
                     previousPos = critter.getPos().round();
                     return;
                 }
-            // if the ghost is in scatter mode, it goes in scatter direction mode
+                // if the ghost is in scatter mode, it goes in scatter direction mode
             } else if (critter.isScatterMode()) result = scatterDirection(critter, config);
             else result = nextDirection(critter, config);
             previousPos = critter.getPos().round();
@@ -106,21 +105,21 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
         voisins[1] = pos.toRealCoordinates(1.0).plus(RealCoordinates.EAST_UNIT).round();
         voisins[2] = pos.toRealCoordinates(1.0).plus(RealCoordinates.SOUTH_UNIT).round();
         voisins[3] = pos.toRealCoordinates(1.0).plus(RealCoordinates.WEST_UNIT).round();
-
+        // First use of n is as an index to
         for (var v: voisins) {
             if (config.getCell(v).initialContent() != Cell.Content.WALL)
-                if (0 < pos.x() && 0 < pos.y() && pos.x() < config.getHeight() && pos.y() < config.getWidth()) {
+                if (0 <= pos.x() && 0 <= pos.y() && pos.x() < config.getHeight() && pos.y() < config.getWidth()) {
                     distances[n] = Math.sqrt(Math.pow(v.x() - goal.x(), 2) + Math.pow(v.y() - goal.y(), 2));
                 }
             n++;
         } n = 0;
         for (int i = 0; i < distances.length; i++) {
+            // If direction n is invalid, go to the next possible direction
             if (distances[n] == -1.0) n = i;
-            if (isDirectionValid(critter.getDirection(), Direction.values()[i + 1], critter, config)) {
+            else if (isDirectionValid(critter.getDirection(), Direction.values()[i + 1], critter, config)) {
                 if (distances[i] != -1.0)
-                    if (!isDirectionValid(critter.getDirection(), Direction.values()[n + 1], critter, config)) {
-                        n = i;
-                    } else if (distances[n] >= distances[i]) n = i;
+                    if (!isDirectionValid(critter.getDirection(), Direction.values()[n + 1], critter, config)) n = i;
+                    else if (distances[n] >= distances[i]) n = i;
             }
         }
         // Debug.out(n + " " + Arrays.toString(voisins) + " " + Arrays.toString(distances) + " " + critter.getPos().round());
@@ -153,10 +152,10 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      */
     public Direction waiting(Critter critter) {
         IntCoordinates pos = critter.getPos().round();
-        if (conditionOut() && pos.x() == 10 && pos.y() == 9) {
+        if (conditionOut() && pos.x() == Constants.INKY.x() && pos.y() == Constants.INKY.y()) {
             started = true;return Direction.NORTH;
-        } else if (pos.x() == 9 && pos.y() == 9) return Direction.EAST;
-        else if (pos.x() == 11 && pos.y() == 9) return Direction.WEST;
+        } else if (pos.x() == Constants.BLINKY.x() && pos.y() == Constants.BLINKY.y()) return Direction.EAST;
+        else if (pos.x() == Constants.PINKY.x() && pos.y() == Constants.PINKY.y()) return Direction.WEST;
         return critter.getDirection();
     }
 

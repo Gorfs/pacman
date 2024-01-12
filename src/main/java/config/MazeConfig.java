@@ -6,7 +6,6 @@ import static config.Cell.*;
 import static config.Cell.Content.*;
 
 import java.io.InputStream;
-// Import the Scanner class to read text files
 import java.util.Scanner;
 
 /**
@@ -72,41 +71,52 @@ public record MazeConfig(Cell[][] grid, IntCoordinates pacManPos, IntCoordinates
      * @return Array of cell that will represent the maze
      */
     public static MazeConfig originalMaze(String file) {
-        // New class Cell to store the map
-        Cell[][] map = new Cell[21][21];
-        // Open the file maze.txt
-        InputStream is = MazeConfig.class.getResourceAsStream("/" + file + ".txt");
+        Cell[][] maze = new Cell[21][21];
+        InputStream is = MazeConfig.class.getResourceAsStream("/mazes/" + file + ".txt");
         Scanner myReader;
-        // Read the file maze.txt
         assert is != null;
         myReader = new Scanner(is);
-        int n = 0;
+        int line = 0;
+        // Init the spawn of the entities
+        IntCoordinates player = new IntCoordinates(10, 15),
+                blinky = new IntCoordinates(10, 7), inky = new IntCoordinates(10, 9),
+                pinky = new IntCoordinates(11, 9), clyde = new IntCoordinates(9, 9);
         // while there is something to read
         while (myReader.hasNextLine()) {
-            // Get the current line
-            String line = myReader.nextLine();
+            // Get the curent nextLine
+            String nextLine = myReader.nextLine();
             // Split everything into a String array
-            String[] data = line.split(",");
-
-            // For every 2 string
-            for (int i = 0; i < data.length; i++) {
-                // create a cell based on what there is inside(NOTHING, DOT, etc.)
-                switch (data[i]) {
-                    case "ENERGIZER" -> map[n][i] = slot(ENERGIZER);
-                    case "WALL" -> map[n][i] = slot(WALL);
-                    case "DOT" -> map[n][i] = slot(DOT);
-                    default -> map[n][i] = slot(NOTHING);
+            String[] data = nextLine.split(",");
+            if (line < maze.length) {
+                for (int i = 0; i < data.length; i++) {
+                    // create a cell based on what there is inside(NOTHING, DOT, etc.)
+                    maze[line][i] = switch (data[i]) {
+                        case "E" -> slot(ENERGIZER);
+                        case "W" -> slot(WALL);
+                        case "D" -> slot(DOT);
+                        default -> slot(NOTHING);
+                    };
                 }
-            }
-            n++;
-        }
-        // close file
-        myReader.close();
-        // Init the spawn of the entities
-        IntCoordinates player = Constants.PLAYER, blinky = Constants.BLINKY, inky = Constants.INKY,
-                pinky = Constants.PINKY, clyde = Constants.CLYDE;
-        // return everything
-        return new MazeConfig(map, player, blinky, pinky, inky, clyde);
+            } else if (line == maze.length) {
+                try {
+                    // Init the spawn of the entities
+                    player = new IntCoordinates(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+                    blinky = new IntCoordinates(Integer.parseInt(data[2]), Integer.parseInt(data[3]));
+                    inky = new IntCoordinates(Integer.parseInt(data[4]), Integer.parseInt(data[5]));
+                    pinky = new IntCoordinates(Integer.parseInt(data[6]), Integer.parseInt(data[7]));
+                    clyde = new IntCoordinates(Integer.parseInt(data[8]), Integer.parseInt(data[9]));
+                } catch (Exception e) {
+                    System.out.println("Erreur dans la lecture du fichier, impossible de lire la position de départ des entités");
+                }
+                Constants.PLAYER = player;
+                Constants.BLINKY = blinky;
+                Constants.INKY = inky;
+                Constants.PINKY = pinky;
+                Constants.CLYDE = clyde;
+            } line++;
+        } myReader.close();
+
+        return new MazeConfig(maze, player, blinky, pinky, inky, clyde);
     }
 
 }
