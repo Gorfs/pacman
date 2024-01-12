@@ -9,7 +9,7 @@ configurations {
 }
 
 group 'fr.u-paris.informatique.cproj'
-version '1.0'
+version '2.0'
 
 repositories {
     mavenCentral()
