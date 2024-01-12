@@ -23,17 +23,14 @@ public class Constants {
     public static int WINDOW_Y = 630;
 
     // String name of file
-    public final static String PACMAN_PNG = "/pacman.png";
-    public final static String BLINKY_PNG = "/ghosts/ghost_blinky.png";
-    public final static String INKY_PNG = "/ghosts/ghost_inky.png";
-    public final static String PINKY_PNG = "/ghosts/ghost_pinky.png";
-    public final static String CLYDE_PNG = "/ghosts/ghost_clyde.png";
+    public final static String PACMAN_PNG = "/critters/pacman.png";
+    public final static String BLINKY_PNG = "/critters/ghost_blinky.png";
+    public final static String INKY_PNG = "/critters/ghost_inky.png";
+    public final static String PINKY_PNG = "/critters/ghost_pinky.png";
+    public final static String CLYDE_PNG = "/critters/ghost_clyde.png";
 
     // Score given by each possible input
     public final static int DOT_SCORE = 10;
     public final static int ENERGIZER_SCORE = 50;
     public final static int GHOST_SCORE = 100;
-
-    // Index of the current map
-    public static int MAP_INDEX = 0;
 }

@@ -73,8 +73,8 @@ public final class CritterGraphicsFactory {
                     if (critter instanceof Ghost) {
                         Image fullImage;
                         InputStream is = getClass().getResourceAsStream(url);
-                        InputStream is2 = getClass().getResourceAsStream("/ghosts/scared_ghost.png");
-                        InputStream is3 = getClass().getResourceAsStream("/ghosts/ghost_white.png");
+                        InputStream is2 = getClass().getResourceAsStream("/critters/scared_ghost.png");
+                        InputStream is3 = getClass().getResourceAsStream("/critters/ghost_white.png");
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
                         if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
                             // If pacman is energized AND is almost normal, switch the sprite of ghosts every 0,1 second (the white one and the scared one)

@@ -26,15 +26,15 @@ public class CellGraphicsFactory {
     private static final Image bonusImage, cherryImage, strawberryImage, orangeImage, appleImage, melonImage, galaxianImage, bellImage, keyImage;
 
     static{
-        bonusImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonus.png")));
-        cherryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/cherry.png")));
-        strawberryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/strawberry.png")));
-        orangeImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/orange.png")));
-        appleImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/apple.png")));
-        melonImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/melon.png")));
-        galaxianImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/galaxian.png")));
-        bellImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bell.png")));
-        keyImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/key.png")));
+        bonusImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/bonus.png")));
+        cherryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/cherry.png")));
+        strawberryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/strawberry.png")));
+        orangeImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/orange.png")));
+        appleImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/apple.png")));
+        melonImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/melon.png")));
+        galaxianImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/galaxian.png")));
+        bellImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/bell.png")));
+        keyImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/key.png")));
     }
 
 

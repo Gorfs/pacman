@@ -34,7 +34,7 @@ public class InGameDisplay {
         // setting up the javaFX objects for the lives display.
         ImageView[] livesArray = new ImageView[initLives];
         for(int i = 0 ; i < initLives; i++){
-            livesArray[i] = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/pacmanSimple.png")),
+            livesArray[i] = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/lives.png")),
                     scale*size,scale*size, true, true));
         }
         
@@ -78,12 +78,12 @@ public class InGameDisplay {
                 Label scoreText = new Label("Score : " + score);
 
                 // resetting and updating the hearts counter.
-                String heartUrl = "/pacmanSimple.png";
+                String heartUrl = "/lives.png";
                 ImageView[] livesArray = new ImageView[initLives];
                 // Debug.out(MazeState.getLives() + "");
                 for(int i = 0 ; i < initLives; i++){
                     if ((MazeState.getLives() - 1) <= i){
-                        heartUrl = "/empty1.png"; 
+                        heartUrl = "/empty.png";
                     }
                     livesArray[i] = new ImageView(new Image(Objects.requireNonNull(getClass().getResourceAsStream(heartUrl)),
                             scale*size,scale*size, true, true));

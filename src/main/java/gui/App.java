@@ -60,7 +60,7 @@ public class App extends Application {
         root.setStyle("-fx-background-color: #000000");
 
         // Initialise the background image
-        InputStream is = getClass().getResourceAsStream("/pac.jpg");
+        InputStream is = getClass().getResourceAsStream("/background.jpg");
         assert is != null;
         Image img = new Image(is);
         is.close();
