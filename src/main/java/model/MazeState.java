@@ -24,7 +24,7 @@ import static model.Ghost.*;
  * Class MazeState is used to update the maze while the PLAYER is playing.
  */
 public final class MazeState {
-    private final GhostsController[] ghostsController;
+    private static GhostsController[] ghostsController;
     private static MazeConfig config;
     private static int height;
     private static int width;
@@ -57,7 +57,7 @@ public final class MazeState {
      */
     public MazeState(GhostsController[] ghostsController, MazeConfig config, OptionInGame gameMenu) {
         this.optionMenu = gameMenu;
-        this.ghostsController = ghostsController;
+        MazeState.ghostsController = ghostsController;
         MazeState.config = config;
         height = config.getHeight();
         width = config.getWidth();
@@ -87,10 +87,6 @@ public final class MazeState {
 
     public static List<Critter> getCritters() {
         return critters;
-    }
-
-    public static Map<Critter, RealCoordinates> getInitialPos(){
-        return initialPos; // get it for the reset ghost positions function
     }
 
     public double getWidth() {
@@ -406,7 +402,7 @@ public final class MazeState {
         }
     }
 
-    private void resetCritter(Critter critter) {
+    public static void resetCritter(Critter critter) {
         if (critter instanceof Ghost ) {
             if (Objects.equals(critter.toString(), "INKY"))
                 ghostsController[3].startAI();

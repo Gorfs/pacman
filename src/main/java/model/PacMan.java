@@ -252,7 +252,7 @@ public final class PacMan implements Critter {
 
     public void resetGhosts(){
         for(var critter : getCritters()){
-            if(critter instanceof Ghost) critter.setPos(MazeState.getInitialPos().get(critter));}
+            if (critter instanceof Ghost) MazeState.resetCritter(critter);}
     }
 
     public void teleport(Critter critter){
