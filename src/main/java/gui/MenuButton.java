@@ -10,8 +10,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * Class for button menu
+ */
 public class MenuButton extends StackPane {
-//class qui gère tous les boutons sauf PLAY et le bouton submit
     private final Text text;
 
     public MenuButton(String name) {

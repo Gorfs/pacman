@@ -23,23 +23,23 @@ public class GameView {
     }
 
     /**
-     * @param maze  le "modèle" de cette vue (le labyrinthe et tout ce qui s'y trouve)
-     * @param root  le nœud racine dans la scène JavaFX dans lequel le jeu sera affiché
-     * @param scale le nombre de pixels représentant une unité du labyrinthe
+     * @param maze  the "model" of the view (the labyrinth and everything there is)
+     * @param root  the root in the scene JavaFX in which the game will be displayed
+     * @param scale scaling of one cell of the labyrinth
      */
     public GameView(MazeState maze, Pane root, double scale) throws Exception {
         this.maze = maze;
         gameRoot = root;
         // pixels per cell
         root.setMinWidth(maze.getWidth() * scale);
-        // le +80, c'est pour ajouter le menu en bas plutôt qu'en haut
+        // adding 80 pixels at the end for the display in game
         root.setMinHeight(maze.getHeight() * scale + 80);
         root.setStyle("-fx-background-color: #000000");
         var critterFactory = new CritterGraphicsFactory(scale);
         var cellFactory = new CellGraphicsFactory(scale);
-        //On initialise le GameOver
+        // Initialise GameOver
         var gameover = new GameOver();
-        //On initialise le Menu
+        // Initialise the Menu
         var menu = new InGameDisplay(scale * 1);
         graphicsUpdaters = new ArrayList<>();
 
@@ -47,8 +47,8 @@ public class GameView {
             for (int y = 0; y < maze.getHeight(); y++)
                 addGraphics(cellFactory.makeGraphics(maze, new IntCoordinates(x, y)));
         for (var critter : MazeState.getCritters()) addGraphics(critterFactory.makeGraphics(critter));
-        addGraphics(gameover.makeGraphics()); //Pour pouvoir afficher le GameOver
-        addGraphics(menu.makeGraphics()); //Pour pouvoir afficher le Menu
+        addGraphics(gameover.makeGraphics());
+        addGraphics(menu.makeGraphics());
     }
 
     public AnimationTimer animate() {

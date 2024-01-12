@@ -33,7 +33,7 @@ public final class MazeState {
     private static boolean[][] fruitsGridState; // Another grid for the fruits
     private static boolean[][] bonusGridState; // Another grid for the bonus;
     private static boolean fruitsAndBonusTimerStarted = false;
-    private Timer timer = new Timer();
+    private final Timer timer = new Timer();
     // liste avec tous les fruits possibles et compteur id qui permet d'accéder aux données d'un fruit (nom, points, seuil de score pour passer à un autre fruit)
     private static ArrayList<Fruit> fruits;
     public static int id;
@@ -278,13 +278,13 @@ public final class MazeState {
                 resetGrid();
             }
             // If the score is higher than 1000 (threshold for the 1st fruit, cherry) we start to generate fruits and bonus in the map
-            if(score>fruits.get(0).getThresholds() && !fruitsAndBonusTimerStarted){
+            if(score>fruits.get(0).thresholds() && !fruitsAndBonusTimerStarted){
                 generateRandomFruits();
                 generateRandomBonus();
                 fruitsAndBonusTimerStarted = true;
             }
             if(id<fruits.size()-1){
-                if(score>fruits.get(id+1).getThresholds()) id++;
+                if(score>fruits.get(id+1).thresholds()) id++;
             }
         }
     }

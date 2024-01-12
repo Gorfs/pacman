@@ -13,7 +13,6 @@ import javafx.util.Duration;
  */
 public class OptionInGame extends Parent {
     // class qui gère les boutons in-game (options et exit)
-    private static VBox actuelle;
 
     public OptionInGame(Text left, Text right, Text up, Text down, Stage primaryStage, MenuButton btncase1, MenuButton btncase2, MenuButton btncase3, MenuButton btncase4) {
         VBox menu0 = new VBox(10);
@@ -48,7 +47,6 @@ public class OptionInGame extends Parent {
         MenuButton btnOptions = new MenuButton("OPTIONS");
         btnOptions.setOnMouseClicked(event -> {
             getChildren().add(menu1);
-            actuelle=menu1;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu0);
             tt.setToX(menu0.getTranslateX() - offset);
 
@@ -67,7 +65,6 @@ public class OptionInGame extends Parent {
         MenuButton btnBack = new MenuButton("BACK");
         btnBack.setOnMouseClicked(event -> {
             getChildren().add(menu0);
-            actuelle=menu0;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu1);
             tt.setToX(menu1.getTranslateX() + offset);
 
@@ -83,7 +80,6 @@ public class OptionInGame extends Parent {
         MenuButton btnBack1 = new MenuButton("BACK");
         btnBack1.setOnMouseClicked(event -> {
             getChildren().add(menu1);
-            actuelle=menu1;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu2);
             tt.setToX(menu2.getTranslateX() + offset);
 
@@ -99,7 +95,6 @@ public class OptionInGame extends Parent {
         MenuButton btnBack2 = new MenuButton("BACK");
         btnBack2.setOnMouseClicked(event -> {
             getChildren().add(menu1);
-            actuelle=menu1;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu3);
             tt.setToX(menu3.getTranslateX() + offset);
 
@@ -115,7 +110,6 @@ public class OptionInGame extends Parent {
         MenuButton btnSound = new MenuButton("SOUND");
         btnSound.setOnMouseClicked(event -> {
             getChildren().add(menu3);
-            actuelle=menu3;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu1);
             tt.setToX(menu1.getTranslateX() - offset);
 
@@ -131,7 +125,6 @@ public class OptionInGame extends Parent {
         MenuButton btnKey = new MenuButton("KEY");
         btnKey.setOnMouseClicked(event -> {
             getChildren().add(menu2);
-            actuelle=menu2;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu1);
             tt.setToX(menu1.getTranslateX() - offset);
 
@@ -167,7 +160,6 @@ public class OptionInGame extends Parent {
         MenuButton btnBack3 = new MenuButton("BACK");
         btnBack3.setOnMouseClicked(event -> {
             getChildren().add(menu3);
-            actuelle=menu3;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu4);
             tt.setToX(menu4.getTranslateX() + offset);
 
@@ -183,7 +175,6 @@ public class OptionInGame extends Parent {
         MenuButton btns1 = new MenuButton("Background music");
         btns1.setOnMouseClicked(event -> {
             getChildren().add(menu4);
-            actuelle=menu4;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu3);
             tt.setToX(menu3.getTranslateX() - offset);
 
@@ -199,7 +190,6 @@ public class OptionInGame extends Parent {
         MenuButton btnBack4 = new MenuButton("BACK");
         btnBack4.setOnMouseClicked(event -> {
             getChildren().add(menu3);
-            actuelle=menu3;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu5);
             tt.setToX(menu5.getTranslateX() + offset);
 
@@ -215,7 +205,6 @@ public class OptionInGame extends Parent {
         MenuButton btns2 = new MenuButton("Sound effects");
         btns2.setOnMouseClicked(event -> {
             getChildren().add(menu5);
-            actuelle=menu5;
             TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), menu3);
             tt.setToX(menu3.getTranslateX() - offset);
 

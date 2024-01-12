@@ -83,19 +83,13 @@ public class Music {
 
             // LineListener pour fermer le clip une fois la lecture audio terminée
             bgmClip.addLineListener(event -> {
-                if (event.getType() == LineEvent.Type.STOP) {
-                    bgmClip.close();
-                }
+                if (event.getType() == LineEvent.Type.STOP) bgmClip.close();
             });
 
             // Logique de traitement lors de la fermeture du programme
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                if (bgmClip.isRunning()) {
-                    bgmClip.stop();
-                }
-                if (bgmClip.isOpen()) {
-                    bgmClip.close();
-                }
+                if (bgmClip.isRunning()) bgmClip.stop();
+                if (bgmClip.isOpen()) bgmClip.close();
             }));
 
             bgmClip.start();
@@ -139,19 +133,13 @@ public class Music {
 
         // LineListener pour fermer le clip une fois la lecture audio terminée
         clip.addLineListener(event -> {
-            if (event.getType() == LineEvent.Type.STOP) {
-                clip.close();
-            }
+            if (event.getType() == LineEvent.Type.STOP) clip.close();
         });
 
         // Logique de traitement lors de la fermeture du programme
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            if (clip.isRunning()) {
-                clip.stop();
-            }
-            if (clip.isOpen()) {
-                clip.close();
-            }
+            if (clip.isRunning()) clip.stop();
+            if (clip.isOpen()) clip.close();
         }));
 
         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
@@ -188,5 +176,4 @@ public class Music {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -5,18 +5,19 @@ import java.io.InputStream;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * Class that generate play button in the menu
+ */
 public class ButtonPlay extends StackPane {
-    //class qui gère le bouton PLAY dans le menu    
-    private Text text;
+    private final Text text;
 
-    public ButtonPlay(String name, Pane root) {
+    public ButtonPlay(String name) {
         text = new Text(name);
         InputStream is = getClass().getResourceAsStream("/fonts/TeleSys.ttf");
         text.setFont(Font.loadFont(is, 100));
