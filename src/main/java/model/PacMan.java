@@ -9,6 +9,8 @@ import gui.OptionInGame;
 import static model.MazeState.allPointsCollected;
 import static model.MazeState.getCritters;
 
+import java.util.Random;
+
 /**
  * Implements Pac-Man character using singleton pattern.
  */
@@ -18,11 +20,16 @@ public final class PacMan implements Critter {
     private RealCoordinates pos;
 
     private long nanoSeconds = 0L;
+    private long nanoSecondsForSpeed = 0L;
 
     private static boolean energizerPaused = false; // pour gérer le timer de setEnergized
 
     private static boolean energized = false;
     private static boolean almostNormal = false;
+    private static boolean ghostSpeedChanged = false; // gérer le timer de la vitesse des ghost qui change en prenant un bonus
+
+    private double speed = 4; // vitesse normale de pacman
+    private Random random = new Random();
 
     // movement animation related
     private float timerAni = 0;
@@ -90,7 +97,12 @@ public final class PacMan implements Critter {
     @Override
     public double getSpeed() {
         // Changed so that when pacman is dying, it doesn't move anymore.
-        return getIsDying()? 0:(isEnergized() ? 6 : 4);
+        return getIsDying()? 0:(isEnergized() ? 6 : speed);
+    }
+
+    @Override
+    public void setSpeed(double speed){
+        this.speed = speed;
     }
 
     @Override
@@ -137,6 +149,7 @@ public final class PacMan implements Critter {
     }
 
     public void update(long deltaT){ //I moved what is related directly to Pacman
+        if(ghostSpeedChanged) updateGhostSpeed(deltaT);
         var pacPos = INSTANCE.getPos().round();
         // Debug.out(config.getCell(new IntCoordinates(pacPos.y(), pacPos.x())).toString());
         if (!MazeState.getGridState()[pacPos.y()][pacPos.x()] && !allPointsCollected()) {
@@ -155,6 +168,11 @@ public final class PacMan implements Critter {
         if(MazeState.getFruitsGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()){
             MazeState.addScore(MazeState.getFruit(MazeState.id).getPoints());
             MazeState.getFruitsGridState()[pacPos.y()][pacPos.x()] = false;
+        }
+        if(MazeState.getBonusGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()){
+            MazeState.addScore(100);
+            MazeState.getBonusGridState()[pacPos.y()][pacPos.x()] = false;
+            bonusRandomAction();
         }
         if (this.isDying) {
             this.deathTimerAni += (float) ((float) deltaT * 1E-9);
@@ -198,4 +216,72 @@ public final class PacMan implements Critter {
             almostNormal = false;
         }
     }
+
+    // this method is like a timer of 10 seconds for the ghost speed changing
+    public void updateGhostSpeed(long deltaT){
+        if (!energizerPaused) nanoSecondsForSpeed = nanoSecondsForSpeed + deltaT;
+        System.out.println(nanoSecondsForSpeed * 1E-9);
+        if (nanoSecondsForSpeed * 1E-9 >= 10 || MazeState.getGameEnded()) {
+            nanoSecondsForSpeed = 0L;
+            // reset ghost speeds
+            for(var critter : getCritters()){
+                if(critter instanceof Ghost) critter.setSpeed(2);
+            }
+            ghostSpeedChanged = false;
+        }
+    }
+
+    public void bonusRandomAction(){
+        int id = random.nextInt(4);
+        switch(id){
+            case 0:
+                resetGhosts();
+                break;
+            case 1:
+                teleport(INSTANCE);
+                break;
+            case 2:
+                teleportGhosts();
+                break;
+            case 3:
+                setRandomGhostSpeed();
+                ghostSpeedChanged = true;
+                break;
+        }
+    }
+
+    public void resetGhosts(){
+        for(var critter : getCritters()){
+            if(critter instanceof Ghost) critter.setPos(MazeState.getInitialPos().get(critter));}
+    }
+
+    public void teleport(Critter critter){
+        boolean w = false;
+        while(!w){
+            int x = random.nextInt(21);
+            int y = random.nextInt(21);
+            // make sure it is not teleporting out of the walls, or in a wall
+            if(MazeState.getConfig().getCell(new RealCoordinates(x, y).round()).initialContent() == Cell.Content.DOT){
+                critter.setPos(new RealCoordinates(x, y));
+                w = true;
+            }
+        }
+    }
+
+    public void teleportGhosts(){
+        for(var critter : getCritters()){
+            if(critter instanceof Ghost) teleport(critter);
+        }
+    }
+
+    public void setRandomGhostSpeed(){
+        double newSpeed = random.nextInt(6);
+        while(newSpeed == 2){
+            newSpeed = random.nextInt(6);
+        }
+        for(var critter : getCritters()){
+            if(critter instanceof Ghost) critter.setSpeed(newSpeed);
+        }
+    }
+
 }
