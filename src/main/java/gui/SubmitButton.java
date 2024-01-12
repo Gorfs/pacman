@@ -12,7 +12,7 @@ import javafx.scene.text.Text;
 
 public class SubmitButton extends StackPane {
     //class qui gère le bouton submit dans le menu
-    private Text text;
+    private final Text text;
 
     public SubmitButton(String name) {
             
@@ -30,13 +30,9 @@ public class SubmitButton extends StackPane {
         setRotate(-0.5);
         getChildren().addAll(bg, text);
 
-        setOnMouseEntered(event -> {
-            text.setFill(Color.PURPLE);
-        });
+        setOnMouseEntered(event -> text.setFill(Color.PURPLE));
 
-        setOnMouseExited(event -> {
-            text.setFill(Color.BLACK);
-        });
+        setOnMouseExited(event -> text.setFill(Color.BLACK));
         DropShadow drop = new DropShadow(50, Color.WHITE);
         drop.setInput(new Glow());
 

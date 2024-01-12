@@ -1,5 +1,6 @@
 package controllers;
 
+import config.Constants;
 import config.MazeConfig;
 import geometry.IntCoordinates;
 import geometry.RealCoordinates;
@@ -10,12 +11,12 @@ public final class ClydeController extends GhostsController {
     public void startAI(){
         Ghost.CLYDE.setNextDirection(Direction.EAST);
         started = false;
-        timer = 0;
+        scatterTimer = 0;
     }
 
     @Override
     public IntCoordinates scatterDirection(Critter critter, MazeConfig config) {
-        return findPathing(critter, new IntCoordinates(0, config.getHeight()-1), config);
+        return findPathing(critter, new IntCoordinates(0, config.getHeight() + 1), config);
     }
 
     @Override
@@ -28,6 +29,6 @@ public final class ClydeController extends GhostsController {
 
     @Override
     public boolean conditionOut() {
-        return (MazeState.getScore() >= 146/3);
+        return (MazeState.getScore() >= 146/3 * Constants.DOT_SCORE);
     }
 }

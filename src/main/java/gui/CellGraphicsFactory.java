@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import model.MazeState;
+import model.PacMan;
 
 
 /**
@@ -25,15 +26,15 @@ public class CellGraphicsFactory {
     private static final Image bonusImage, cherryImage, strawberryImage, orangeImage, appleImage, melonImage, galaxianImage, bellImage, keyImage;
 
     static{
-        bonusImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonus.png")));
-        cherryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/cherry.png")));
-        strawberryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/strawberry.png")));
-        orangeImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/orange.png")));
-        appleImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/apple.png")));
-        melonImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/melon.png")));
-        galaxianImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/galaxian.png")));
-        bellImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bell.png")));
-        keyImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/key.png")));
+        bonusImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/bonus.png")));
+        cherryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/cherry.png")));
+        strawberryImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/strawberry.png")));
+        orangeImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/orange.png")));
+        appleImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/apple.png")));
+        melonImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/melon.png")));
+        galaxianImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/galaxian.png")));
+        bellImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/bell.png")));
+        keyImage = new Image(Objects.requireNonNull(CellGraphicsFactory.class.getResourceAsStream("/bonuses/key.png")));
     }
 
 
@@ -57,6 +58,7 @@ public class CellGraphicsFactory {
      * @return a method that update the group of graphic that represent a cell.
      */
     public GraphicsUpdater makeGraphics(MazeState state, IntCoordinates pos) {
+        boolean wall = false;
         // New group to stock every graphics for one cell
         var group = new Group();
         // Place it to the right position
@@ -75,55 +77,23 @@ public class CellGraphicsFactory {
 
         dot.setCenterX(scale/2);
         dot.setCenterY(scale/2);
-        var bonusImageView = new ImageView(bonusImage);
-        bonusImageView.setFitWidth(scale);
-        bonusImageView.setFitHeight(scale);
-        bonusImageView.setVisible(false);
-        group.getChildren().add(bonusImageView);
-        var cherryImageView = new ImageView(cherryImage);
-        cherryImageView.setFitWidth(scale);
-        cherryImageView.setFitHeight(scale);
-        cherryImageView.setVisible(false);
-        group.getChildren().add(cherryImageView);
-        var strawberryImageView = new ImageView(strawberryImage);
-        strawberryImageView.setFitWidth(scale);
-        strawberryImageView.setFitHeight(scale);
-        strawberryImageView.setVisible(false);
-        group.getChildren().add(strawberryImageView);
-        var orangeImageView = new ImageView(orangeImage);
-        orangeImageView.setFitWidth(scale);
-        orangeImageView.setFitHeight(scale);
-        orangeImageView.setVisible(false);
-        group.getChildren().add(orangeImageView);
-        var appleImageView = new ImageView(appleImage);
-        appleImageView.setFitWidth(scale);
-        appleImageView.setFitHeight(scale);
-        appleImageView.setVisible(false);
-        group.getChildren().add(appleImageView);
-        var melonImageView = new ImageView(melonImage);
-        melonImageView.setFitWidth(scale);
-        melonImageView.setFitHeight(scale);
-        melonImageView.setVisible(false);
-        group.getChildren().add(melonImageView);
-        var galaxianImageView = new ImageView(galaxianImage);
-        galaxianImageView.setFitWidth(scale);
-        galaxianImageView.setFitHeight(scale);
-        galaxianImageView.setVisible(false);
-        group.getChildren().add(galaxianImageView);
-        var bellImageView = new ImageView(bellImage);
-        bellImageView.setFitWidth(scale);
-        bellImageView.setFitHeight(scale);
-        bellImageView.setVisible(false);
-        group.getChildren().add(bellImageView);
-        var keyImageView = new ImageView(keyImage);
-        keyImageView.setFitWidth(scale);
-        keyImageView.setFitHeight(scale);
-        keyImageView.setVisible(false);
-        group.getChildren().add(keyImageView);
-        // if there is a wall in the cell
+
+        // Initialise bonus image
+        var bonusImageView = addNewImage(group, bonusImage);
+        var cherryImageView = addNewImage(group, cherryImage);
+        var strawberryImageView = addNewImage(group, strawberryImage);
+        var orangeImageView = addNewImage(group, orangeImage);
+        var appleImageView = addNewImage(group, appleImage);
+        var melonImageView = addNewImage(group, melonImage);
+        var galaxianImageView = addNewImage(group, galaxianImage);
+        var bellImageView = addNewImage(group, bellImage);
+        var keyImageView = addNewImage(group, keyImage);
+
         var wallX = new Rectangle();
         var wallY = new Rectangle();
+        // if there is a wall in the cell
         if (cell.initialContent() == Cell.Content.WALL) {
+            wall = true;
             // set wall color
             dot.setFill(colorWalls);
             if (pos.x() < state.getWidth() - 1) {
@@ -158,7 +128,12 @@ public class CellGraphicsFactory {
             dot.setFill(Color.YELLOW);
         }
 
+        boolean finalWall = wall;
+
         return new GraphicsUpdater() {
+            final float[] timer = {0F,1F,0F};
+            int i = 0;
+            boolean t = true;
             /**
              * Method that update the graphics for each cell
              * @param deltaT time between two frames in nanoseconds
@@ -166,15 +141,34 @@ public class CellGraphicsFactory {
             @Override
             public void update(long deltaT) {
                 dot.setVisible(!state.getGridState(pos));
+
+                if (PacMan.INSTANCE.isEnergized() && finalWall){
+                    if (t) {
+                        timer[i] += (float) (deltaT * 1E-9);
+                        if (timer[i] >= 1) timer[i] = 1;
+                    } else {
+                        timer[i] -= (float) (deltaT * 1E-9);
+                        if (timer[i] <= 0) timer[i] = 0;
+                    }
+                    var temp = Color.color(timer[0], timer[1], timer[2]);
+                    dot.setFill(temp);
+                    wallX.setFill(temp);
+                    wallY.setFill(temp);
+                    if (timer[i] == 1 || timer[i] == 0) {
+                        i++;
+                        t = !t;
+                        if (i >= 3) i = 0;
+                    }
+                }
                 bonusImageView.setVisible(state.getBonusGridState(pos));
-                cherryImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("cherry"));
-                strawberryImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("strawberry"));
-                orangeImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("orange"));
-                appleImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("apple"));
-                melonImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("melon"));
-                galaxianImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("galaxian"));
-                bellImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("bell"));
-                keyImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).getName().equals("key"));
+                cherryImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("cherry"));
+                strawberryImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("strawberry"));
+                orangeImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("orange"));
+                appleImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("apple"));
+                melonImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("melon"));
+                galaxianImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("galaxian"));
+                bellImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("bell"));
+                keyImageView.setVisible(state.getFruitsGridState(pos) && MazeState.getFruit(MazeState.id).name().equals("key"));
             }
 
             @Override
@@ -182,6 +176,15 @@ public class CellGraphicsFactory {
                 return group;
             }
         };
+    }
+
+    public ImageView addNewImage(Group group, Image image) {
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(scale);
+        imageView.setFitHeight(scale);
+        imageView.setVisible(false);
+        group.getChildren().add(imageView);
+        return imageView;
     }
 }
 

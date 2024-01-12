@@ -29,7 +29,7 @@ public final class PacMan implements Critter {
     private static boolean ghostSpeedChanged = false; // gérer le timer de la vitesse des ghost qui change en prenant un bonus
 
     private double speed = 4; // vitesse normale de pacman
-    private Random random = new Random();
+    private final Random random = new Random();
 
     // movement animation related
     private float timerAni = 0;
@@ -166,7 +166,7 @@ public final class PacMan implements Critter {
             MazeState.getGridState()[pacPos.y()][pacPos.x()] = true;
         }
         if(MazeState.getFruitsGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()){
-            MazeState.addScore(MazeState.getFruit(MazeState.id).getPoints());
+            MazeState.addScore(MazeState.getFruit(MazeState.id).points());
             MazeState.getFruitsGridState()[pacPos.y()][pacPos.x()] = false;
         }
         if(MazeState.getBonusGridState()[pacPos.y()][pacPos.x()] && !MazeState.allPointsCollected()){
@@ -252,7 +252,7 @@ public final class PacMan implements Critter {
 
     public void resetGhosts(){
         for(var critter : getCritters()){
-            if(critter instanceof Ghost) critter.setPos(MazeState.getInitialPos().get(critter));}
+            if (critter instanceof Ghost) MazeState.resetCritter(critter);}
     }
 
     public void teleport(Critter critter){

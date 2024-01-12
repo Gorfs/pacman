@@ -14,18 +14,12 @@ import model.PacMan;
 import java.util.Random;
 
 public sealed abstract class GhostsController permits BlinkyController, ClydeController, InkyController, PinkyController {
-    // Variable that is used to get a random Direction
     private static final Random rd = new Random();
     // Stock previous pos so that we just check one time if the ghost can turn
     private IntCoordinates previousPos = new IntCoordinates(0, 0);
-    // timer to update scatter mode
-    float timer = 0;
+    float scatterTimer = 0;
     // If it can start chasing/scatter
     boolean started = false;
-
-    int[] startPosition1;
-    int[] startPosition2;
-    int[] startPosition3;
 
     /**
      * Method that start the ghost AI.
@@ -44,10 +38,10 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
             return;
         }
 
-        // Update timer for scatter mode
-        if (!critter.isScaredMode()) timer += (float) (deltaTns * 1E-9);
-        if ((timer >= 7 && !critter.isScatterMode()) || (timer >= 5 && critter.isScatterMode())) {
-            timer = 0; critter.changeScatterMode();
+        // Update scatterTimer for scatter mode
+        if (!critter.isScaredMode()) scatterTimer += (float) (deltaTns * 1E-9);
+        if ((scatterTimer >= 7 && !critter.isScatterMode()) || (scatterTimer >= 5 && critter.isScatterMode())) {
+            scatterTimer = 0; critter.changeScatterMode();
         }
         // Next cell the ghost should go
         IntCoordinates result = critter.getPos().round();
@@ -111,21 +105,21 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
         voisins[1] = pos.toRealCoordinates(1.0).plus(RealCoordinates.EAST_UNIT).round();
         voisins[2] = pos.toRealCoordinates(1.0).plus(RealCoordinates.SOUTH_UNIT).round();
         voisins[3] = pos.toRealCoordinates(1.0).plus(RealCoordinates.WEST_UNIT).round();
-
+        // First use of n is as an index to
         for (var v: voisins) {
             if (config.getCell(v).initialContent() != Cell.Content.WALL)
-                if (0 < pos.x() && 0 < pos.y() && pos.x() < config.getHeight() && pos.y() < config.getWidth()) {
+                if (0 <= pos.x() && 0 <= pos.y() && pos.x() < config.getHeight() && pos.y() < config.getWidth()) {
                     distances[n] = Math.sqrt(Math.pow(v.x() - goal.x(), 2) + Math.pow(v.y() - goal.y(), 2));
                 }
             n++;
         } n = 0;
         for (int i = 0; i < distances.length; i++) {
+            // If direction n is invalid, go to the next possible direction
             if (distances[n] == -1.0) n = i;
-            if (isDirectionValid(critter.getDirection(), Direction.values()[i + 1], critter, config)) {
+            else if (isDirectionValid(critter.getDirection(), Direction.values()[i + 1], critter, config)) {
                 if (distances[i] != -1.0)
-                    if (!isDirectionValid(critter.getDirection(), Direction.values()[n + 1], critter, config)) {
-                        n = i;
-                    } else if (distances[n] >= distances[i]) n = i;
+                    if (!isDirectionValid(critter.getDirection(), Direction.values()[n + 1], critter, config)) n = i;
+                    else if (distances[n] >= distances[i]) n = i;
             }
         }
         // Debug.out(n + " " + Arrays.toString(voisins) + " " + Arrays.toString(distances) + " " + critter.getPos().round());
@@ -157,23 +151,6 @@ public sealed abstract class GhostsController permits BlinkyController, ClydeCon
      * @return direction the ghost should go
      */
     public Direction waiting(Critter critter) {
-        switch (Constants.MAP_INDEX) {
-            case 1:
-                startPosition1 = new int[]{10, 9};
-                startPosition2 = new int[]{9, 9};
-                startPosition3 = new int[]{11, 9};
-                break;
-            case 2:
-                startPosition1 = new int[]{17, 19};
-                startPosition2 = new int[]{16, 19};
-                startPosition3 = new int[]{18, 19};
-                break;
-            case 3:
-                startPosition1 = new int[]{10, 1};
-                startPosition2 = new int[]{9, 1};
-                startPosition3 = new int[]{11, 1};
-                break;
-        }
         IntCoordinates pos = critter.getPos().round();
         if (conditionOut() && pos.x() == Constants.INKY.x() && pos.y() == Constants.INKY.y()) {
             started = true;return Direction.NORTH;

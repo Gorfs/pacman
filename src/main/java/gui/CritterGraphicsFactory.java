@@ -73,8 +73,8 @@ public final class CritterGraphicsFactory {
                     if (critter instanceof Ghost) {
                         Image fullImage;
                         InputStream is = getClass().getResourceAsStream(url);
-                        InputStream is2 = getClass().getResourceAsStream("/ghosts/scared_ghost.png");
-                        InputStream is3 = getClass().getResourceAsStream("/ghosts/ghost_white.png");
+                        InputStream is2 = getClass().getResourceAsStream("/critters/scared_ghost.png");
+                        InputStream is3 = getClass().getResourceAsStream("/critters/ghost_white.png");
                         // If pacman is energized, change its sprite to the one scared, else keep the not scared one.
                         if (PacMan.INSTANCE.isEnergized() && ((Ghost) critter).isScaredMode()) {
                             // If pacman is energized AND is almost normal, switch the sprite of ghosts every 0,1 second (the white one and the scared one)
@@ -138,11 +138,9 @@ public final class CritterGraphicsFactory {
                         image.setTranslateX((critter.getPos().x() + (1 - size) / 2) * scale);
                         image.setTranslateY((critter.getPos().y() + (1 - size) / 2) * scale);
                     }
-                    // Debug.out("sprite updated");
                 } else {
                     image.setVisible(false);
-                    //Ici tous les sprites disparaissent parce que "image" contient tous les sprites (joueur + ghosts)
-                    //Si cela ne convient pas, il faudra trouver un moyen de séparer les deux types d'images.
+
                 }
             }
 

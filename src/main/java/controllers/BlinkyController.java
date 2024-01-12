@@ -11,12 +11,12 @@ public final class BlinkyController extends GhostsController {
     public void startAI() {
         Ghost.BLINKY.setDirection(Direction.NORTH);
         started = true;
-        timer = 0;
+        scatterTimer = 0;
     }
 
     @Override
     public IntCoordinates scatterDirection(Critter critter, MazeConfig config) {
-        return findPathing(critter, new IntCoordinates(config.getWidth() - 1, 0), config);
+        return findPathing(critter, new IntCoordinates(config.getWidth() - 2, -2), config);
     }
 
     @Override
