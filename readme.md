@@ -1,131 +1,69 @@
-# Jeu de Pacman
+# Pacman Game
 
-## Présentation
+## Overview
 
-Ce Pacman est un jeu d'arcade programmé en Java 17 avec JavaFX. Le projet est configuré avec Gradle utilisant le plugin JavaFX. Ce jeu est largement inspiré du jeu [Pacman](https://fr.wikipedia.org/wiki/Pac-Man), un grand classique de 1980.
+Project Pre-pro 2 done in the first semester of the second year of the "Licence Informatique" for 
+Universite Paris cite.
 
-Le principe est archi-connu et plutôt simple (se référer à la page Wikipédia).
- 
-Pour l'instant, seules quelques fonctionnalités basiques sont implémentées... et encore avec des bugs et des tonnes de maladresses. Il est temps de finir ce jeu !
+This Pacman game is a classic arcade game implemented in Java 17 with JavaFX. The project is configured with Gradle using the JavaFX plugin. This game is inspired by the original [Pac-Man](https://en.wikipedia.org/wiki/Pac-Man) game released in 1980.
 
-Objectifs de développement :
+The game principle is well-known and simple (refer to the Wikipedia page).
 
-- déboguer
-- rationaliser et documenter le code
-- implémenter tout ce qu'on trouve dans tout PacMan de base: le labyrinthe classique, les stratégies des fantômes, les bonus à ramasser, l'effet des super pac-gommes, ...)
-- aller plus loin : plusieurs niveaux, 3D, multijoueur, ... (ce ne sont que des suggestions)
+Currently, only some basic functionalities are implemented, and there are still bugs and improvements to be made.
+
+Development goals:
+
+- Debugging
+- Rationalizing and documenting the code
+- Implementing all the basic features of Pac-Man: the classic maze, ghost strategies, bonuses, the effect of super pellets, etc.
+- Further enhancements: multiple levels, 3D, multiplayer, etc. (these are just suggestions)
 
 ## Instructions
 
-Dans les instructions ci-dessous, il faut remplacer `myteam` par
+### Downloading Pacman
 
-- soit le nom de votre équipe dans gaufre, si le dépôt a été forké au nom de votre équipe,
-- soit le login du membre de votre equipe qui a forké le dépôt pour tout le monde,
-- soit `cproj`, si vous voulez cloner directement le dépôt de l'équipe enseignante.
-
-Notez que dans le dernier cas, vous pourrez compiler et exécuter le projet, mais pas faire de `git push`.
-
-### Télécharger Pacman
-
-Le plus pratique pour télécharger Pacman afin de participer à son développement, c'est de cloner le dépôt. Depuis la console :
+The easiest way to download Pacman for development is to clone the repository from GitHub. From the console:
 
 ```bash
-$ git clone https://gaufre.informatique.univ-paris-diderot.fr/myteam/pacman
+$ git clone https://github.com/Gorfs/pacman
 ```
 
-Le projet actuellement développé n'a pas encore eu de release. Ainsi pour l'instant tout est dans la branche `develop`. Donc avant de faire le reste, tapez :
-```bash
-$ git checkout develop
-```
 
-#### Depuis une machine de TP de la Halle aux Farines
+## Execution and Compilation
 
-Il semble que l'installation de git sur les machines de TP refuse de reconnaître le certificat de gaufre. Heureusement, on peut demander à git d'ignorer la vérification du certificat :
+After downloading/cloning the sources, you can compile and run the project using Gradle. The `gradlew` script in the project directory will download and use the correct Gradle version for the project.
 
-
-```bash
-$ git clone -c http.sslVerify=false https://gaufre.informatique.univ-paris-diderot.fr/myteam/pacman
-```
-
-Ensuite, vous pouvez enregistrer de façon permanente votre choix d'ignorer la vérification pour ce dépôt :
-
-```bash
-$ cd pacman
-$ git config http.sslVerify false
-```
-(cela permettra de faire des `git push`, des `git pull` et des `git fetch` sans avoir à préciser à chaque fois `-c http.sslVerify=false`)
-
-## Exécution, compilation
-
-Après avoir téléchargé/cloné les sources, vous pouvez compiler et exécuter le projet à l'aide de gradle.
-Le principe c'est que le script `gradlew` dans le répertoire du projet téléchargera puis utilisera la version de gradle qui fonctionne avec le projet.
-
-Pour compiler, il suffit d'exécuter, depuis le répertoire `pacman` :
+To compile, execute the following command from the `pacman` directory:
 
 ```bash
 `./gradlew build`
 ```
 
-Pour exécuter, il suffit d'exécuter, depuis le répertoire `pacman` :
+To run the game, execute the following command from the `pacman` directory:
 
 ```bash
 `./gradlew run`
 ```
 
-Le projet en lui-même a besoin de Java 17 pour être compilé et exécuté.
+The project requires Java 17 to be compiled and executed.
 
-### Cas particuliers
+### Special Cases
 
-#### Sur une machine de TP de la Halle aux Farines, depuis la console
+#### Working with Eclipse
 
-Si vous travaillez depuis une machine des salles de TP de la Halle aux Farines, vous devez d'abord passer certains paramètres à gradle via une variable d'environnement. Cela peut être fait en exécutant 
-
-```bash
-$ source SCRIPT/envsetup
-```
-
-avant de lancer toute commande gradle (notamment `build` et `run`.
-
-Pour être tranquille, vous pouvez insérer cette commande dans votre fichier `~/.bashrc`, cela vous évitera de devoir la taper à la main à chaque nouvelle session. Pensez à adapter la commande en donnant le chemin absolu vers `envsetup`.
-
-Pour information, les paramètres passés à gradle indiquent :
-
-- le fichier de certificats à utiliser pour télécharger les dépendances via HTTPS
-- les paramètres du proxy de la Halle aux Farines
-- le chemin vers Java 17
-
-#### Sur une machine de TP de la Halle aux Farines en utilisant Eclipse
-
-Eclipse installé sur les machines de TP contient une distribution de Java 17, et semble savoir passer la bonne configuration à Gradle. Pour travailler avec eclipse, il suffit donc de lancer Eclipse (commande `eclipse`), puis d'importer le projet :
+Eclipse contains a distribution of Java 17 and can pass the correct configuration to Gradle. To work with Eclipse, launch Eclipse and import the project:
 
 1. File > Import... > Gradle > Existing Gradle Project, Next >
-2. choisir le chemin de pacman et valider avec Finish
+2. Choose the path to the `pacman` directory and validate with Finish.
 
-Dans l'onglet "Gradle Tasks", vous trouverez notamment les tâches permettant de compiler et d'exécuter le projet.
+In the "Gradle Tasks" tab, you can find tasks to compile and run the project.
 
-#### Sur une machine personnelle avec Java 11 à 16
+#### Working with other Java versions
 
-Si vous souhaitez/devez travailler avec une version ancienne de Java, il n'est pas très difficile de modifier la configuration : changez juste les numéros de version dans `build.gradle`.
+To work with other Java versions, you may need to modify the `build.gradle` file.
 
-Ensuite, vous pouvez travailler comme avec Java 17 (le projet devrait pouvoir tourner tel quel).
+Important: Commit the changes to `build.gradle` and push them to your fork so that everyone on your team works with the same Java version.
 
-Important : faites un commit de `build.gradle` et poussez-le sur votre fork pour que toutes votre équipe travaille avec la même version de Java.
+## Playing
 
-#### Sur une machine personnelle avec Java 8 à 10 (DISCLAIMER : compliqué !)
-
-Je n'ai pas testé, mais pacman devrait pouvoir tourner (peut-être avec quelques modifications mineures). Malheureusement, ça peut être un peu compliqué.
-
-Dans les grandes lignes :
-
-- Commencez par désactiver le plugin JavaFX dans gradle (toujours dans `build.gradle`), car celui-ci ne fonctionne qu'à partir de Java 11. 
-- Désormais, gradle ne s'occupe plus de télécharger et installer JavaFX. Il faut donc s'assurer de l'avoir installé d'une autre façon. Si vous avez une distribution de Java sans JavaFX (à noter que Oracle Java 8 contient JavaFX), il faut le télécharger et l'installer séparément, en prenant soin de prendre le même numéro de version.
-- Si JavaFX a été installé séparément, il faut le faire savoir à gradle pour qu'il ajoute son répertoire au classpath.
-- Si vous utilisez Java 9 ou 10, il y a de la configuration de modules JPMS à faire à la main. Je ne vais expliquer, ni ce que c'est, ni en quoi ça consiste ici. Il est possible de trouver de l'aide dans les forums.
-
-Bref, il est grandement conseillé d'utiliser une version plus récente de Java. Néanmoins, si vous n'avez pas le choix et que vous êtes en difficulté, demandez de l'aide à vos enseignants.
-
-Important : là aussi, il faut ensuite que toute votre équipe travaille avec la même version de Java. Faites un commit de `build.gradle` et poussez-le sur votre fork pour que toutes votre équipe travaille avec la même version de Java.
-
-## Jouer
-
-Pacman est contrôlé par les 4 flèches de direction... et c'est tout.
+Pacman is controlled with the four arrow keys.
